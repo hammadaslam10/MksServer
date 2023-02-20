@@ -276,7 +276,7 @@ exports.FinalPositionGet = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
   await FinalPositionModel.findAndCountAll({
-    order: [[req.query.orderby || "Rank", req.query.sequence || "ASC"]],
+    order: [[req.query.orderby || "Rank", req.query.sequence || "DESC"]],
     where: {
       NameEn: {
         [Op.like]: `%${req.query.NameEn || ""}%`,
