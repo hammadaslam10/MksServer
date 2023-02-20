@@ -98,7 +98,7 @@ exports.RestoreSoftDeletedTrackCondition = Trackerror(
 );
 
 exports.GetTrackConditionMaxShortCode = Trackerror(async (req, res, next) => {
-  if ((req.params.id.length = 0)) {
+  if (!req.params.id.length) {
     return next(new HandlerCallBack("id is not found", 404));
   }
   const data = await TrackConditionModel.findOne({
