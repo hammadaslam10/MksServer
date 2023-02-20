@@ -44,13 +44,15 @@ const schedule = require("node-schedule");
 exports.TemplateChanging = Trackerror(async (req, res, next) => {
   const { email } = req.body;
   // const date = new Date(Date.UTC(2023, 2, 2, 5, 56, 0));
-  const startTime = new Date("2023-02-20 19:03");
-  console.log(startTime);
-  const endTime = new Date(startTime.getTime() + 50000);
 
-  // const endTime = new Date(startTime.getTime() + 5000);
+  const raceday = "2023-02-20";
+  const racetime = "19:14";
+  const startTime = new Date(`${raceday} ${racetime}`);
+  console.log(startTime);
+  const endTime = new Date(startTime.getTime() + 80000);
+  console.log(endTime);
   schedule.scheduleJob(
-    { start: startTime, end: endTime, rule: "*/1 * * * * *" },
+    { start: startTime, end: endTime, rule: "1 * * * * *" },
     function () {
       console.log("Time for tea!");
     }
