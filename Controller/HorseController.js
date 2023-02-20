@@ -34,6 +34,13 @@ exports.SearchHorsesAccordingToRaceKind = Trackerror(async (req, res, next) => {
   await HorseModel.findAndCountAll({
     order: [["createdAt", "DESC"]],
     attributes: ["_id", "NameEn", "NameAr"],
+    include: [
+      {
+        model: db.NationalityModel,
+        as: "NationalityData",
+        attributes: ["_id", "NameEn", "NameAr"],
+      },
+    ],
     where: {
       KindHorse: req.params.HorseKind,
     },
