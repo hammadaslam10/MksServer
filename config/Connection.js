@@ -150,6 +150,7 @@ db.RaceResultImagesModel = require("../Models/RaceResultImagesModel")(
   Db,
   DataTypes
 );
+db.CronJobModel = require("../Models/CronJobModel")(Db, DataTypes);
 db.sequelize.sync({ force: false, alter: false }).then(() => {
   console.log("yes re-sync done!");
 });

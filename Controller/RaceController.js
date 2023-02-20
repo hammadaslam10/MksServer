@@ -2426,6 +2426,27 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
     RaceWeight: RaceWeight,
     Currency: !Currency ? Currency : CurrencyChecking._id,
   });
+  const raceday = Day;
+  const racetime = StartTime;
+  const startTime = new Date(`${raceday} ${racetime}`);
+  console.log(startTime);
+  const endTime = new Date(startTime.getTime() + 1000);
+  console.log(endTime);
+  console.log(data._id)
+  schedule.scheduleJob(
+    { start: startTime, end: endTime, rule: "*/1 * * * * *" },
+    async function () {
+      await RaceModel.update(
+        { RaceStatus: "Due" },
+        {
+          where: {
+            _id: data._id,
+          },
+        }
+      );
+    }
+  );
+
   res.status(200).json({
     success: true,
     data,

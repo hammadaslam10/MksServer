@@ -46,18 +46,15 @@ exports.TemplateChanging = Trackerror(async (req, res, next) => {
   // const date = new Date(Date.UTC(2023, 2, 2, 5, 56, 0));
 
   const raceday = "2023-02-20";
-  const racetime = "19:14";
+  const racetime = "19:35";
   const startTime = new Date(`${raceday} ${racetime}`);
   console.log(startTime);
-  const endTime = new Date(startTime.getTime() + 80000);
+  const endTime = new Date(startTime.getTime() + 1000);
   console.log(endTime);
   schedule.scheduleJob(
-    { start: startTime, end: endTime, rule: "1 * * * * *" },
-    function () {
-      console.log("Time for tea!");
-    }
+    { start: startTime, end: endTime, rule: "*/1 * * * * *" },
+    async function () {}
   );
-  console.log(startTime.getHours());
   // const emaildata = await db.EmailTemplateModel.findOne({
   //   where: {
   //     TemplateName: "SignUp",
