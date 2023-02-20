@@ -30,6 +30,7 @@ exports.VerifyShortCode = Trackerror(async (req, res, next) => {
     where: {
       shortCode: shortCode,
     },
+    attributes: ["_id", "NameEn", "NameAr"],
   });
   res.status(200).json({
     success: true,

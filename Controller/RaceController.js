@@ -26,6 +26,7 @@ const { Op } = require("sequelize");
 const sequelize = require("sequelize");
 const jwt = require("jsonwebtoken");
 const { getPagination, getPagingData1 } = require("../Utils/Pagination");
+const schedule = require("node-schedule");
 exports.AllDeclaredRaces = Trackerror(async (req, res, next) => {
   const data = await RaceModel.findAll({
     where: { ResultStatus: "Announced" },
@@ -2390,6 +2391,15 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
   //   : condition2 ? value2
   //     : condition3 ? value3
   //       : value4;
+
+  if (RaceStatus == "Live") {
+    // schedule.scheduleJob(
+    //   { start: startTime, end: endTime, rule: "*/1 * * * * *" },
+    //   function () {
+    //     console.log("Time for tea!");
+    //   }
+    // );
+  }
 
   const data = await RaceModel.create({
     // image: `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${Race}/${Image}`,
