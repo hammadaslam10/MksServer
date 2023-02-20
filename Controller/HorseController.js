@@ -24,6 +24,18 @@ const { Conversion } = require("../Utils/Conversion");
 const { Op, Sequelize } = require("sequelize");
 const RaceModel = db.RaceModel;
 const { getPagination, getPagingData1 } = require("../Utils/Pagination");
+exports.VerifyShortCode = Trackerror(async (req, res, next) => {
+  const { shortCode } = req.body;
+  const data = await db.HorseModel.findOne({
+    where: {
+      shortCode: shortCode,
+    },
+  });
+  res.status(200).json({
+    success: true,
+    data,
+  });
+});
 exports.SearchHorsesAccordingToRaceKind = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);

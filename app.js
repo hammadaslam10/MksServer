@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const BodyParser = require("body-parser");
 const Upload = require("express-fileupload");
 const path = require("path");
+const schedule = require("node-schedule");
 const ApplyMiddleware = require("./Middleware/ErrorCallBackReturn");
 const cors = require("cors");
 const SubscriberRoutes = require("./Routes/SubsriberRoutes");
@@ -106,12 +107,20 @@ app.use("/api/v1", TrackConditionRoutes);
 app.use("/api/v1", FinalPositionRoutes);
 app.use("/api/v1", ImageStorageRoutes);
 app.use("/api/v1", EmailTemplateRoutes);
-cron.schedule("* * * * *", () => {
-  console.log("cron job working");
-});
-cron.schedule("* * * * *", () => {
-  console.log("cron job working1");
-});
+// cron.schedule("* * * * *", () => {
+//   console.log("cron job working");
+// });
+// cron.schedule("* * * * *", () => {
+//   console.log("cron job working1");
+// });
+const startTime = new Date(Date.now() + 5000);
+const endTime = new Date(startTime.getTime() + 5000);
+// schedule.scheduleJob(
+//   { start: startTime, end: endTime, rule: "*/1 * * * * *" },
+//   function () {
+//     console.log("Time for tea!");
+//   }
+// );
 app.use(ApplyMiddleware);
 
 module.exports = app;

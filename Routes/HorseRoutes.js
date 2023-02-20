@@ -17,7 +17,9 @@ const {
   RaceHorse,
   HorsesInRace,
   SearchHorsesAccordingToRaceKind,
+  VerifyShortCode,
 } = require("../Controller/HorseController");
+router.route("/VerifyShortCode").post(VerifyShortCode);
 router
   .route("/SearchHorsesAccordingToHorseKind/:HorseKind")
   .get(SearchHorsesAccordingToRaceKind);
