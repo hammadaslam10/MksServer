@@ -26,6 +26,7 @@ const { Op } = require("sequelize");
 const sequelize = require("sequelize");
 const jwt = require("jsonwebtoken");
 const { getPagination, getPagingData1 } = require("../Utils/Pagination");
+const schedule = require("node-schedule");
 exports.AllDeclaredRaces = Trackerror(async (req, res, next) => {
   const data = await RaceModel.findAll({
     where: { ResultStatus: "Announced" },
@@ -2432,7 +2433,7 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
   console.log(startTime);
   const endTime = new Date(startTime.getTime() + 1000);
   console.log(endTime);
-  console.log(data._id)
+  console.log(data._id);
   schedule.scheduleJob(
     { start: startTime, end: endTime, rule: "*/1 * * * * *" },
     async function () {
