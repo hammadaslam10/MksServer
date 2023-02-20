@@ -16,10 +16,13 @@ const {
   HorseDropDown,
   RaceHorse,
   HorsesInRace,
+  SearchHorsesAccordingToRaceKind,
 } = require("../Controller/HorseController");
+router
+  .route("/SearchHorsesAccordingToRaceKind/:HorseKind")
+  .post(SearchHorsesAccordingToRaceKind);
+
 router.route("/HorsesInRace/:raceid").get(HorsesInRace);
-
-
 router.route("/horsegetdeleted").get(GetDeletedHorse);
 router.route("/horserace/:raceid").get(RaceHorse);
 router.route("/SearchHorse").get(SearchHorse);

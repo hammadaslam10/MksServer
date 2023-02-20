@@ -24,6 +24,38 @@ const { Conversion } = require("../Utils/Conversion");
 const { Op, Sequelize } = require("sequelize");
 const RaceModel = db.RaceModel;
 const { getPagination, getPagingData1 } = require("../Utils/Pagination");
+exports.SearchHorsesAccordingToRaceKind = Trackerror(async (req, res, next) => {
+  const { page, size } = req.query;
+  const { limit, offset } = getPagination(page - 1, size);
+  if (req.params.HorseKind.length == 0) {
+    return next(new HandlerCallBack("No HorseKind Has Been Given", 404));
+  }
+  let totalcount = await HorseModel.count();
+  await HorseModel.findAndCountAll({
+    order: [["createdAt", "DESC"]],
+    attributes: ["_id", "NameEn", "NameAr"],
+    where: {
+      KindHorse: req.params.HorseKind,
+    },
+    limit,
+    offset,
+  })
+    .then((data) => {
+      const response = getPagingData1(data, page, limit, totalcount);
+      res.status(200).json({
+        data: response.data,
+        currentPage: response.currentPage,
+        totalPages: response.totalPages,
+        totalcount: response.totalcount,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials.",
+      });
+    });
+});
 exports.SearchHorse = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
@@ -165,7 +197,6 @@ exports.HorsesInRace = Trackerror(async (req, res, next) => {
           "NameEn",
           "NameAr",
           "STARS",
-          "HorseNo",
         ],
       },
       // {
@@ -184,7 +215,7 @@ exports.HorsesInRace = Trackerror(async (req, res, next) => {
       //   attributes: ["_id", "HorseImage", "KindHorse", "NameEn", "NameAr"],
       // },
     ],
-    attributes: ["_id", "TrainerOnRace", "JockeyOnRace"],
+    attributes: ["_id", "TrainerOnRace", "JockeyOnRace", "HorseNo"],
     where: {
       RaceModelId: {
         [Op.eq]: req.params.raceid,

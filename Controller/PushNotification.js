@@ -4,7 +4,7 @@ const HandlerCallBack = require("../Utils/HandlerCallBack");
 // const { getMessaging } = require("fcm-node");
 let admin = require("firebase-admin");
 let fcm = require("fcm-notification");
-let {}= require("../Utils/DynamicTemplate")
+let { Template } = require("../Utils/DynamicTemplate");
 let serviceAccount = require("./mksracing-87bea-firebase-adminsdk-oyldy-7a7d6c1276.json");
 const certPath = admin.credential.cert(serviceAccount);
 let FCM = new fcm(certPath);
@@ -42,8 +42,35 @@ sendPushNotification = (fcm_token, title, body) => {
 };
 exports.TemplateChanging = Trackerror(async (req, res, next) => {
   const { email } = req.body;
-  console.log(email);
+  const emaildata = await db.EmailTemplateModel.findOne({
+    where: {
+      TemplateName: "SignUp",
+    },
+  });
+  let c = email;
+  let d = emaildata.Html.replaceAll(`[user]`, c);
+  let a = Template(emaildata.Html, c);
+  // console.log(email);
+  // console.log(totalcount);
+  // console.log(data[0]._id);
   res.status(200).json({
     email,
+    a,
+    d,
   });
 });
+// const { email } = req.body;
+//   const { count: totalcount, rows: data } =
+//     await db.EmailTemplateModel.findAndCountAll({
+//       where: {
+//         TemplateName: "SignUp",
+//       },
+//     });
+//   // let a = Template();
+//   console.log(email);
+//   console.log(totalcount);
+//   console.log(data[0]._id);
+//   res.status(200).json({
+//     email,
+//     data,
+//   });
