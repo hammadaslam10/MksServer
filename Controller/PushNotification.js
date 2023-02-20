@@ -45,7 +45,9 @@ exports.TemplateChanging = Trackerror(async (req, res, next) => {
   const { email } = req.body;
   // const date = new Date(Date.UTC(2023, 2, 2, 5, 56, 0));
   // const endTime = new Date(date.getTime() + 50000);
-  const startTime = new Date((2023, 2, 2, 18, 59, 0) + 5000);
+  const startTime = new Date("2023-02-20 19:00");
+  console.log(startTime);
+
   // const endTime = new Date(startTime.getTime() + 5000);
   schedule.scheduleJob(
     { start: startTime, rule: "*/1 * * * * *" },
