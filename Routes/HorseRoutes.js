@@ -19,7 +19,7 @@ const {
   SearchHorsesAccordingToRaceKind,
 } = require("../Controller/HorseController");
 router
-  .route("/SearchHorsesAccordingToRaceKind/:HorseKind")
+  .route("/SearchHorsesAccordingToHorseKind/:HorseKind")
   .post(SearchHorsesAccordingToRaceKind);
 
 router.route("/HorsesInRace/:raceid").get(HorsesInRace);
