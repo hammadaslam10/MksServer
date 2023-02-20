@@ -43,6 +43,50 @@ exports.SearchHorsesAccordingToRaceKind = Trackerror(async (req, res, next) => {
     ],
     where: {
       KindHorse: req.params.HorseKind,
+      Breeder: {
+        [Op.like]: `%${req.query.Breeder || ""}%`,
+      },
+      Sex: {
+        [Op.like]: `%${req.query.Sex || ""}%`,
+      },
+      ActiveOwner: {
+        [Op.like]: `%${req.query.ActiveOwner || ""}%`,
+      },
+      ActiveTrainer: {
+        [Op.like]: `%${req.query.ActiveTrainer || ""}%`,
+      },
+      NationalityID: {
+        [Op.like]: `%${req.query.NationalityID || ""}%`,
+      },
+      CreationId: {
+        [Op.like]: `%${req.query.CreationId || ""}%`,
+      },
+      Foal: {
+        [Op.like]: `%${req.query.Foal || ""}%`,
+      },
+      RemarksEn: {
+        [Op.like]: `%${req.query.RemarksEn || ""}%`,
+      },
+      RemarksAr: {
+        [Op.like]: `%${req.query.RemarksAr || ""}%`,
+      },
+      NameEn: {
+        [Op.like]: `%${req.query.NameEn || ""}%`,
+      },
+      NameAr: {
+        [Op.like]: `%${req.query.NameAr || ""}%`,
+      },
+
+      createdAt: {
+        [Op.between]: [
+          req.query.startdate || "2021-12-01 00:00:00",
+          req.query.endDate || "4030-12-01 00:00:00",
+        ],
+      },
+
+      ColorID: {
+        [Op.like]: `%${req.query.ColorID || ""}%`,
+      },
     },
     limit,
     offset,
