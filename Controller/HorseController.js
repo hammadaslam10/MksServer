@@ -165,6 +165,7 @@ exports.HorsesInRace = Trackerror(async (req, res, next) => {
           "NameEn",
           "NameAr",
           "STARS",
+          "HorseNo",
         ],
       },
       // {

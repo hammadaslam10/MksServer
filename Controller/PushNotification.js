@@ -2,11 +2,12 @@ const db = require("../config/Connection");
 const Trackerror = require("../Middleware/TrackError");
 const HandlerCallBack = require("../Utils/HandlerCallBack");
 // const { getMessaging } = require("fcm-node");
-var admin = require("firebase-admin");
-var fcm = require("fcm-notification");
-var serviceAccount = require("./mksracing-87bea-firebase-adminsdk-oyldy-7a7d6c1276.json");
+let admin = require("firebase-admin");
+let fcm = require("fcm-notification");
+let {}= require("../Utils/DynamicTemplate")
+let serviceAccount = require("./mksracing-87bea-firebase-adminsdk-oyldy-7a7d6c1276.json");
 const certPath = admin.credential.cert(serviceAccount);
-var FCM = new fcm(certPath);
+let FCM = new fcm(certPath);
 exports.GetSendNotification = Trackerror(async (req, res, next) => {
   sendPushNotification(
     "fvn_8K9fY727wo--nd9YBt:APA91bHCOJhed2vbcsMoorARb7aEzOkD5PddQnNJbnO1IWawffvUsjOPhB6jEHyvdMEQ4rwXIWcCRl5VBAEDmvNNOYhL9oB-QQFa1BrhkTu2cYxg-8PVBNZ2Tj3P_rPTkN73UOhUlDqQ",
