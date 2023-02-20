@@ -20,7 +20,7 @@ const {
 } = require("../Controller/HorseController");
 router
   .route("/SearchHorsesAccordingToHorseKind/:HorseKind")
-  .post(SearchHorsesAccordingToRaceKind);
+  .get(SearchHorsesAccordingToRaceKind);
 
 router.route("/HorsesInRace/:raceid").get(HorsesInRace);
 router.route("/horsegetdeleted").get(GetDeletedHorse);
