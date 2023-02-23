@@ -114,8 +114,8 @@ exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
         attributes: ["NameEn", "NameAr", "_id"],
       },
       {
-        model: db.HorseModel,
-        as: "RaceAndHorseModelData",
+        model: db.HorseAndRaceModel,
+        as: "RacehorsesData",
         attributes: [
           [
             sequelize.fn("COUNT", sequelize.col("HorseModelId")),
@@ -149,7 +149,15 @@ exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
         attributes: ["NameEn", "NameAr", "_id"],
       },
     ],
-    attributes: ["_id", "Day", "RaceNumber", "RaceStatus"],
+    attributes: [
+      "_id",
+      "Day",
+      "RaceNumber",
+      "RaceStatus",
+      "DescriptionAr",
+      "DescriptionEn",
+      "StartTime",
+    ],
     where: {
       [Op.and]: [
         {
