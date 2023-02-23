@@ -18,7 +18,9 @@ const {
   HorsesInRace,
   SearchHorsesAccordingToRaceKind,
   VerifyShortCode,
+  HorseMassUploadV2,
 } = require("../Controller/HorseController");
+router.route("/HorseMassUploadV2").post(HorseMassUploadV2);
 router.route("/VerifyShortCode").post(VerifyShortCode);
 router
   .route("/SearchHorsesAccordingToHorseKind/:HorseKind")

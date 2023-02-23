@@ -96,84 +96,85 @@ exports.AllRaceCourseRaceToday = Trackerror(async (req, res, next) => {
   });
 });
 exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
-  const data = await RaceModel.findAll({
+  const data = await RaceCourseModel.findAll({
+    where: { _id: req.params.racecourseid },
     include: [
       {
-        model: db.RaceNameModel,
-        as: "RaceNameModelData",
-        attributes: ["NameEn", "NameAr", "_id"],
-      },
-      {
-        model: db.RaceCourseModel,
+        model: db.RaceModel,
         as: "RaceCourseData",
-        attributes: ["TrackNameEn", "TrackNameAr", "_id"],
-      },
-      {
-        model: db.TrackConditionModel,
-        as: "TrackConditionData",
-        attributes: ["NameEn", "NameAr", "_id"],
-      },
-      {
-        model: db.HorseAndRaceModel,
-        as: "RacehorsesData",
-        attributes: [
-          [
-            sequelize.fn("COUNT", sequelize.col("HorseModelId")),
-            "TotalRunners",
+        attributes: ["_id"],
+        where: {
+          [Op.and]: [
+            {
+              // Day: DateFormat
+              Day: {
+                [Op.between]: [
+                  moment().format("YYYY-MM-DD 00:00"),
+                  moment().format("YYYY-MM-DD 23:59"),
+                ],
+              },
+            },
           ],
+        },
+        include: [
+          {
+            model: db.RaceNameModel,
+            as: "RaceNameModelData",
+            attributes: ["NameEn", "NameAr", "_id"],
+          },
+          {
+            model: db.RaceCourseModel,
+            as: "RaceCourseData",
+            attributes: ["TrackNameEn", "TrackNameAr", "_id"],
+          },
+          {
+            model: db.TrackConditionModel,
+            as: "TrackConditionData",
+            attributes: ["NameEn", "NameAr", "_id"],
+          },
+          {
+            model: db.HorseAndRaceModel,
+            as: "RacehorsesData",
+            attributes: ["HorseModelId"],
+          },
+          {
+            model: db.TrackLengthModel,
+            as: "TrackLengthData",
+            attributes: ["TrackLength", "GroundType", "RailPosition", "_id"],
+          },
+          {
+            model: db.RaceTypeModel,
+            as: "RaceTypeModelData",
+            attributes: ["NameEn", "NameAr", "_id"],
+          },
+          {
+            model: db.RaceKindModel,
+            as: "RaceKindData",
+            attributes: ["NameEn", "NameAr", "_id"],
+          },
+          {
+            model: db.HorseKindModel,
+            as: "HorseKindinRaceData",
+            attributes: ["NameEn", "NameAr", "_id"],
+          },
+          {
+            model: db.MeetingTypeModel,
+            as: "MeetingTypeData",
+            attributes: ["NameEn", "NameAr", "_id"],
+          },
+        ],
+        attributes: [
+          "_id",
+          "Day",
+          "RaceNumber",
+          "RaceStatus",
+          "DescriptionAr",
+          "DescriptionEn",
+          "StartTime",
         ],
       },
-      {
-        model: db.TrackLengthModel,
-        as: "TrackLengthData",
-        attributes: ["TrackLength", "GroundType", "RailPosition", "_id"],
-      },
-      {
-        model: db.RaceTypeModel,
-        as: "RaceTypeModelData",
-        attributes: ["NameEn", "NameAr", "_id"],
-      },
-      {
-        model: db.RaceKindModel,
-        as: "RaceKindData",
-        attributes: ["NameEn", "NameAr", "_id"],
-      },
-      {
-        model: db.HorseKindModel,
-        as: "HorseKindinRaceData",
-        attributes: ["NameEn", "NameAr", "_id"],
-      },
-      {
-        model: db.MeetingTypeModel,
-        as: "MeetingTypeData",
-        attributes: ["NameEn", "NameAr", "_id"],
-      },
     ],
-    attributes: [
-      "_id",
-      "Day",
-      "RaceNumber",
-      "RaceStatus",
-      "DescriptionAr",
-      "DescriptionEn",
-      "StartTime",
-    ],
-    where: {
-      [Op.and]: [
-        {
-          // Day: DateFormat
-          Day: {
-            [Op.between]: [
-              moment().format("YYYY-MM-DD 00:00"),
-              moment().format("YYYY-MM-DD 23:59"),
-            ],
-          },
-        },
-        {
-          RaceCourse: req.params.racecourseid,
-        },
-      ],
-    },
+    attributes: ["TrackNameEn", "TrackNameAr", "_id"],
   });
   // console.log(moment().utc.format("YYYY-MM-DD 23:59"));
 
@@ -1181,8 +1182,8 @@ exports.ResultCreationV2 = Trackerror(async (req, res, next) => {
   for (let i = 0; i < ResultEntry.length; i++) {
     statements.push(
       db.sequelize.query(
-        `UPDATE ${tableName} 
-      SET STARS='${ResultEntry[i].Rating}' 
+        `UPDATE ${tableName}
+      SET STARS='${ResultEntry[i].Rating}'
       WHERE _id='${ResultEntry[i].HorseID}';`
       )
     );
