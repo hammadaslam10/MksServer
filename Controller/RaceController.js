@@ -28,11 +28,67 @@ const jwt = require("jsonwebtoken");
 const { getPagination, getPagingData1 } = require("../Utils/Pagination");
 const schedule = require("node-schedule");
 const moment = require("moment");
+exports.AllRaceCourseRace = Trackerror(async (req, res, next) => {
+  const racedata = await RaceModel.findAll({
+    attributes: [
+      [
+        sequelize.fn("DISTINCT", sequelize.col("RaceCourse")),
+        "AllRaceCourseToday",
+      ],
+    ],
+    where: {
+      // Day: DateFormat
+      Day: {
+        [Op.between]: [
+          moment().format("YYYY-MM-DD 00:00"),
+          moment().format("YYYY-MM-DD 23:59"),
+        ],
+      },
+    },
+  });
+
+  let allracecourse = [];
+
+  // if(){
+
+  // }
+  let data = [];
+  if (racedata.length > 0) {
+    for (let i = 0; i < racedata.length; i++) {
+      allracecourse.push(racedata[i].dataValues.AllRaceCourseToday);
+    }
+    data = await RaceCourseModel.findAll({
+      where: { _id: allracecourse },
+      include: [
+        {
+          model: db.RaceModel,
+          as: "RaceCourseData",
+          where: {
+            // Day: DateFormat
+            Day: {
+              [Op.between]: [
+                moment().format("YYYY-MM-DD 00:00"),
+                moment().format("YYYY-MM-DD 23:59"),
+              ],
+            },
+          },
+        },
+      ],
+      include: [
+        {
+          model: db.RaceNameModel,
+          as: "RaceNameModelData",
+          attributes: ["NameEn", "NameAr", "_id"],
+        },
+      ],
+    });
+  }
+  res.status(200).json({
+    success: true,
+    data,
+  });
+});
 exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
-  // const TodaysDate = new Date(Date.now());
-  // let DateFormat = `${TodaysDate.getFullYear()}-0${
-  //   TodaysDate.getMonth() + 1
-  // }-${TodaysDate.getDate()}`;
   const data = await RaceModel.findAll({
     include: [
       {
