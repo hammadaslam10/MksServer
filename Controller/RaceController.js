@@ -63,6 +63,7 @@ exports.AllRaceCourseRaceToday = Trackerror(async (req, res, next) => {
         {
           model: db.RaceModel,
           as: "RaceCourseData",
+          attributes: ["_id"],
           where: {
             // Day: DateFormat
             Day: {
@@ -72,15 +73,21 @@ exports.AllRaceCourseRaceToday = Trackerror(async (req, res, next) => {
               ],
             },
           },
+          include: [
+            {
+              model: db.RaceNameModel,
+              as: "RaceNameModelData",
+              attributes: ["NameEn", "NameAr", "_id"],
+            },
+          ],
         },
-      ],
-      include: [
         {
-          model: db.RaceNameModel,
-          as: "RaceNameModelData",
+          model: db.NationalityModel,
+          as: "NationalityDataRaceCourse",
           attributes: ["NameEn", "NameAr", "_id"],
         },
       ],
+      attributes: ["TrackNameEn", "TrackNameAr", "_id"],
     });
   }
   res.status(200).json({
