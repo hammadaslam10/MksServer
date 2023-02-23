@@ -43,10 +43,10 @@ const {
   DeleteRaceVerdict,
   DeleteRaceHorse,
   RaceCardOfToday,
-  AllRaceCourseRace,
+  AllRaceCourseRaceToday,
 } = require("../Controller/RaceController");
 const { upload } = require("../Utils/ImageUpload");
-router.route("/AllRaceCourseRace").get(AllRaceCourseRace);
+router.route("/AllRaceCourseRaceToday").get(AllRaceCourseRaceToday);
 router.route("/RaceCardOfToday/:racecourseid").get(RaceCardOfToday);
 router.route("/EditRaceVerdictv2/:id").put(EditRaceVerdictv2);
 router.route("/DeleteRaceHorse/:id").delete(DeleteRaceHorse);

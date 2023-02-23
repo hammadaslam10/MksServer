@@ -28,7 +28,7 @@ const jwt = require("jsonwebtoken");
 const { getPagination, getPagingData1 } = require("../Utils/Pagination");
 const schedule = require("node-schedule");
 const moment = require("moment");
-exports.AllRaceCourseRace = Trackerror(async (req, res, next) => {
+exports.AllRaceCourseRaceToday = Trackerror(async (req, res, next) => {
   const racedata = await RaceModel.findAll({
     attributes: [
       [
