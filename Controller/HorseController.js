@@ -216,7 +216,6 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
         });
       }
     }
-    console.log(errorstatements.length);
 
     if (errorstatements.length === 0) {
       let Nationality = Array.from(new Set(de.map((item) => item.Nationality)));
@@ -255,7 +254,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       NationalityData.push({
         id: defaultnatioanlityrow.dataValues._id,
         NameEn: defaultnatioanlityrow.dataValues.NameEn,
-        createdS: created,
+        created: created,
       });
       for (let i = 0; i < Nationality.length; i++) {
         const [row, created] = await db.NationalityModel.findOrCreate({
@@ -276,7 +275,6 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           NameEn: row.dataValues.NameEn,
           createdS: created,
         });
-        console.log(created);
       }
       for (let i = 0; i < HorseKind.length; i++) {
         const [row, created] = await db.HorseKindModel.findOrCreate({
@@ -314,7 +312,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           created: created,
         });
       }
-      console.log(ColorData);
+
       for (let i = 0; i < Gender.length; i++) {
         const [row, created] = await db.SexModel.findOrCreate({
           where: { NameEn: Gender[i] },
@@ -481,7 +479,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       }
       res.status(200).json({
         success: true,
-        RecordsCreated: HorseData.length,
+        HorseData: HorseData,
         NationalityData,
         GenderData,
         ActiveTrainerData,
@@ -601,8 +599,72 @@ exports.SearchHorse = Trackerror(async (req, res, next) => {
   const { limit, offset } = getPagination(page - 1, size);
   let totalcount = await HorseModel.count();
   await HorseModel.findAndCountAll({
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "DESC"]],
-    include: { all: true },
+    order: [["createdAt", "DESC"]],
+    include: [
+      {
+        model: db.SexModel,
+        as: "SexModelData",
+        attributes: ["_id", "NameEn", "NameAr"],
+      },
+      {
+        model: db.ColorModel,
+        as: "ColorIDData",
+        attributes: ["_id", "NameEn", "NameAr"],
+      },
+      {
+        model: db.BreederModel,
+        as: "BreederData",
+        attributes: ["_id", "NameEn", "NameAr"],
+      },
+      {
+        model: db.NationalityModel,
+        as: "NationalityData",
+        attributes: ["_id", "NameEn", "NameAr"],
+      },
+      {
+        model: db.TrainerModel,
+        as: "ActiveTrainerData",
+        attributes: ["_id", "NameEn", "NameAr"],
+      },
+      {
+        model: db.TrainerModel,
+        as: "ActiveTrainerData",
+        attributes: ["_id", "NameEn", "NameAr"],
+      },
+      {
+        model: db.HorseModel,
+        as: "DamData",
+        attributes: ["_id", "NameEn", "NameAr"],
+      },
+      {
+        model: db.HorseModel,
+        as: "SireData",
+        attributes: ["_id", "NameEn", "NameAr"],
+      },
+      {
+        model: db.HorseModel,
+        as: "GSireData",
+        attributes: ["_id", "NameEn", "NameAr"],
+      },
+      {
+        model: db.OwnerModel,
+        as: "ActiveOwnerData",
+        attributes: ["_id", "NameEn", "NameAr"],
+      },
+    ],
+    attributes: [
+      "NameEn",
+      "NameAr",
+      "_id",
+      "DOB",
+      "PurchasePrice",
+      "RemarksEn",
+      "RemarksAr",
+      "Rds",
+      "Foal",
+      "HorseStatus",
+      "HorseImage",
+    ],
     where: {
       KindHorse: {
         [Op.like]: `%${req.query.KindHorse || ""}%`,
