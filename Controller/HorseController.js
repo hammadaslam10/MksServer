@@ -56,11 +56,26 @@ var flatten = function (a, shallow, r) {
   return r;
 };
 function exchangefunctionv2(arraytobechecked, valuetobechecked, val) {
-  let a = arraytobechecked.find((item) => item.NameEn == valuetobechecked);
-  console.log(a, valuetobechecked, val);
+  let a = arraytobechecked.find(
+    (item) => item.NameEn.toLowerCase() == valuetobechecked.toLowerCase()
+  );
+  // console.log(a, valuetobechecked, val);
   return a.id;
 }
+
+function CheckAge(a, b) {
+  let now = new Date();
+  let year = now.getFullYear();
+  let month = now.getMonth();
+  let day = now.getDay();
+  let dateofbirth = year - (a, b);
+  let value = dateofbirth + "-" + month + "-" + day;
+  return value;
+  // console.log(dateofbirth + "-" + month + "-" + day, "dateofbirth");
+}
 exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
+  let century = 20;
+
   if (!req.files || !req.files.file) {
     res.status(404).json({ message: "File not found" });
   } else if (req.files.file.mimetype === "application/json") {
@@ -70,68 +85,84 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       if (de[i].shortCode == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
-          message: `RecordNo ${i + 1} is missing shortcode number`,
+          message: `RecordNo ${i + 1} is missing shortcode `,
+          recordetail: de[i],
+        });
+      }
+      if (de[i].Age == undefined) {
+        errorstatements.push({
+          recordnumber: i + 1,
+          message: `RecordNo ${i + 1} is missing Age `,
+          recordetail: de[i],
+        });
+      }
+      if (de[i].Foal == undefined) {
+        errorstatements.push({
+          recordnumber: i + 1,
+          messFoal: `RecordNo ${i + 1} is missing Foal `,
           recordetail: de[i],
         });
       }
       if (de[i].Name == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
-          message: `RecordNo ${i + 1} is missing Name number`,
+          message: `RecordNo ${i + 1} is missing Name `,
           recordetail: de[i],
         });
       }
       if (de[i].Color == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
-          message: `RecordNo ${i + 1} is missing Color number`,
+          message: `RecordNo ${i + 1} is missing Color `,
           recordetail: de[i],
         });
       }
       if (de[i].Gender == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
-          message: `RecordNo ${i + 1} is missing Gender number`,
+          message: `RecordNo ${i + 1} is missing Gender `,
           recordetail: de[i],
         });
       }
       if (de[i].Dam == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
-          message: `RecordNo ${i + 1} is missing Dam number`,
+          message: `RecordNo ${i + 1} is missing Dam `,
           recordetail: de[i],
         });
       }
       if (de[i].Sire == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
-          message: `RecordNo ${i + 1} is missing Sire number`,
+          message: `RecordNo ${i + 1} is missing Sire `,
           recordetail: de[i],
         });
       }
       if (de[i].GSIRE == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
-          message: `RecordNo ${i + 1} is missing GSIRE number`,
+          message: `RecordNo ${i + 1} is missing GSIRE `,
           recordetail: de[i],
         });
       }
       if (de[i].OwnerShortCode == undefined) {
-        errorstatements.push(
-          `RecordNo ${i + 1} is missing OwnerShortCode number`
-        );
+        errorstatements.push({
+          recordnumber: i + 1,
+          message: `RecordNo ${i + 1} is missing OwnerShortCode `,
+          recordetail: de[i],
+        });
       }
       if (de[i].ActiveOwner == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
-          message: `RecordNo ${i + 1} is missing ActiveOwner number`,
+          message: `RecordNo ${i + 1} is missing ActiveOwner `,
           recordetail: de[i],
         });
       }
       if (de[i].Breeder == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
-          message: `RecordNo ${i + 1} is missing Breeder number`,
+          message: `RecordNo ${i + 1} is missing Breeder `,
           recordetail: de[i],
         });
       }
@@ -145,28 +176,28 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       if (de[i].ActiveTrainer == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
-          message: `RecordNo ${i + 1} is missing ActiveTrainer number`,
+          message: `RecordNo ${i + 1} is missing ActiveTrainer `,
           recordetail: de[i],
         });
       }
       if (de[i].HorseKind == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
-          message: `RecordNo ${i + 1} is missing HorseKind number`,
+          message: `RecordNo ${i + 1} is missing HorseKind `,
           recordetail: de[i],
         });
       }
       if (de[i].Gelded == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
-          message: `RecordNo ${i + 1} is missing Gelded number`,
+          message: `RecordNo ${i + 1} is missing Gelded `,
           recordetail: de[i],
         });
       }
       if (de[i].Rds == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
-          message: `RecordNo ${i + 1} is missing Rds number`,
+          message: `RecordNo ${i + 1} is missing Rds `,
           recordetail: de[i],
         });
       }
@@ -177,9 +208,17 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           recordetail: de[i],
         });
       }
+      if (de[i].Nationality == undefined) {
+        errorstatements.push({
+          recordnumber: i + 1,
+          message: `RecordNo ${i + 1} is missing Nationality `,
+          recordetail: de[i],
+        });
+      }
     }
+    console.log(errorstatements.length);
 
-    if (errorstatements.length == 0) {
+    if (errorstatements.length === 0) {
       let Nationality = Array.from(new Set(de.map((item) => item.Nationality)));
       let Color = Array.from(new Set(de.map((item) => item.Color)));
       let Gender = Array.from(new Set(de.map((item) => item.Gender)));
@@ -198,6 +237,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       let ActiveOwnerData = [];
       let HorseKindData = [];
       let HorseData = [];
+
       const [defaultnatioanlityrow, created] =
         await db.NationalityModel.findOrCreate({
           where: { NameEn: "UAE" },
@@ -212,6 +252,11 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           },
           attributes: ["_id", "NameEn"],
         });
+      NationalityData.push({
+        id: defaultnatioanlityrow.dataValues._id,
+        NameEn: defaultnatioanlityrow.dataValues.NameEn,
+        createdS: created,
+      });
       for (let i = 0; i < Nationality.length; i++) {
         const [row, created] = await db.NationalityModel.findOrCreate({
           where: { NameEn: Nationality[i] },
@@ -229,7 +274,9 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
         NationalityData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
+          createdS: created,
         });
+        console.log(created);
       }
       for (let i = 0; i < HorseKind.length; i++) {
         const [row, created] = await db.HorseKindModel.findOrCreate({
@@ -246,9 +293,9 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
         HorseKindData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
+          created: created,
         });
       }
-      console.log(HorseKindData);
       for (let i = 0; i < Color.length; i++) {
         const [row, created] = await db.ColorModel.findOrCreate({
           where: { NameEn: Color[i] },
@@ -264,6 +311,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
         ColorData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
+          created: created,
         });
       }
       console.log(ColorData);
@@ -282,6 +330,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
         GenderData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
+          created: created,
         });
       }
       for (let i = 0; i < Breeder.length; i++) {
@@ -299,6 +348,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
         BreederData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
+          created: created,
         });
       }
       for (let i = 0; i < ActiveTrainer.length; i++) {
@@ -325,6 +375,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
         ActiveTrainerData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
+          created: created,
         });
       }
       for (let i = 0; i < ActiveOwner.length; i++) {
@@ -350,6 +401,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
         ActiveOwnerData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
+          created: created,
         });
       }
       let nationtemp;
@@ -395,7 +447,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
             GSireNameAr: de[i].GSIRE || "N/A",
             DamNameEn: de[i].Dam || "N/A",
             DamNameAr: de[i].Dam || "N/A",
-            DOB: "2011-02-02",
+            DOB: CheckAge(century, de[i].Age),
             ActiveTrainer: trainertemp,
             Breeder: breedertemp,
             RemarksEn: de[i].RemarksEn || "N/A",
@@ -424,23 +476,24 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
         HorseData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
+          created: created,
         });
       }
       res.status(200).json({
         success: true,
+        RecordsCreated: HorseData.length,
         NationalityData,
         GenderData,
         ActiveTrainerData,
         ColorData,
         BreederData,
         ActiveOwnerData,
-        length: de.length,
       });
       res.end();
     } else {
       res.status(200).json({
         success: false,
-        message: "error hai",
+        message: errorstatements,
       });
       res.end();
     }
