@@ -434,6 +434,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
         ColorData,
         BreederData,
         ActiveOwnerData,
+        length: de.length,
       });
       res.end();
     } else {
