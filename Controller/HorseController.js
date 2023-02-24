@@ -55,6 +55,11 @@ var flatten = function (a, shallow, r) {
   }
   return r;
 };
+function exchangefunctionv2(arraytobechecked, valuetobechecked, val) {
+  let a = arraytobechecked.find((item) => item.NameEn == valuetobechecked);
+  console.log(a, valuetobechecked, val);
+  return a.id;
+}
 exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
   if (!req.files || !req.files.file) {
     res.status(404).json({ message: "File not found" });
@@ -182,47 +187,21 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       let ActiveTrainer = Array.from(
         new Set(de.map((item) => item.ActiveTrainer))
       );
-      const NationalityData = await db.NationalityModel.findAll({
-        where: {
-          NameEn: Nationality,
-        },
-        attributes: ["_id", "NameEn", "NameAr"],
-      });
+      let ActiveOwner = Array.from(new Set(de.map((item) => item.ActiveOwner)));
+      let HorseKind = Array.from(new Set(de.map((item) => item.HorseKind)));
 
-      console.log(Nationality);
-      let a = [];
-      console.log(NationalityData.length);
-      let c;
-      for (let j = 0; j < NationalityData.length; j++) {
-        // await db.NationalityModel.create({
-        //   NameEn: Nationality[j],
-        //   NameAr: Nationality[j],
-        //   AbbrevEn: Nationality[j],
-        //   AbbrevAr: Nationality[j],
-        //   AltNameEn: Nationality[j],
-        //   AltNameAr: Nationality[j],
-        //   BackupId: 4777777,
-        // });
-
-        // for (let i = 0; i < Nationality.length; i++) {
-        //   if (Nationality[i] == NationalityData[j].dataValues.NameEn) {
-        //     console.log(Nationality[i], "Same");
-        //   } else {
-        //     console.log(Nationality[i], "unique");
-        //   }
-        // }
-        c = NationalityData[j].dataValues.NameEn;
-        a.push(NationalityData[j].dataValues.NameEn);
-        c = "";
-      }
-      console.log("abc");
-      var array3 = Nationality.filter(function (obj) {
-        return a.indexOf(obj) == -1;
-      });
-      console.log(array3);
-      if (array3.length > 0) {
-        for (let i = 0; i < array3.length; i++) {
-          await db.NationalityModel.create({
+      let NationalityData = [];
+      let ColorData = [];
+      let GenderData = [];
+      let BreederData = [];
+      let ActiveTrainerData = [];
+      let ActiveOwnerData = [];
+      let HorseKindData = [];
+      let HorseData = [];
+      for (let i = 0; i < Nationality.length; i++) {
+        const [row, created] = await db.NationalityModel.findOrCreate({
+          where: { NameEn: Nationality[i] },
+          defaults: {
             NameEn: Nationality[i],
             NameAr: Nationality[i],
             AbbrevEn: Nationality[i],
@@ -230,12 +209,216 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
             AltNameEn: Nationality[i],
             AltNameAr: Nationality[i],
             BackupId: 4777777,
-          });
-        }
+          },
+          attributes: ["_id", "NameEn"],
+        });
+        NationalityData.push({
+          id: row.dataValues._id,
+          NameEn: row.dataValues.NameEn,
+        });
+      }
+      for (let i = 0; i < HorseKind.length; i++) {
+        const [row, created] = await db.HorseKindModel.findOrCreate({
+          where: { NameEn: HorseKind[i] },
+          defaults: {
+            NameEn: HorseKind[i],
+            NameAr: HorseKind[i],
+            AbbrevEn: HorseKind[i],
+            AbbrevAr: HorseKind[i],
+            BackupId: 4777777,
+          },
+          attributes: ["_id", "NameEn"],
+        });
+        HorseKindData.push({
+          id: row.dataValues._id,
+          NameEn: row.dataValues.NameEn,
+        });
+      }
+      console.log(HorseKindData);
+      for (let i = 0; i < Color.length; i++) {
+        const [row, created] = await db.ColorModel.findOrCreate({
+          where: { NameEn: Color[i] },
+          defaults: {
+            NameEn: Color[i],
+            NameAr: Color[i],
+            AbbrevEn: Color[i],
+            AbbrevAr: Color[i],
+            BackupId: 4777777,
+          },
+          attributes: ["_id", "NameEn"],
+        });
+        ColorData.push({
+          id: row.dataValues._id,
+          NameEn: row.dataValues.NameEn,
+        });
+      }
+      for (let i = 0; i < Gender.length; i++) {
+        const [row, created] = await db.SexModel.findOrCreate({
+          where: { NameEn: Gender[i] },
+          defaults: {
+            NameEn: Gender[i],
+            NameAr: Gender[i],
+            AbbrevEn: Gender[i],
+            AbbrevAr: Gender[i],
+            BackupId: 4777777,
+          },
+          attributes: ["_id", "NameEn"],
+        });
+        GenderData.push({
+          id: row.dataValues._id,
+          NameEn: row.dataValues.NameEn,
+        });
+      }
+      for (let i = 0; i < Breeder.length; i++) {
+        const [row, created] = await db.BreederModel.findOrCreate({
+          where: { NameEn: Breeder[i] },
+          defaults: {
+            NameEn: Breeder[i],
+            NameAr: Breeder[i],
+            DescriptionEn: Breeder[i],
+            DescriptionAr: Breeder[i],
+            BackupId: 4777777,
+          },
+          attributes: ["_id", "NameEn"],
+        });
+        BreederData.push({
+          id: row.dataValues._id,
+          NameEn: row.dataValues.NameEn,
+        });
+      }
+      for (let i = 0; i < ActiveTrainer.length; i++) {
+        const [row, created] = await db.TrainerModel.findOrCreate({
+          where: { NameEn: ActiveTrainer[i] },
+          defaults: {
+            NameEn: ActiveTrainer[i],
+            NameAr: ActiveTrainer[i],
+            TitleEn: ActiveTrainer[i],
+            TitleAr: ActiveTrainer[i],
+            ShortNameEn: ActiveTrainer[i],
+            ShortNameAr: ActiveTrainer[i],
+            DetailAr: ActiveTrainer[i],
+            DetailEn: ActiveTrainer[i],
+            RemarksEn: ActiveTrainer[i],
+            RemarksAr: ActiveTrainer[i],
+            NationalityID: "966dacd7-c0b0-4657-83b7-b479fb262d3b",
+            DOB: Date.now(),
+            TrainerLicenseDate: Date.now(),
+            BackupId: 4777777,
+          },
+          attributes: ["_id", "NameEn"],
+        });
+        ActiveTrainerData.push({
+          id: row.dataValues._id,
+          NameEn: row.dataValues.NameEn,
+        });
+      }
+      for (let i = 0; i < ActiveOwner.length; i++) {
+        const [row, created] = await db.OwnerModel.findOrCreate({
+          where: { NameEn: ActiveOwner[i] },
+          defaults: {
+            NameEn: ActiveOwner[i],
+            NameAr: ActiveOwner[i],
+            TitleEn: ActiveOwner[i],
+            TitleAr: ActiveOwner[i],
+            // ShortNameEn: ActiveOwner[i],
+            // ShortNameAr: ActiveOwner[i],
+            ShortAr: ActiveOwner[i],
+            ShortEn: ActiveOwner[i],
+            RemarksEn: ActiveOwner[i],
+            RemarksAr: ActiveOwner[i],
+            NationalityID: "966dacd7-c0b0-4657-83b7-b479fb262d3b",
+            RegistrationDate: Date.now(),
+            BackupId: 4777777,
+          },
+          attributes: ["_id", "NameEn"],
+        });
+        ActiveOwnerData.push({
+          id: row.dataValues._id,
+          NameEn: row.dataValues.NameEn,
+        });
+      }
+      let nationtemp;
+      let colortemp;
+      let breedertemp;
+      let horsekindtemp;
+      let sextemp;
+      let trainertemp;
+      let ownertemp;
+      for (let i = 0; i < de.length; i++) {
+        nationtemp = exchangefunctionv2(
+          NationalityData,
+          de[i].Nationality,
+          "nat"
+        );
+        colortemp = exchangefunctionv2(ColorData, de[i].Color, "col");
+        breedertemp = exchangefunctionv2(BreederData, de[i].Breeder, "bred");
+        horsekindtemp = exchangefunctionv2(
+          HorseKindData,
+          de[i].HorseKind,
+          "horsekind"
+        );
+        sextemp = exchangefunctionv2(GenderData, de[i].Gender, "sex");
+        trainertemp = exchangefunctionv2(
+          ActiveTrainerData,
+          de[i].ActiveTrainer,
+          "trainer"
+        );
+        ownertemp = exchangefunctionv2(
+          ActiveOwnerData,
+          de[i].ActiveOwner,
+          "owner"
+        );
+        console.log(horsekindtemp);
+        const [row, created] = await db.HorseModel.findOrCreate({
+          where: { NameEn: de[i].Name, shortCode: de[i].shortCode },
+          defaults: {
+            NameEn: de[i].Name,
+            NameAr: de[i].Name,
+            SireNameEn: de[i].Sire || "N/A",
+            SireNameAr: de[i].Sire || "N/A",
+            GSireNameEn: de[i].GSIRE || "N/A",
+            GSireNameAr: de[i].GSIRE || "N/A",
+            DamNameEn: de[i].Dam || "N/A",
+            DamNameAr: de[i].Dam || "N/A",
+            DOB: "2011-02-02",
+            ActiveTrainer: trainertemp,
+            Breeder: breedertemp,
+            RemarksEn: de[i].RemarksEn || "N/A",
+            Sex: sextemp,
+            Color: colortemp,
+            Earning: de[i].Earning || 0,
+            STARS: de[i].STARS || 0,
+            ActiveOwner: ownertemp,
+            NationalityID: nationtemp,
+            Foal: de[i].Foal || 1,
+            PurchasePrice: de[i].PurchasePrice,
+            Rds: de[i].Rds,
+            ColorID: colortemp,
+            CreationId: nationtemp,
+            HorseStatus: de[i].HorseStatus,
+            // Dam: de[i].Dam || null,
+            // Sire: de[i].Sire || null,
+            // GSire: de[i].GSire || null,
+            Height: de[i].Height || 0,
+            KindHorse: horsekindtemp,
+            shortCode: de[i].shortCode,
+            RemarksAr: de[i].RemarksAr || "N/A",
+            BackupId: 4777777,
+          },
+        });
+        HorseData.push({
+          id: row.dataValues._id,
+          NameEn: row.dataValues.NameEn,
+        });
       }
       res.status(200).json({
         success: true,
-        // de
+        NationalityData,
+        GenderData,
+        ActiveTrainerData,
+        ColorData,
+        BreederData,
+        ActiveOwnerData,
       });
       res.end();
     } else {
@@ -245,32 +428,6 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       });
       res.end();
     }
-    // let Nationality = Array.from(new Set(de.map((item) => item.Nationality)));
-    // let Color = Array.from(new Set(de.map((item) => item.Color)));
-    // let Gender = Array.from(new Set(de.map((item) => item.Gender)));
-    // let Breeder = Array.from(new Set(de.map((item) => item.Breeder)));
-    // let ActiveTrainer = Array.from(
-    //   new Set(de.map((item) => item.ActiveTrainer))
-    // );
-    // console.log(Nationality);
-    // console.log(Color);
-    // console.log(Gender);
-    // console.log(Breeder);
-    // console.log(ActiveTrainer);
-    // let data1;
-    // for (let i = 0; i < Nationality.length; i++) {
-    //   Promise.all(
-    //     (data1 = await db.NationalityModel.findAll({
-    //       where: { NameEn: Nationality },
-    //     }))
-    //   );
-    // }
-    // let { rows: data } = data1;
-    // console.log(data);
-    // for (let i = 0; i < Color.length; i++) {}
-    // for (let i = 0; i < Gender.length; i++) {}
-    // for (let i = 0; i < Breeder.length; i++) {}
-    // for (let i = 0; i < ActiveTrainer.length; i++) {}
   } else {
   }
 });
