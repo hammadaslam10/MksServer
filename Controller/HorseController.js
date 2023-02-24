@@ -968,7 +968,7 @@ exports.HorseDropDown = Trackerror(async (req, res, next) => {
   const data = await HorseModel.findAll({
     offset: Number(req.query.page) - 1 || 0,
     limit: Number(req.query.limit) || 10,
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "ASC"]],
+    order: [["createdAt", "DESC"]],
     include: [
       {
         model: db.NationalityModel,
