@@ -198,6 +198,20 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       let ActiveOwnerData = [];
       let HorseKindData = [];
       let HorseData = [];
+      const [defaultnatioanlityrow, created] =
+        await db.NationalityModel.findOrCreate({
+          where: { NameEn: "UAE" },
+          defaults: {
+            NameEn: "UAE",
+            NameAr: "UAE",
+            AbbrevEn: "UAE",
+            AbbrevAr: "UAE",
+            AltNameEn: "UAE",
+            AltNameAr: "UAE",
+            BackupId: 4777777,
+          },
+          attributes: ["_id", "NameEn"],
+        });
       for (let i = 0; i < Nationality.length; i++) {
         const [row, created] = await db.NationalityModel.findOrCreate({
           where: { NameEn: Nationality[i] },
@@ -252,6 +266,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           NameEn: row.dataValues.NameEn,
         });
       }
+      console.log(ColorData);
       for (let i = 0; i < Gender.length; i++) {
         const [row, created] = await db.SexModel.findOrCreate({
           where: { NameEn: Gender[i] },
@@ -300,7 +315,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
             DetailEn: ActiveTrainer[i],
             RemarksEn: ActiveTrainer[i],
             RemarksAr: ActiveTrainer[i],
-            NationalityID: "966dacd7-c0b0-4657-83b7-b479fb262d3b",
+            NationalityID: defaultnatioanlityrow.dataValues._id,
             DOB: Date.now(),
             TrainerLicenseDate: Date.now(),
             BackupId: 4777777,
@@ -326,7 +341,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
             ShortEn: ActiveOwner[i],
             RemarksEn: ActiveOwner[i],
             RemarksAr: ActiveOwner[i],
-            NationalityID: "966dacd7-c0b0-4657-83b7-b479fb262d3b",
+            NationalityID: defaultnatioanlityrow.dataValues._id,
             RegistrationDate: Date.now(),
             BackupId: 4777777,
           },
@@ -865,7 +880,6 @@ exports.HorseDropDown = Trackerror(async (req, res, next) => {
 });
 function exchangefunction(arraytobechecked, valuetobechecked, val) {
   let a = arraytobechecked.find((item) => item.BackupId == valuetobechecked);
-  console.log(a, valuetobechecked, val);
   return a._id;
 }
 exports.HorseMassUpload = Trackerror(async (req, res, next) => {
