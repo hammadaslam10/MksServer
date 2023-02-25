@@ -222,7 +222,7 @@ exports.ColorGet = Trackerror(async (req, res, next) => {
   const { limit, offset } = getPagination(page - 1, size);
 
   await ColorModel.findAndCountAll({
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "ASC"]],
+   order: [["createdAt", "DESC"]],
     where: {
       NameEn: {
         [Op.like]: `%${req.query.NameEn || ""}%`,

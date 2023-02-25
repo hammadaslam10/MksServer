@@ -299,7 +299,7 @@ exports.SearchJockey = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
   await JockeyModel.findAndCountAll({
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "ASC"]],
+   order: [["createdAt", "DESC"]],
     include: { all: true },
     where: {
       NameEn: {

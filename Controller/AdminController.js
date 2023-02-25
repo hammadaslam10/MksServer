@@ -60,7 +60,7 @@ exports.GetAllAdmin = Trackerror(async (req, res, next) => {
   const data = await AdminModel.findAll({
     offset: Number(req.query.page) - 1 || 0,
     limit: Number(req.query.limit) || 10,
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "ASC"]],
+   order: [["createdAt", "DESC"]],
     where: {
       FirstName: {
         [Op.like]: `%${req.query.FirstName || ""}%`,

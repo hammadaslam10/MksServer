@@ -220,7 +220,7 @@ exports.SexGet = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
   const data = await SexModel.findAndCountAll({
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "ASC"]],
+   order: [["createdAt", "DESC"]],
     where: {
       NameEn: {
         [Op.like]: `%${req.query.NameEn || ""}%`,

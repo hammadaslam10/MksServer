@@ -66,7 +66,7 @@ exports.BreederDropDown = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
   await BreederModel.findAndCountAll({
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "ASC"]],
+   order: [["createdAt", "DESC"]],
     attributes: ["NameEn", "NameAr", "_id"],
     where: {
       NameEn: {
@@ -273,7 +273,7 @@ exports.BreederGet = Trackerror(async (req, res, next) => {
    await BreederModel.findAndCountAll({
     offset: Number(req.query.page) - 1 || 0,
     limit: Number(req.query.limit) || 10,
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "ASC"]],
+   order: [["createdAt", "DESC"]],
     where: {
       NameEn: {
         [Op.like]: `%${req.query.NameEn || ""}%`,

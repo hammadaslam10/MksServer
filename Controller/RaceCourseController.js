@@ -139,7 +139,7 @@ exports.SearchRaceCourse = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
   await RaceCourseModel.findAndCountAll({
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "ASC"]],
+   order: [["createdAt", "DESC"]],
     include: { all: true },
     where: {
       // TrackNameEn: {

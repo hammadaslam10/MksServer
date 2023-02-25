@@ -84,7 +84,7 @@ exports.NewsGet = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
   await NewsModel.findAndCountAll({
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "ASC"]],
+   order: [["createdAt", "DESC"]],
     where: {
       TitleEn: {
         [Op.like]: `%${req.query.TitleEn || ""}%`,

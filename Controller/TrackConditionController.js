@@ -276,7 +276,7 @@ exports.TrackConditionGet = Trackerror(async (req, res, next) => {
   await TrackConditionModel.findAndCountAll({
     offset: 0,
     limit: Number(req.query.limit) || 10,
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "ASC"]],
+   order: [["createdAt", "DESC"]],
     where: {
       NameEn: {
         [Op.like]: `%${req.query.NameEn || ""}%`,

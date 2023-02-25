@@ -102,7 +102,7 @@ exports.SearchTrainer = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
   await TrainerModel.findAndCountAll({
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "ASC"]],
+   order: [["createdAt", "DESC"]],
     include: [
       {
         model: db.NationalityModel,
@@ -181,7 +181,7 @@ exports.TrainerDropDown = Trackerror(async (req, res, next) => {
   const data = await TrainerModel.findAll({
     offset: Number(req.query.page) - 1 || 0,
     limit: Number(req.query.limit) || 10,
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "ASC"]],
+   order: [["createdAt", "DESC"]],
     attributes: ["NameEn", "NameAr", "_id"],
     where: {
       NameEn: {

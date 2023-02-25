@@ -53,7 +53,7 @@ exports.SearchRaceCard = Trackerror(async (req, res, next) => {
   const data = await RaceCardModel.findAll({
     offset: Number(req.query.page) - 1 || 0,
     limit: Number(req.query.limit) || 10,
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "ASC"]],
+   order: [["createdAt", "DESC"]],
     where: {
       RaceCardNameEn: {
         [Op.like]: `%${req.query.RaceCardNameEn || ""}%`,

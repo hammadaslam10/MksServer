@@ -547,7 +547,7 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
         paranoid: false,
       },
     ],
-    order: [[req.query.orderby || "createdAt", req.query.sequence || "ASC"]],
+   order: [["createdAt", "DESC"]],
     where: {
       MeetingType: {
         [Op.like]: `%${req.query.MeetingType || ""}%`,
