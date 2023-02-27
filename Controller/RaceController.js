@@ -2648,14 +2648,14 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
     Currency: !Currency ? Currency : CurrencyChecking._id,
   });
   const raceday = Day;
-  const racetime = data.StartTime;
+  const racetime = data.StartTime.toutc();
   const startTime = new Date(`${raceday} ${racetime}`);
   console.log(startTime);
   const endTime = new Date(startTime.getTime() + 1000);
   console.log(endTime);
   console.log(data._id);
   await db.CronJobModel.create({
-    CronStartTime: startTime,
+    CronStartTime: racetime,
     CronEndTime: endTime,
     RaceId: data._id,
   });
@@ -2676,6 +2676,7 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data,
+    time: data.StartTime.toutc(),
   });
 });
 exports.AddPointTable = Trackerror(async (req, res, next) => {
