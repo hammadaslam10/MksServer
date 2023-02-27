@@ -30,6 +30,7 @@ const server = app.listen(process.env.PORT || 8081, () => {
   console.log(b.getTime(), b);
   console.log(Date.now(), "now");
   console.log(A.toISOString()), "a";
+  console.log(A.toUTCString()), "a";
 });
 const io = new Server(server);
 io.on("connection", (socket) => {
