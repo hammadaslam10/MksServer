@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       CronStartTime: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
         allowNull: false,
         validate: {
           notNull: { msg: "Please Add CronStartTime Of Cron Job" },
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       CronEndTime: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
         allowNull: false,
       },
       RaceId: {
