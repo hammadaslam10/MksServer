@@ -3246,7 +3246,7 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
         HorseRunningStatus:
           HorseRunningStatus || racehorsedata.HorseRunningStatus,
         CapColor: CapColor || racehorsedata.CapColor,
-        JockeyRaceWeight: JockeyRaceWeight || racehorsedata.JockeyRaceWeight,
+        JockeyRaceWeight: 0,
       },
       {
         where: {
