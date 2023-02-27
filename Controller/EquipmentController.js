@@ -219,7 +219,7 @@ exports.EquipmentGet = Trackerror(async (req, res, next) => {
    order: [["createdAt", "DESC"]],
     where: {
       NameEn: {
-        [Op.like]: `%${req.query.NameEn || ""}%`,
+        [Op.like]: `${req.query.NameEn || ""}%`,
       },
       NameAr: {
         [Op.like]: `%${req.query.NameAr || ""}%`,
