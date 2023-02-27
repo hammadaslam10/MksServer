@@ -3229,8 +3229,9 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
   let horsedata = await HorseModel.findOne({
     where: { _id: HorseModelId },
   });
-  console.log(horsedata, "Dsdsd");
-  if (HorseRunningStatus == false) {
+  console.log(HorseRunningStatus);
+  if (HorseRunningStatus == "false") {
+    console.log("hello");
     await HorseAndRaceModel.update(
       {
         GateNo: 100,

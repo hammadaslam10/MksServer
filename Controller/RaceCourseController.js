@@ -142,12 +142,12 @@ exports.SearchRaceCourse = Trackerror(async (req, res, next) => {
    order: [["createdAt", "DESC"]],
     include: { all: true },
     where: {
-      // TrackNameEn: {
-      //   [Op.like]: `%${req.query.TrackNameEn || ""}%`,
-      // },
-      // TrackNameAr: {
-      //   [Op.like]: `%${req.query.TrackNameAr || ""}%`,
-      // },
+      TrackNameEn: {
+        [Op.like]: `%${req.query.TrackNameEn || ""}%`,
+      },
+      TrackNameAr: {
+        [Op.like]: `%${req.query.TrackNameAr || ""}%`,
+      },
       shortCode: {
         [Op.like]: `${req.query.shortCode || "%%"}`,
       },
