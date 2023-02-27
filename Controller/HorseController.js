@@ -607,6 +607,11 @@ exports.SearchHorse = Trackerror(async (req, res, next) => {
         attributes: ["_id", "NameEn", "NameAr"],
       },
       {
+        model: db.HorseKindModel,
+        as: "KindHorseData",
+        attributes: ["_id", "NameEn", "NameAr"],
+      },
+      {
         model: db.ColorModel,
         as: "ColorIDData",
         attributes: ["_id", "NameEn", "NameAr"],
