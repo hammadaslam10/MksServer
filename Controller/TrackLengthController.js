@@ -64,7 +64,9 @@ exports.CreateTrackLength = Trackerror(async (req, res, next) => {
       } else {
         res.status(500).json({
           success: false,
-          message: error,
+          message: error.errors.map((singleerr) => {
+            return singleerr.message;
+          }),
         });
       }
     }
@@ -90,7 +92,7 @@ exports.TrackLengthGet = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
   await TrackLengthModel.findAndCountAll({
-   order: [["createdAt", "DESC"]],
+    order: [["createdAt", "DESC"]],
     where: {
       TrackLength: {
         [Op.like]: `%${req.query.TrackLength || ""}%`,
@@ -127,7 +129,7 @@ exports.TrackLengthGet = Trackerror(async (req, res, next) => {
       });
     });
 });
-exports.GetTrackLengthAdmin = Trackerror(async (req, res, next) => {});
+exports.GetTrackLengthAdmin = Trackerror(async (req, res, next) => { });
 exports.EditTrackLength = Trackerror(async (req, res, next) => {
   const { RaceCourse, TrackLength, RailPosition, GroundType } = req.body;
   let data = await TrackLengthModel.findOne({
