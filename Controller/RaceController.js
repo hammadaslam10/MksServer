@@ -185,7 +185,16 @@ exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
 });
 exports.AllDeclaredRaces = Trackerror(async (req, res, next) => {
   const data = await RaceModel.findAll({
-    where: { ResultStatus: "Announced" },
+    where: {
+      [Op.and]: [
+        {
+          ResultStatus: "Announced",
+        },
+        {
+          RaceStatus: "Completed",
+        },
+      ],
+    },
     include: [
       {
         separate: true,
@@ -801,12 +810,14 @@ exports.RaceWithTime = Trackerror(async (req, res, next) => {
 exports.GetRaceResultToBeAnnounced = Trackerror(async (req, res, next) => {
   const data = await RaceModel.findAll({
     where: {
-      // [Op.and]: [
-      // {
-      //   ResultStatus: "Awaited",
-      // },
-      RaceStatus: "Completed",
-      // ],
+      [Op.and]: [
+        {
+          ResultStatus: "Awaited",
+        },
+        {
+          RaceStatus: "Due",
+        },
+      ],
     },
     include: [
       {
@@ -1190,7 +1201,7 @@ exports.ResultCreationV2 = Trackerror(async (req, res, next) => {
   }
   await Promise.all(statements);
   await RaceModel.update(
-    { ResultStatus: "Announced" },
+    { ResultStatus: "Announced", RaceStatus: "Completed" },
     {
       where: {
         _id: req.params.RaceId,
