@@ -154,7 +154,7 @@ db.CronJobModel = require("../Models/CronJobModel")(Db, DataTypes);
 db.sequelize.sync({ force: false, alter: false }).then(() => {
   console.log("yes re-sync done!");
 });
-// db.SponsorModel.sync({ alter: true });
+db.TrackLengthModel.sync({ alter: true });
 
 // -------------------------------------SubscriberAndCompetitionModel----------------------------
 db.CompetitonModel.hasMany(db.SubscriberAndCompetitionModel, {
