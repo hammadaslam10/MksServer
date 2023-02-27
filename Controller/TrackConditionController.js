@@ -98,82 +98,16 @@ exports.RestoreSoftDeletedTrackCondition = Trackerror(
 );
 
 exports.GetTrackConditionMaxShortCode = Trackerror(async (req, res, next) => {
-  if (!req.params.id.length) {
-    return next(new HandlerCallBack("id is not found", 404));
-  }
-  const data = await TrackConditionModel.findOne({
+  const data = await TrackConditionModel.findAll({
     paranoid: false,
-    where: { _id: req.params.id },
+    attributes: [
+      [sequelize.fn("max", sequelize.col("shortCode")), "maxshortCode"],
+    ],
   });
-  if (!data) {
-    return next(new HandlerCallBack("data not found", 404));
-  }
-
-  let checkcode = await TrackConditionModel.findOne({
-    paranoid: false,
-    where: { shortCode: -1 * data.shortCode },
+  res.status(200).json({
+    success: true,
+    data,
   });
-  console.log(checkcode);
-  if (checkcode) {
-    let [result] = await TrackConditionModel.findAll({
-      paranoid: false,
-      attributes: [
-        [sequelize.fn("max", sequelize.col("shortCode")), "maxshortCode"],
-      ],
-    });
-    console.log(-1 * (result.dataValues.maxshortCode + 1));
-    let newcode = result.dataValues.maxshortCode + 1;
-    console.log(newcode, "dsd");
-    await TrackConditionModel.update(
-      { shortCode: newcode },
-      {
-        where: {
-          _id: req.params.id,
-        },
-        paranoid: false,
-      }
-    );
-    const restoredata = await TrackConditionModel.restore({
-      where: { _id: req.params.id },
-    });
-
-    res.status(200).json({
-      success: true,
-      restoredata,
-    });
-  } else {
-    console.log("done else");
-    let newcode = -1 * (data.shortCode + 1);
-    console.log(newcode);
-    console.log(newcode);
-    try {
-      await TrackConditionModel.update(
-        { shortCode: newcode },
-        {
-          where: {
-            _id: req.params.id,
-          },
-          paranoid: false,
-        }
-      );
-    } catch (error) {
-      if (error.name === "SequelizeUniqueConstraintError") {
-      } else {
-        res.status(500).json({
-          success: false,
-          message: error,
-        });
-      }
-    }
-
-    const restoredata = await TrackConditionModel.restore({
-      where: { _id: req.params.id },
-    });
-    res.status(200).json({
-      success: true,
-      restoredata,
-    });
-  }
 });
 exports.CreateTrackCondition = Trackerror(async (req, res, next) => {
   const { NameEn, NameAr, shortCode, AbbrevEn, AbbrevAr } = req.body;
@@ -276,7 +210,7 @@ exports.TrackConditionGet = Trackerror(async (req, res, next) => {
   await TrackConditionModel.findAndCountAll({
     offset: 0,
     limit: Number(req.query.limit) || 10,
-   order: [["createdAt", "DESC"]],
+    order: [["createdAt", "DESC"]],
     where: {
       NameEn: {
         [Op.like]: `%${req.query.NameEn || ""}%`,
