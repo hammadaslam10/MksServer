@@ -3241,7 +3241,7 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
         TrainerOnRace: horsedata.TrainerOnRace,
         OwnerOnRace: horsedata.OwnerOnRace,
         JockeyOnRace: null,
-        JockeyWeight: null,
+        JockeyWeight: 0,
         Rating: Rating || racehorsedata.Rating,
         HorseRunningStatus:
           HorseRunningStatus || racehorsedata.HorseRunningStatus,
@@ -3254,7 +3254,6 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
         },
       }
     );
-    ;
   } else {
     await HorseAndRaceModel.update(
       {
