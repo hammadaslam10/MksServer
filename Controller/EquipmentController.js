@@ -222,7 +222,7 @@ exports.EquipmentGet = Trackerror(async (req, res, next) => {
         [Op.like]: `${req.query.NameEn || ""}%`,
       },
       NameAr: {
-        [Op.like]: `%${req.query.NameAr || ""}%`,
+        [Op.like]: `${req.query.NameAr || ""}%`,
       },
       shortCode: {
         [Op.like]: `${req.query.shortCode || "%%"}`,
