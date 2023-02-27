@@ -25,7 +25,9 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 
 const server = app.listen(process.env.PORT || 8081, () => {
   console.log(`Server is working on port http:localhost:${process.env.PORT}`);
-  const A = new Date("2-27-2023 19:19:00");
+  const A = new Date(
+    "Mon Feb 27 2023 20:14:48 GMT+0500 (Pakistan Standard Time)"
+  );
   const b = new Date();
   console.log(b.getTime(), b);
   console.log(Date.now(), "now");
