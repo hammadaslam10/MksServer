@@ -12,22 +12,22 @@ let options = {
   Protocol: "TCP",
 };
 
-const Db = new Sequelize(
-  process.env.RDSDB,
-  process.env.RDSUSER,
-  process.env.RDSPASSWORD,
-  {
-    ...options,
-  }
-);
 // const Db = new Sequelize(
-//   process.env.SQLDB,
-//   process.env.SQLHOST,
-//   process.env.SQLPASSWORD,
+//   process.env.RDSDB,
+//   process.env.RDSUSER,
+//   process.env.RDSPASSWORD,
 //   {
-//     dialect: "mysql",
+//     ...options,
 //   }
 // );
+const Db = new Sequelize(
+  process.env.SQLDB,
+  process.env.SQLHOST,
+  process.env.SQLPASSWORD,
+  {
+    dialect: "mysql",
+  }
+);
 
 Db.authenticate()
   .then(() => {
@@ -154,7 +154,7 @@ db.CronJobModel = require("../Models/CronJobModel")(Db, DataTypes);
 db.sequelize.sync({ force: false, alter: false }).then(() => {
   console.log("yes re-sync done!");
 });
-db.TrackLengthModel.sync({ alter: true });
+// db.TrackLengthModel.sync({ alter: true });
 
 // -------------------------------------SubscriberAndCompetitionModel----------------------------
 db.CompetitonModel.hasMany(db.SubscriberAndCompetitionModel, {
