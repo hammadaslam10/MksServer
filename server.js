@@ -26,6 +26,7 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 const server = app.listen(process.env.PORT || 8081, () => {
   console.log(`Server is working on port http:localhost:${process.env.PORT}`);
   const A = new Date("2-27-2023 19:19:00");
+  console.log(new Date.now());
   console.log(A.toUTCString());
 });
 const io = new Server(server);
