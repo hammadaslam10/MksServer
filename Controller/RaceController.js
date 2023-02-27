@@ -2648,13 +2648,13 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
     Currency: !Currency ? Currency : CurrencyChecking._id,
   });
   const raceday = Day;
-  const racetime = StartTime;
+  const racetime = data.StartTime;
   const startTime = new Date(`${raceday} ${racetime}`);
   console.log(startTime);
   const endTime = new Date(startTime.getTime() + 1000);
   console.log(endTime);
   console.log(data._id);
-  db.CronJobModel.create({
+  await db.CronJobModel.create({
     CronStartTime: startTime,
     CronEndTime: endTime,
     RaceId: data._id,
