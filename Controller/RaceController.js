@@ -547,7 +547,7 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
         paranoid: false,
       },
     ],
-   order: [["createdAt", "DESC"]],
+    order: [["createdAt", "DESC"]],
     where: {
       MeetingType: {
         [Op.like]: `%${req.query.MeetingType || ""}%`,
@@ -3230,29 +3230,56 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
     where: { _id: HorseModelId },
   });
   console.log(horsedata, "Dsdsd");
-  await HorseAndRaceModel.update(
-    {
-      GateNo: GateNo || racehorsedata.GateNo,
-      HorseNo: HorseNo || racehorsedata.HorseNo,
-      RaceModelId: req.params.id,
-      HorseModelId: HorseModelId || racehorsedata.HorseModelId,
-      Equipment: Equipment || racehorsedata.Equipment,
-      TrainerOnRace: horsedata.TrainerOnRace,
-      OwnerOnRace: horsedata.OwnerOnRace,
-      JockeyOnRace: JockeyOnRace || racehorsedata.JockeyOnRace,
-      JockeyWeight: JockeyWeight || racehorsedata.JockeyWeight,
-      Rating: Rating || racehorsedata.Rating,
-      HorseRunningStatus:
-        HorseRunningStatus || racehorsedata.HorseRunningStatus,
-      CapColor: CapColor || racehorsedata.CapColor,
-      JockeyRaceWeight: JockeyRaceWeight || racehorsedata.JockeyRaceWeight,
-    },
-    {
-      where: {
-        _id: Rowid,
+  if (HorseRunningStatus == false) {
+    await HorseAndRaceModel.update(
+      {
+        GateNo: 100,
+        HorseNo: HorseNo || racehorsedata.HorseNo,
+        RaceModelId: req.params.id,
+        HorseModelId: HorseModelId || racehorsedata.HorseModelId,
+        Equipment: Equipment || racehorsedata.Equipment,
+        TrainerOnRace: horsedata.TrainerOnRace,
+        OwnerOnRace: horsedata.OwnerOnRace,
+        JockeyOnRace: null,
+        JockeyWeight: null,
+        Rating: Rating || racehorsedata.Rating,
+        HorseRunningStatus:
+          HorseRunningStatus || racehorsedata.HorseRunningStatus,
+        CapColor: CapColor || racehorsedata.CapColor,
+        JockeyRaceWeight: JockeyRaceWeight || racehorsedata.JockeyRaceWeight,
       },
-    }
-  );
+      {
+        where: {
+          _id: Rowid,
+        },
+      }
+    );
+    ;
+  } else {
+    await HorseAndRaceModel.update(
+      {
+        GateNo: GateNo || racehorsedata.GateNo,
+        HorseNo: HorseNo || racehorsedata.HorseNo,
+        RaceModelId: req.params.id,
+        HorseModelId: HorseModelId || racehorsedata.HorseModelId,
+        Equipment: Equipment || racehorsedata.Equipment,
+        TrainerOnRace: horsedata.TrainerOnRace,
+        OwnerOnRace: horsedata.OwnerOnRace,
+        JockeyOnRace: JockeyOnRace || racehorsedata.JockeyOnRace,
+        JockeyWeight: JockeyWeight || racehorsedata.JockeyWeight,
+        Rating: Rating || racehorsedata.Rating,
+        HorseRunningStatus:
+          HorseRunningStatus || racehorsedata.HorseRunningStatus,
+        CapColor: CapColor || racehorsedata.CapColor,
+        JockeyRaceWeight: JockeyRaceWeight || racehorsedata.JockeyRaceWeight,
+      },
+      {
+        where: {
+          _id: Rowid,
+        },
+      }
+    );
+  }
 
   res.status(200).json({
     success: true,
