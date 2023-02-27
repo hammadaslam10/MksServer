@@ -12,22 +12,22 @@ let options = {
   Protocol: "TCP",
 };
 
-// const Db = new Sequelize(
-//   process.env.RDSDB,
-//   process.env.RDSUSER,
-//   process.env.RDSPASSWORD,
-//   {
-//     ...options,
-//   }
-// );
 const Db = new Sequelize(
-  process.env.SQLDB,
-  process.env.SQLHOST,
-  process.env.SQLPASSWORD,
+  process.env.RDSDB,
+  process.env.RDSUSER,
+  process.env.RDSPASSWORD,
   {
-    dialect: "mysql",
+    ...options,
   }
 );
+// const Db = new Sequelize(
+//   process.env.SQLDB,
+//   process.env.SQLHOST,
+//   process.env.SQLPASSWORD,
+//   {
+//     dialect: "mysql",
+//   }
+// );
 
 Db.authenticate()
   .then(() => {
@@ -39,6 +39,39 @@ Db.authenticate()
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = Db;
+const schedule = require("node-schedule");
+const moment = require("moment");
+db.CronJobModel = require("../Models/CronJobModel")(Db, DataTypes);
+let loadcronjob = async () => {
+  try {
+    const row = await db.CronJobModel.findAll({
+      where: { Status: true },
+    });
+    for (let i = 0; i < row.length; i++) {
+      schedule.scheduleJob(
+        {
+          start: row[i].dataValues.CronStartTime,
+          end: row[i].dataValues.CronEndTime,
+          rule: "*/1 * * * * *",
+        },
+        async function () {
+          await RaceModel.update(
+            { RaceStatus: "Due" },
+            {
+              where: {
+                _id: row[i].dataValues.RaceId,
+              },
+            }
+          );
+        }
+      );
+    }
+    console.log("cron job loaded");
+  } catch (error) {
+    console.error("cron job loaded failed:", error);
+  }
+};
+loadcronjob();
 db.ImagesStorageModel = require("../Models/ImagesStorageModel")(Db, DataTypes);
 db.ColorModel = require("../Models/ColorModel")(Db, DataTypes);
 db.BreederModel = require("../Models/BreederModel")(Db, DataTypes);
@@ -150,8 +183,7 @@ db.RaceResultImagesModel = require("../Models/RaceResultImagesModel")(
   Db,
   DataTypes
 );
-db.CronJobModel = require("../Models/CronJobModel")(Db, DataTypes);
-db.sequelize.sync({ force: false, alter: false }).then(() => {
+db.sequelize.sync({ force: false, alter: false }).then(async () => {
   console.log("yes re-sync done!");
 });
 // db.TrackLengthModel.sync({ alter: true });

@@ -2643,6 +2643,11 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
   const endTime = new Date(startTime.getTime() + 1000);
   console.log(endTime);
   console.log(data._id);
+  db.CronJobModel.create({
+    CronStartTime: startTime,
+    CronEndTime: endTime,
+    RaceId: data._id,
+  });
   schedule.scheduleJob(
     { start: startTime, end: endTime, rule: "*/1 * * * * *" },
     async function () {
