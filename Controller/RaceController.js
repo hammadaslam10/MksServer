@@ -2534,7 +2534,7 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
     PrizeNumber,
     RaceWeight,
     Timing,
-    EndTiming,
+    Endtiming,
   } = req.body;
   let = {
     FirstPrice,
@@ -2652,11 +2652,11 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
 
   await db.CronJobModel.create({
     CronStartTime: Timing,
-    CronEndTime: EndTiming,
+    CronEndTime: Endtiming,
     RaceId: data._id,
   });
   schedule.scheduleJob(
-    { start: Timing, end: EndTiming, rule: "*/1 * * * * *" },
+    { start: Timing, end: Endtiming, rule: "*/1 * * * * *" },
     async function () {
       await RaceModel.update(
         { RaceStatus: "Due" },
