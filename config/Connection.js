@@ -3,7 +3,7 @@ require("dotenv").config({ path: "./config/Secrets.env" });
 let options = {
   host: process.env.RDSHOST,
   port: 3306,
-  logging: console.log,
+
   // maxConcurrentQueries: 100,
   dialect: "mysql",
   ssl: process.env.RDSSSL,
