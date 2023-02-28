@@ -33,18 +33,18 @@ exports.AllRaceCourseRaceToday = Trackerror(async (req, res, next) => {
     attributes: [
       [
         sequelize.fn("DISTINCT", sequelize.col("RaceCourse")),
-        "AllRaceCourseToday",
-      ],
+        "AllRaceCourseToday"
+      ]
     ],
     where: {
       // Day: DateFormat
       Day: {
         [Op.between]: [
           moment().format("YYYY-MM-DD 00:00"),
-          moment().format("YYYY-MM-DD 23:59"),
-        ],
-      },
-    },
+          moment().format("YYYY-MM-DD 23:59")
+        ]
+      }
+    }
   });
 
   let allracecourse = [];
@@ -69,30 +69,30 @@ exports.AllRaceCourseRaceToday = Trackerror(async (req, res, next) => {
             Day: {
               [Op.between]: [
                 moment().format("YYYY-MM-DD 00:00"),
-                moment().format("YYYY-MM-DD 23:59"),
-              ],
-            },
+                moment().format("YYYY-MM-DD 23:59")
+              ]
+            }
           },
           include: [
             {
               model: db.RaceNameModel,
               as: "RaceNameModelData",
-              attributes: ["NameEn", "NameAr", "_id"],
-            },
-          ],
+              attributes: ["NameEn", "NameAr", "_id"]
+            }
+          ]
         },
         {
           model: db.NationalityModel,
           as: "NationalityDataRaceCourse",
-          attributes: ["NameEn", "NameAr", "_id"],
-        },
+          attributes: ["NameEn", "NameAr", "_id"]
+        }
       ],
-      attributes: ["TrackNameEn", "TrackNameAr", "_id"],
+      attributes: ["TrackNameEn", "TrackNameAr", "_id"]
     });
   }
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
@@ -110,58 +110,58 @@ exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
               Day: {
                 [Op.between]: [
                   moment().format("YYYY-MM-DD 00:00"),
-                  moment().format("YYYY-MM-DD 23:59"),
-                ],
-              },
-            },
-          ],
+                  moment().format("YYYY-MM-DD 23:59")
+                ]
+              }
+            }
+          ]
         },
         include: [
           {
             model: db.RaceNameModel,
             as: "RaceNameModelData",
-            attributes: ["NameEn", "NameAr", "_id"],
+            attributes: ["NameEn", "NameAr", "_id"]
           },
           {
             model: db.RaceCourseModel,
             as: "RaceCourseData",
-            attributes: ["TrackNameEn", "TrackNameAr", "_id"],
+            attributes: ["TrackNameEn", "TrackNameAr", "_id"]
           },
           {
             model: db.TrackConditionModel,
             as: "TrackConditionData",
-            attributes: ["NameEn", "NameAr", "_id"],
+            attributes: ["NameEn", "NameAr", "_id"]
           },
           {
             model: db.HorseAndRaceModel,
             as: "RacehorsesData",
-            attributes: ["HorseModelId"],
+            attributes: ["HorseModelId"]
           },
           {
             model: db.TrackLengthModel,
             as: "TrackLengthData",
-            attributes: ["TrackLength", "GroundType", "RailPosition", "_id"],
+            attributes: ["TrackLength", "GroundType", "RailPosition", "_id"]
           },
           {
             model: db.RaceTypeModel,
             as: "RaceTypeModelData",
-            attributes: ["NameEn", "NameAr", "_id"],
+            attributes: ["NameEn", "NameAr", "_id"]
           },
           {
             model: db.RaceKindModel,
             as: "RaceKindData",
-            attributes: ["NameEn", "NameAr", "_id"],
+            attributes: ["NameEn", "NameAr", "_id"]
           },
           {
             model: db.HorseKindModel,
             as: "HorseKindinRaceData",
-            attributes: ["NameEn", "NameAr", "_id"],
+            attributes: ["NameEn", "NameAr", "_id"]
           },
           {
             model: db.MeetingTypeModel,
             as: "MeetingTypeData",
-            attributes: ["NameEn", "NameAr", "_id"],
-          },
+            attributes: ["NameEn", "NameAr", "_id"]
+          }
         ],
         attributes: [
           "_id",
@@ -170,17 +170,17 @@ exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
           "RaceStatus",
           "DescriptionAr",
           "DescriptionEn",
-          "StartTime",
-        ],
-      },
+          "StartTime"
+        ]
+      }
     ],
-    attributes: ["TrackNameEn", "TrackNameAr", "_id"],
+    attributes: ["TrackNameEn", "TrackNameAr", "_id"]
   });
   // console.log(moment().utc.format("YYYY-MM-DD 23:59"));
 
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.AllDeclaredRaces = Trackerror(async (req, res, next) => {
@@ -188,12 +188,12 @@ exports.AllDeclaredRaces = Trackerror(async (req, res, next) => {
     where: {
       [Op.and]: [
         {
-          ResultStatus: "Announced",
+          ResultStatus: "Announced"
         },
         {
-          RaceStatus: "Completed",
-        },
-      ],
+          RaceStatus: "Completed"
+        }
+      ]
     },
     include: [
       {
@@ -206,7 +206,7 @@ exports.AllDeclaredRaces = Trackerror(async (req, res, next) => {
           "RaceTime",
           "CumulativeDistance",
           "Distance",
-          "PrizeWin",
+          "PrizeWin"
         ],
         order: ["CumulativeDistance", "ASC"],
         include: [
@@ -214,45 +214,45 @@ exports.AllDeclaredRaces = Trackerror(async (req, res, next) => {
             model: db.HorseModel,
             as: "HorseIDData",
 
-            attributes: ["_id", "NameEn", "NameAr"],
+            attributes: ["_id", "NameEn", "NameAr"]
           },
           {
             model: db.HorseModel,
             as: "BeatenByData",
-            attributes: ["_id", "NameEn", "NameAr"],
+            attributes: ["_id", "NameEn", "NameAr"]
           },
           {
             model: db.FinalPositionModel,
             as: "FinalPositionDataHorse",
-            attributes: ["_id", "NameEn", "Rank"],
-          },
+            attributes: ["_id", "NameEn", "Rank"]
+          }
         ],
-        order: [["FinalPositionDataHorse", "Rank", "ASC"]],
+        order: [["FinalPositionDataHorse", "Rank", "ASC"]]
       },
       {
         model: db.RaceNameModel,
         as: "RaceNameModelData",
-        attributes: ["_id", "NameEn", "NameAr"],
-      },
+        attributes: ["_id", "NameEn", "NameAr"]
+      }
     ],
-    attributes: ["_id"],
+    attributes: ["_id"]
   });
 
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.GetDeletedRace = Trackerror(async (req, res, next) => {
   const data = await RaceModel.findAll({
     paranoid: false,
     where: {
-      [Op.not]: { deletedAt: null },
+      [Op.not]: { deletedAt: null }
     },
     include: [
       {
         model: db.MeetingTypeModel,
-        as: "MeetingTypeData",
+        as: "MeetingTypeData"
       },
       // {
       //   model: db.GroundTypeModel,
@@ -261,57 +261,57 @@ exports.GetDeletedRace = Trackerror(async (req, res, next) => {
       {
         model: db.RaceCourseModel,
         as: "RaceCourseData",
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.TrackLengthModel,
-        as: "TrackLengthData",
+        as: "TrackLengthData"
       },
       {
         model: db.RaceNameModel,
-        as: "RaceNameModelData",
+        as: "RaceNameModelData"
       },
       {
         model: db.RaceKindModel,
-        as: "RaceKindData",
+        as: "RaceKindData"
       },
       {
         model: db.RaceTypeModel,
-        as: "RaceTypeModelData",
+        as: "RaceTypeModelData"
       },
       {
         model: db.SponsorModel,
-        as: "SponsorData",
+        as: "SponsorData"
       },
       {
         model: db.HorseModel,
         as: "RaceAndHorseModelData",
         include: {
-          all: true,
+          all: true
         },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.JockeyModel,
         include: { all: true },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.HorseAndRaceModel,
         as: "RacehorsesData",
-        include: { all: true },
+        include: { all: true }
       },
       {
         model: db.ResultModel,
         as: "RaceResultData",
         include: { all: true },
-        paranoid: false,
-      },
-    ],
+        paranoid: false
+      }
+    ]
   });
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.SearchRace = Trackerror(async (req, res, next) => {
@@ -335,17 +335,17 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
         "deletedAt",
         "Competition",
         "RaceCard",
-        "BackupId",
-      ],
+        "BackupId"
+      ]
     },
     include: [
       {
         model: db.HorseKindModel,
         as: "HorseKindinRaceData",
         attributes: {
-          exclude: ["createdAt", "updatedAt", "deletedAt"],
+          exclude: ["createdAt", "updatedAt", "deletedAt"]
         },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.RaceCourseModel,
@@ -359,65 +359,65 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
             "AbbrevAr",
             "createdAt",
             "updatedAt",
-            "deletedAt",
-          ],
+            "deletedAt"
+          ]
         },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.TrackLengthModel,
         as: "TrackLengthData",
         attributes: {
-          exclude: ["GroundType", "createdAt", "updatedAt", "deletedAt"],
+          exclude: ["GroundType", "createdAt", "updatedAt", "deletedAt"]
         },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.RaceNameModel,
         as: "RaceNameModelData",
         attributes: {
-          exclude: ["createdAt", "updatedAt", "deletedAt"],
+          exclude: ["createdAt", "updatedAt", "deletedAt"]
         },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.TrackConditionModel,
         as: "TrackConditionData",
         attributes: {
-          exclude: ["createdAt", "updatedAt", "deletedAt"],
+          exclude: ["createdAt", "updatedAt", "deletedAt"]
         },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.CurrencyModel,
         as: "CurrencyData",
         attributes: {
-          exclude: ["createdAt", "updatedAt", "deletedAt"],
+          exclude: ["createdAt", "updatedAt", "deletedAt"]
         },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.RaceKindModel,
         as: "RaceKindData",
         attributes: {
-          exclude: ["createdAt", "updatedAt", "deletedAt"],
+          exclude: ["createdAt", "updatedAt", "deletedAt"]
         },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.MeetingTypeModel,
         as: "MeetingTypeData",
         attributes: {
-          exclude: ["createdAt", "updatedAt", "deletedAt"],
-        },
+          exclude: ["createdAt", "updatedAt", "deletedAt"]
+        }
       },
       {
         model: db.RaceTypeModel,
         as: "RaceTypeModelData",
         attributes: {
-          exclude: ["createdAt", "updatedAt", "deletedAt"],
+          exclude: ["createdAt", "updatedAt", "deletedAt"]
         },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.SponsorModel,
@@ -428,22 +428,22 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
             "updatedAt",
             "deletedAt",
             "DescriptionEn",
-            "DescriptionAr",
-          ],
+            "DescriptionAr"
+          ]
         },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.CompetitonModel,
         as: "CompetitionRacesPointsModelData",
         include: { all: true },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.ResultModel,
         as: "RaceResultData",
         include: { all: true },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.HorseAndRaceModel,
@@ -455,8 +455,8 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
             "Equipment",
             "TrainerOnRace",
             "JockeyOnRace",
-            "OwnerOnRace",
-          ],
+            "OwnerOnRace"
+          ]
         },
 
         include: [
@@ -464,8 +464,8 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
             model: db.EquipmentModel,
             as: "EquipmentData1",
             attributes: {
-              exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
-            },
+              exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+            }
           },
           {
             model: db.HorseModel,
@@ -476,50 +476,50 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
                 model: db.HorseModel,
                 as: "DamData",
                 attributes: {
-                  exclude: ["createdAt", "updatedAt", "deletedAt"],
-                },
+                  exclude: ["createdAt", "updatedAt", "deletedAt"]
+                }
               },
               {
                 model: db.test,
                 as: "TrackHorses",
                 attributes: {
-                  exclude: ["createdAt", "updatedAt", "deletedAt"],
-                },
+                  exclude: ["createdAt", "updatedAt", "deletedAt"]
+                }
               },
               {
                 model: db.NationalityModel,
                 as: "NationalityData",
                 attributes: {
-                  exclude: ["createdAt", "updatedAt", "deletedAt"],
-                },
+                  exclude: ["createdAt", "updatedAt", "deletedAt"]
+                }
               },
               {
                 model: db.BreederModel,
                 as: "BreederData",
                 attributes: {
-                  exclude: ["createdAt", "updatedAt", "deletedAt"],
-                },
+                  exclude: ["createdAt", "updatedAt", "deletedAt"]
+                }
               },
               {
                 model: db.HorseModel,
                 as: "SireData",
                 attributes: {
-                  exclude: ["createdAt", "updatedAt", "deletedAt"],
-                },
+                  exclude: ["createdAt", "updatedAt", "deletedAt"]
+                }
               },
               {
                 model: db.HorseModel,
                 as: "GSireData",
                 attributes: {
-                  exclude: ["createdAt", "updatedAt", "deletedAt"],
-                },
-              },
-            ],
+                  exclude: ["createdAt", "updatedAt", "deletedAt"]
+                }
+              }
+            ]
           },
           {
             model: db.TrainerModel,
             as: "TrainerOnRaceData1",
-            attributes: ["NameEn", "NameAr", "_id", "BackupId", "image"],
+            attributes: ["NameEn", "NameAr", "_id", "BackupId", "image"]
           },
           {
             model: db.JockeyModel,
@@ -534,50 +534,50 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
                 "RemarksEn",
                 "Rating",
                 "NationalityID",
-                "BackupId",
-              ],
-            },
+                "BackupId"
+              ]
+            }
           },
           {
             model: db.OwnerModel,
             as: "OwnerOnRaceData1",
             attributes: {
-              exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
-            },
+              exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+            }
           },
           {
             model: db.ColorModel,
             as: "CapColorData1",
             attributes: {
-              exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
-            },
-          },
+              exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+            }
+          }
         ],
-        paranoid: false,
-      },
+        paranoid: false
+      }
     ],
     order: [["createdAt", "DESC"]],
     where: {
       MeetingType: {
-        [Op.like]: `%${req.query.MeetingType || ""}%`,
+        [Op.like]: `%${req.query.MeetingType || ""}%`
       },
       MeetingCode: {
-        [Op.like]: `%${req.query.MeetingCode || ""}%`,
+        [Op.like]: `%${req.query.MeetingCode || ""}%`
       },
       RaceName: {
-        [Op.like]: `%${req.query.RaceName || ""}%`,
+        [Op.like]: `%${req.query.RaceName || ""}%`
       },
       TrackLength: {
-        [Op.like]: `%${req.query.TrackLength || ""}%`,
+        [Op.like]: `%${req.query.TrackLength || ""}%`
       },
       // Ground: {
       //   [Op.like]: `%${req.query.Ground || ""}%`
       // },
       DescriptionAr: {
-        [Op.like]: `%${req.query.DescriptionAr || ""}%`,
+        [Op.like]: `%${req.query.DescriptionAr || ""}%`
       },
       DescriptionEn: {
-        [Op.like]: `%${req.query.DescriptionEn || ""}%`,
+        [Op.like]: `%${req.query.DescriptionEn || ""}%`
       },
       // RaceStatus: {
       //   [Op.like]: `%${req.query.RaceStatus || ""}%`,
@@ -586,22 +586,22 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
       //   [Op.like]: `%${req.query.ResultStatus || ""}%`,
       // },
       RaceCourse: {
-        [Op.like]: `%${req.query.RaceCourse || ""}%`,
+        [Op.like]: `%${req.query.RaceCourse || ""}%`
       },
       RaceType: {
-        [Op.like]: `%${req.query.RaceType || ""}%`,
+        [Op.like]: `%${req.query.RaceType || ""}%`
       },
       // HorseFilled: {
       //   [Op.like]: `%${req.query.HorseFilled || ""}%`,
       // },
       WeatherType: {
-        [Op.like]: `%${req.query.WeatherType || ""}%`,
+        [Op.like]: `%${req.query.WeatherType || ""}%`
       },
       WeatherDegree: {
-        [Op.like]: `%${req.query.WeatherDegree || ""}%`,
+        [Op.like]: `%${req.query.WeatherDegree || ""}%`
       },
       RaceType: {
-        [Op.like]: `%${req.query.RaceType || ""}%`,
+        [Op.like]: `%${req.query.RaceType || ""}%`
       },
       // PointTableSystem: {
       //   [Op.like]: `%${req.query.PointTableSystem || ""}%`,
@@ -630,20 +630,20 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
       Day: {
         [Op.between]: [
           req.query.racestartday || "2021-12-01 00:00:00",
-          req.query.raceendday || "4030-12-01 00:00:00",
-        ],
+          req.query.raceendday || "4030-12-01 00:00:00"
+        ]
       },
 
       createdAt: {
         [Op.between]: [
           req.query.startdate || "2021-12-01 00:00:00",
-          req.query.endDate || "4030-12-01 00:00:00",
-        ],
-      },
+          req.query.endDate || "4030-12-01 00:00:00"
+        ]
+      }
     },
     limit,
     offset,
-    paranoid: true,
+    paranoid: true
   })
     .then((data) => {
       // console.log(page, limit, data);
@@ -653,56 +653,56 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
         data: response.data,
         currentPage: response.currentPage,
         totalPages: response.totalPages,
-        totalcount: response.totalcount,
+        totalcount: response.totalcount
       });
     })
     .catch((err) => {
       res.status(500).json({
-        message: err.message || "Some error occurred while retrieving Color.",
+        message: err.message || "Some error occurred while retrieving Color."
       });
     });
 });
 exports.RestoreSoftDeletedRace = Trackerror(async (req, res, next) => {
   const data = await RaceModel.findOne({
     paranoid: false,
-    where: { _id: req.params.id },
+    where: { _id: req.params.id }
   });
   if (!data) {
     return next(new HandlerCallBack("data not found", 404));
   }
   const restoredata = await RaceModel.restore({
-    where: { _id: req.params.id },
+    where: { _id: req.params.id }
   });
   res.status(200).json({
     success: true,
-    restoredata,
+    restoredata
   });
 });
 
 exports.GetHorsesofraces = Trackerror(async (req, res, next) => {
   let raceid = await RaceModel.findOne({
     where: {
-      _id: req.params.id,
-    },
+      _id: req.params.id
+    }
   });
   if (raceid == null) {
     return next(new HandlerCallBack("Race not found", 404));
   }
   const data = await db.RaceModel.findAll({
     where: {
-      _id: req.params.id,
+      _id: req.params.id
     },
     include: [
       {
         model: db.HorseModel,
         as: "RaceCardRacesModelData",
-        include: { all: true },
-      },
-    ],
+        include: { all: true }
+      }
+    ]
   });
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.GetRace = Trackerror(async (req, res, next) => {
@@ -712,68 +712,68 @@ exports.GetRace = Trackerror(async (req, res, next) => {
       {
         paranoid: false,
         model: db.MeetingTypeModel,
-        as: "MeetingTypeData",
+        as: "MeetingTypeData"
       },
 
       {
         model: db.RaceCourseModel,
         as: "RaceCourseData",
-        paranoid: false,
+        paranoid: false
       },
       {
         paranoid: false,
         model: db.TrackLengthModel,
-        as: "TrackLengthData",
+        as: "TrackLengthData"
       },
       {
         paranoid: false,
         model: db.RaceNameModel,
-        as: "RaceNameModelData",
+        as: "RaceNameModelData"
       },
       {
         paranoid: false,
         model: db.RaceKindModel,
-        as: "RaceKindData",
+        as: "RaceKindData"
       },
       {
         model: db.RaceTypeModel,
-        as: "RaceTypeModelData",
+        as: "RaceTypeModelData"
       },
       {
         paranoid: false,
         model: db.SponsorModel,
-        as: "SponsorData",
+        as: "SponsorData"
       },
       {
         model: db.HorseModel,
         as: "RaceAndHorseModelData",
         include: {
-          all: true,
+          all: true
         },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.JockeyModel,
         include: { all: true },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.ResultModel,
         as: "RaceResultData",
         include: { all: true },
-        paranoid: false,
+        paranoid: false
       },
       {
         model: db.HorseAndRaceModel,
         as: "RacehorsesData",
-        include: { all: true },
-      },
-    ],
+        include: { all: true }
+      }
+    ]
   });
 
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.RaceWithTime = Trackerror(async (req, res, next) => {
@@ -783,28 +783,41 @@ exports.RaceWithTime = Trackerror(async (req, res, next) => {
     include: [
       {
         model: db.RaceCourseModel,
-        as: "RaceCourseData",
+        as: "RaceCourseData"
         // paranoid: false,
       },
       {
         model: db.TrackLengthModel,
-        as: "TrackLengthData",
+        as: "TrackLengthData"
         // paranoid: false,
       },
       {
         model: db.RaceNameModel,
-        as: "RaceNameModelData",
+        as: "RaceNameModelData"
         // paranoid: false,
-      },
+      }
     ],
     where: {
-      HorseFilled: true,
-    },
+      [Op.and]: [
+        {
+          // Day: DateFormat
+          Day: {
+            [Op.between]: [
+              moment().format("YYYY-MM-DD 00:00"),
+              moment().format("YYYY-MM-DD 23:59")
+            ]
+          }
+        },
+        {
+          HorseFilled: true
+        }
+      ]
+    }
   });
 
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.GetRaceResultToBeAnnounced = Trackerror(async (req, res, next) => {
@@ -812,17 +825,17 @@ exports.GetRaceResultToBeAnnounced = Trackerror(async (req, res, next) => {
     where: {
       [Op.and]: [
         {
-          ResultStatus: "Awaited",
+          ResultStatus: "Awaited"
         },
         {
-          RaceStatus: "Due",
-        },
-      ],
+          RaceStatus: "Due"
+        }
+      ]
     },
     include: [
       {
         model: db.MeetingTypeModel,
-        as: "MeetingTypeData",
+        as: "MeetingTypeData"
       },
       // {
       //   model: db.GroundTypeModel,
@@ -830,37 +843,37 @@ exports.GetRaceResultToBeAnnounced = Trackerror(async (req, res, next) => {
       // },
       {
         model: db.RaceCourseModel,
-        as: "RaceCourseData",
+        as: "RaceCourseData"
       },
       {
         model: db.TrackLengthModel,
-        as: "TrackLengthData",
+        as: "TrackLengthData"
       },
       {
         model: db.RaceNameModel,
-        as: "RaceNameModelData",
+        as: "RaceNameModelData"
       },
       {
         model: db.RaceKindModel,
-        as: "RaceKindData",
+        as: "RaceKindData"
       },
       {
         model: db.RaceTypeModel,
-        as: "RaceTypeModelData",
+        as: "RaceTypeModelData"
       },
       {
         model: db.SponsorModel,
-        as: "SponsorData",
+        as: "SponsorData"
       },
       {
         model: db.HorseModel,
         as: "RaceAndHorseModelData",
-        include: { all: true },
+        include: { all: true }
       },
       {
         model: db.HorseAndRaceModel,
         as: "RacehorsesData",
-        include: { all: true },
+        include: { all: true }
         // include: [
         //   {
         //     model: db.EquipmentModel,
@@ -886,42 +899,42 @@ exports.GetRaceResultToBeAnnounced = Trackerror(async (req, res, next) => {
       },
       {
         model: db.JockeyModel,
-        include: { all: true },
-      },
-    ],
+        include: { all: true }
+      }
+    ]
   });
 
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.CancelRace = Trackerror(async (req, res, next) => {
   const data = {
     RaceStatus: "Cancelled",
-    ResultStatus: "Cancelled",
+    ResultStatus: "Cancelled"
   };
   await RaceModel.update(
     { data },
     {
       where: {
-        _id: req.params.id,
-      },
+        _id: req.params.id
+      }
     }
   );
   res.status(200).json({
     success: true,
-    message: "Race has been cancelled",
+    message: "Race has been cancelled"
   });
 });
 exports.GetRaceTobeOPublished = Trackerror(async (req, res, next) => {
   const data = await RaceModel.findAll({
     where: { HorseFilled: false },
-    include: { all: true },
+    include: { all: true }
   });
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.RaceOrderByCountry = Trackerror(async (req, res, next) => {
@@ -930,20 +943,20 @@ exports.RaceOrderByCountry = Trackerror(async (req, res, next) => {
     // order: [["RaceCourse", "DESC"]],
     include: {
       model: RaceCourseModel,
-      as: "RaceCourseData",
+      as: "RaceCourseData"
     },
-    order: [["RaceCourseData", "Country", "DESC"]],
+    order: [["RaceCourseData", "Country", "DESC"]]
   });
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.RaceOrderByRaceCourseOnly = Trackerror(async (req, res, next) => {
   const RaceCourseName = await RaceCourseModel.findAll({
     include: { all: true },
     attributes: ["Country"],
-    group: "Country",
+    group: "Country"
   });
   const data = await RaceModel.findAll({
     where: { HorseFilled: true },
@@ -952,18 +965,18 @@ exports.RaceOrderByRaceCourseOnly = Trackerror(async (req, res, next) => {
       model: RaceCourseModel,
       as: "RaceCourseData",
       // where: { TrackName: req.params.RaceCourseName },
-      attributes: ["Country", "TrackName"],
-    },
+      attributes: ["Country", "TrackName"]
+    }
   });
   res.status(200).json({
     success: true,
     RaceCourseName,
-    data,
+    data
   });
 });
 exports.PublishRaces = Trackerror(async (req, res, next) => {
   let data = await RaceModel.findOne({
-    where: { _id: req.params.id },
+    where: { _id: req.params.id }
   });
   if (!data) {
     return next(new HandlerCallBack("Race Is Not Available", 404));
@@ -972,13 +985,13 @@ exports.PublishRaces = Trackerror(async (req, res, next) => {
     { HorseFilled: true },
     {
       where: {
-        _id: req.params.id,
-      },
+        _id: req.params.id
+      }
     }
   );
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.AddRaceImage = Trackerror(async (req, res, next) => {
@@ -986,7 +999,7 @@ exports.AddRaceImage = Trackerror(async (req, res, next) => {
     return next(new HandlerCallBack("No Race id Available in param", 404));
   }
   const data = await RaceModel.findOne({
-    where: { _id: req.params.id },
+    where: { _id: req.params.id }
   });
   if (!data) {
     return next(
@@ -1014,13 +1027,13 @@ exports.AddRaceImage = Trackerror(async (req, res, next) => {
     await RaceResultImagesModel.findOrCreate({
       where: {
         RaceId: data._id,
-        image: `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${RaceImages}/${SingleImage}`,
-      },
+        image: `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${RaceImages}/${SingleImage}`
+      }
     });
   });
   res.status(201).json({
     success: true,
-    message: "all images are been submitted",
+    message: "all images are been submitted"
   });
 });
 exports.GetRacesHorsesForResult = Trackerror(async (req, res, next) => {
@@ -1029,42 +1042,42 @@ exports.GetRacesHorsesForResult = Trackerror(async (req, res, next) => {
   }
   const data = await HorseAndRaceModel.findAll({
     where: {
-      RaceModelId: req.params.raceid,
+      RaceModelId: req.params.raceid
     },
     include: [
       {
         model: db.HorseModel,
         as: "HorseModelIdData1",
-        attributes: ["_id"],
-      },
-    ],
+        attributes: ["_id"]
+      }
+    ]
   });
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.Getracehorses = Trackerror(async (req, res, next) => {
   const data = await RaceModel.findAll({
     where: {
-      _id: req.params.id,
+      _id: req.params.id
     },
     include: [
       {
         model: db.RaceAndHorseModel,
         as: "RaceAndHorseModelData",
-        include: { all: true },
+        include: { all: true }
       },
       {
         model: db.HorseAndRaceModel,
         as: "RacehorsesData",
-        include: { all: true },
-      },
-    ],
+        include: { all: true }
+      }
+    ]
   });
   res.status(200).json({
     success: true,
-    data: data,
+    data: data
   });
 });
 
@@ -1074,7 +1087,7 @@ exports.ResultCreationV2 = Trackerror(async (req, res, next) => {
     return next(new HandlerCallBack("No Race id provided in param", 404));
   }
   let RaceData = await RaceModel.findOne({
-    where: { _id: req.params.RaceId },
+    where: { _id: req.params.RaceId }
   });
   first = 0;
   second = 0;
@@ -1167,7 +1180,7 @@ exports.ResultCreationV2 = Trackerror(async (req, res, next) => {
   for (let i = 0; i < ResultEntry.length; i++) {
     a.push({
       _id: ResultEntry[i].HorseID,
-      STARS: ResultEntry[i].Rating,
+      STARS: ResultEntry[i].Rating
     });
     console.log("done12");
     data = await ResultsModel.findOrCreate({
@@ -1183,8 +1196,8 @@ exports.ResultCreationV2 = Trackerror(async (req, res, next) => {
         CumulativeDistance: ResultEntry[i].CumulativeDistance,
         BeatenBy: ResultEntry[i].BeatenBy,
         TrainerOnRace: ResultEntry[i].TrainerOnRace || null,
-        JockeyOnRace: ResultEntry[i].JockeyOnRace || null,
-      },
+        JockeyOnRace: ResultEntry[i].JockeyOnRace || null
+      }
     });
   }
   const statements = [];
@@ -1204,13 +1217,13 @@ exports.ResultCreationV2 = Trackerror(async (req, res, next) => {
     { ResultStatus: "Announced", RaceStatus: "Completed" },
     {
       where: {
-        _id: req.params.RaceId,
-      },
+        _id: req.params.RaceId
+      }
     }
   );
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 
@@ -1231,8 +1244,8 @@ exports.ResultCreation = Trackerror(async (req, res, next) => {
           FinalPosition: SingleResultEntryDetail[3],
           Distance: SingleResultEntryDetail[4],
           CumulativeDistance: SingleResultEntryDetail[5],
-          BeatenBy: SingleResultEntryDetail[6],
-        },
+          BeatenBy: SingleResultEntryDetail[6]
+        }
       });
     });
   });
@@ -1240,13 +1253,13 @@ exports.ResultCreation = Trackerror(async (req, res, next) => {
     { ResultStatus: "Announced" },
     {
       where: {
-        _id: req.params.RaceId,
-      },
+        _id: req.params.RaceId
+      }
     }
   );
   res.status(200).json({
     success: true,
-    race,
+    race
   });
 });
 exports.VerdictLatest = Trackerror(async (req, res, next) => {
@@ -1266,14 +1279,14 @@ exports.VerdictLatest = Trackerror(async (req, res, next) => {
             attributes: [
               [
                 sequelize.fn("COUNT", sequelize.col("HorseModelId")),
-                "TotalRunners",
-              ],
-            ],
+                "TotalRunners"
+              ]
+            ]
           },
           {
             model: db.RaceNameModel,
             as: "RaceNameModelData",
-            attributes: ["_id", "NameEn", "NameAr"],
+            attributes: ["_id", "NameEn", "NameAr"]
           },
           {
             model: db.RaceAndVerdictsHorseModel,
@@ -1284,28 +1297,28 @@ exports.VerdictLatest = Trackerror(async (req, res, next) => {
               {
                 model: db.VerdictModel,
                 as: "VerdictNameData",
-                attributes: ["NameEn", "NameAr", "_id"],
+                attributes: ["NameEn", "NameAr", "_id"]
               },
               {
                 model: db.HorseModel,
                 as: "HorseNo1Data",
-                attributes: ["NameEn", "NameAr", "_id"],
+                attributes: ["NameEn", "NameAr", "_id"]
               },
               {
                 model: db.HorseModel,
                 as: "HorseNo2Data",
-                attributes: ["NameEn", "NameAr", "_id"],
+                attributes: ["NameEn", "NameAr", "_id"]
               },
               {
                 model: db.HorseModel,
                 as: "HorseNo3Data",
-                attributes: ["NameEn", "NameAr", "_id"],
-              },
-            ],
-          },
-        ],
-      },
-    ],
+                attributes: ["NameEn", "NameAr", "_id"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
   });
   console.log(result);
   // const data = await RaceModel.findOne({
@@ -1375,7 +1388,7 @@ exports.VerdictLatest = Trackerror(async (req, res, next) => {
   // });
   res.status(200).json({
     success: true,
-    result,
+    result
   });
 });
 exports.AllResults = Trackerror(async (req, res, next) => {
@@ -1394,18 +1407,18 @@ exports.AllResults = Trackerror(async (req, res, next) => {
         model: db.ResultModel,
         as: "RaceResultData",
         include: { all: true },
-        order: [["CumulativeDistance", "DESC"]],
+        order: [["CumulativeDistance", "DESC"]]
       },
       {
         model: db.RaceNameModel,
-        as: "RaceNameModelData",
-      },
+        as: "RaceNameModelData"
+      }
     ],
-    attributes: ["_id"],
+    attributes: ["_id"]
   });
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.ResultLatest = Trackerror(async (req, res, next) => {
@@ -1414,7 +1427,7 @@ exports.ResultLatest = Trackerror(async (req, res, next) => {
     return next(new HandlerCallBack("No Race Result", 404));
   }
   const result = await ResultModel.findOne({
-    order: [["createdAt", "DESC"]],
+    order: [["createdAt", "DESC"]]
   });
   // const data = await ResultModel.findAll({
   //   order: [["CumulativeDistance", "ASC"]],
@@ -1428,29 +1441,29 @@ exports.ResultLatest = Trackerror(async (req, res, next) => {
       {
         order: [["CumulativeDistance", "DESC"]],
         where: {
-          RaceID: result.RaceID,
+          RaceID: result.RaceID
         },
 
         model: db.ResultModel,
         as: "RaceResultData",
-        include: { all: true },
+        include: { all: true }
       },
       {
         model: db.RaceNameModel,
-        as: "RaceNameModelData",
-      },
+        as: "RaceNameModelData"
+      }
     ],
-    attributes: ["_id"],
+    attributes: ["_id"]
   });
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.HorseHistory = Trackerror(async (req, res, next) => {
   const data = await ResultModel.findAll({
     where: {
-      HorseID: req.params.horseid,
+      HorseID: req.params.horseid
     },
     order: [["createdAt", "ASC"]],
     limit: 4,
@@ -1458,27 +1471,27 @@ exports.HorseHistory = Trackerror(async (req, res, next) => {
       {
         model: db.HorseModel,
         as: "HorseIDData",
-        attributes: ["_id", "NameEn", "NameAr"],
+        attributes: ["_id", "NameEn", "NameAr"]
       },
       {
         model: db.HorseModel,
         as: "BeatenByData",
-        attributes: ["_id", "NameEn", "NameAr"],
+        attributes: ["_id", "NameEn", "NameAr"]
       },
       {
         model: db.TrainerModel,
         as: "TrainerOnRaceDataResult",
-        attributes: ["_id", "NameEn", "NameAr"],
+        attributes: ["_id", "NameEn", "NameAr"]
       },
       {
         model: db.JockeyModel,
         as: "JockeyOnRaceDataResult",
-        attributes: ["_id", "NameEn", "NameAr"],
+        attributes: ["_id", "NameEn", "NameAr"]
       },
       {
         model: db.FinalPositionModel,
         as: "FinalPositionDataHorse",
-        attributes: ["_id", "NameEn", "NameAr", "Rank"],
+        attributes: ["_id", "NameEn", "NameAr", "Rank"]
       },
       {
         model: db.RaceModel,
@@ -1487,22 +1500,22 @@ exports.HorseHistory = Trackerror(async (req, res, next) => {
           {
             model: db.RaceNameModel,
             as: "RaceNameModelData",
-            attributes: ["_id", "NameEn", "NameAr"],
+            attributes: ["_id", "NameEn", "NameAr"]
           },
           {
             model: db.RaceCourseModel,
             as: "RaceCourseData",
 
-            attributes: ["_id", "TrackNameEn", "TrackNameAr"],
+            attributes: ["_id", "TrackNameEn", "TrackNameAr"]
           },
           {
             model: db.TrackConditionModel,
             as: "TrackConditionData",
-            attributes: ["_id", "NameEn", "NameAr"],
-          },
+            attributes: ["_id", "NameEn", "NameAr"]
+          }
         ],
-        attributes: ["_id", "Day"],
-      },
+        attributes: ["_id", "Day"]
+      }
     ],
     attributes: [
       "_id",
@@ -1510,12 +1523,12 @@ exports.HorseHistory = Trackerror(async (req, res, next) => {
       "CumulativeDistance",
       "VideoLink",
       "RaceTime",
-      "Rating",
-    ],
+      "Rating"
+    ]
   });
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.SingleRace = Trackerror(async (req, res, next) => {
@@ -1529,7 +1542,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
     try {
       decodedData = jwt.verify(token, process.env.JWT_SECRET);
       verify = await SubscriberModel.findOne({
-        where: { _id: decodedData.id },
+        where: { _id: decodedData.id }
       });
       if (verify) {
         data = await RaceModel.findOne({
@@ -1552,18 +1565,18 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
               "deletedAt",
               "Competition",
               "RaceCard",
-              "BackupId",
+              "BackupId"
             ],
-            paranoid: false,
+            paranoid: false
           },
           include: [
             {
               model: db.HorseKindModel,
               as: "HorseKindinRaceData",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt"],
+                exclude: ["createdAt", "updatedAt", "deletedAt"]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.RaceCourseModel,
@@ -1577,58 +1590,58 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                   "AbbrevAr",
                   "createdAt",
                   "updatedAt",
-                  "deletedAt",
-                ],
+                  "deletedAt"
+                ]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.TrackLengthModel,
               as: "TrackLengthData",
               attributes: {
-                exclude: ["GroundType", "createdAt", "updatedAt", "deletedAt"],
+                exclude: ["GroundType", "createdAt", "updatedAt", "deletedAt"]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.RaceNameModel,
               as: "RaceNameModelData",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt"],
+                exclude: ["createdAt", "updatedAt", "deletedAt"]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.TrackConditionModel,
               as: "TrackConditionData",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt"],
+                exclude: ["createdAt", "updatedAt", "deletedAt"]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.CurrencyModel,
               as: "CurrencyData",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt"],
+                exclude: ["createdAt", "updatedAt", "deletedAt"]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.RaceKindModel,
               as: "RaceKindData",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt"],
+                exclude: ["createdAt", "updatedAt", "deletedAt"]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.RaceTypeModel,
               as: "RaceTypeModelData",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt"],
+                exclude: ["createdAt", "updatedAt", "deletedAt"]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.SponsorModel,
@@ -1639,22 +1652,22 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                   "updatedAt",
                   "deletedAt",
                   "DescriptionEn",
-                  "DescriptionAr",
-                ],
+                  "DescriptionAr"
+                ]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.CompetitonModel,
               as: "CompetitionRacesPointsModelData",
               include: { all: true },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.ResultModel,
               as: "RaceResultData",
               include: { all: true },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.HorseAndRaceModel,
@@ -1666,8 +1679,8 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                   "Equipment",
                   "TrainerOnRace",
                   "JockeyOnRace",
-                  "OwnerOnRace",
-                ],
+                  "OwnerOnRace"
+                ]
               },
 
               include: [
@@ -1675,13 +1688,8 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                   model: db.EquipmentModel,
                   as: "EquipmentData1",
                   attributes: {
-                    exclude: [
-                      "createdAt",
-                      "updatedAt",
-                      "deletedAt",
-                      "BackupId",
-                    ],
-                  },
+                    exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+                  }
                 },
                 {
                   model: db.HorseModel,
@@ -1692,50 +1700,50 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                       model: db.HorseModel,
                       as: "DamData",
                       attributes: {
-                        exclude: ["createdAt", "updatedAt", "deletedAt"],
-                      },
+                        exclude: ["createdAt", "updatedAt", "deletedAt"]
+                      }
                     },
                     {
                       model: db.test,
                       as: "TrackHorses",
                       attributes: {
-                        exclude: ["createdAt", "updatedAt", "deletedAt"],
-                      },
+                        exclude: ["createdAt", "updatedAt", "deletedAt"]
+                      }
                     },
                     {
                       model: db.NationalityModel,
                       as: "NationalityData",
                       attributes: {
-                        exclude: ["createdAt", "updatedAt", "deletedAt"],
-                      },
+                        exclude: ["createdAt", "updatedAt", "deletedAt"]
+                      }
                     },
                     {
                       model: db.BreederModel,
                       as: "BreederData",
                       attributes: {
-                        exclude: ["createdAt", "updatedAt", "deletedAt"],
-                      },
+                        exclude: ["createdAt", "updatedAt", "deletedAt"]
+                      }
                     },
                     {
                       model: db.HorseModel,
                       as: "SireData",
                       attributes: {
-                        exclude: ["createdAt", "updatedAt", "deletedAt"],
-                      },
+                        exclude: ["createdAt", "updatedAt", "deletedAt"]
+                      }
                     },
                     {
                       model: db.HorseModel,
                       as: "GSireData",
                       attributes: {
-                        exclude: ["createdAt", "updatedAt", "deletedAt"],
-                      },
-                    },
-                  ],
+                        exclude: ["createdAt", "updatedAt", "deletedAt"]
+                      }
+                    }
+                  ]
                 },
                 {
                   model: db.TrainerModel,
                   as: "TrainerOnRaceData1",
-                  attributes: ["NameEn", "NameAr", "_id", "BackupId", "image"],
+                  attributes: ["NameEn", "NameAr", "_id", "BackupId", "image"]
                 },
                 {
                   model: db.JockeyModel,
@@ -1750,39 +1758,29 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                       "RemarksEn",
                       "Rating",
                       "NationalityID",
-                      "BackupId",
-                    ],
-                  },
+                      "BackupId"
+                    ]
+                  }
                 },
                 {
                   model: db.OwnerModel,
                   as: "OwnerOnRaceData1",
                   attributes: {
-                    exclude: [
-                      "createdAt",
-                      "updatedAt",
-                      "deletedAt",
-                      "BackupId",
-                    ],
-                  },
+                    exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+                  }
                 },
                 {
                   model: db.ColorModel,
                   as: "CapColorData1",
                   attributes: {
-                    exclude: [
-                      "createdAt",
-                      "updatedAt",
-                      "deletedAt",
-                      "BackupId",
-                    ],
-                  },
-                },
+                    exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+                  }
+                }
               ],
-              paranoid: false,
-            },
+              paranoid: false
+            }
           ],
-          order: [["RacehorsesData", "HorseNo", "ASC"]],
+          order: [["RacehorsesData", "HorseNo", "ASC"]]
         });
       } else {
         data = await RaceModel.findOne({
@@ -1805,18 +1803,18 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
               "deletedAt",
               "Competition",
               "RaceCard",
-              "BackupId",
+              "BackupId"
             ],
-            paranoid: false,
+            paranoid: false
           },
           include: [
             {
               model: db.HorseKindModel,
               as: "HorseKindinRaceData",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt"],
+                exclude: ["createdAt", "updatedAt", "deletedAt"]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.RaceCourseModel,
@@ -1830,58 +1828,58 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                   "AbbrevAr",
                   "createdAt",
                   "updatedAt",
-                  "deletedAt",
-                ],
+                  "deletedAt"
+                ]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.TrackLengthModel,
               as: "TrackLengthData",
               attributes: {
-                exclude: ["GroundType", "createdAt", "updatedAt", "deletedAt"],
+                exclude: ["GroundType", "createdAt", "updatedAt", "deletedAt"]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.RaceNameModel,
               as: "RaceNameModelData",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt"],
+                exclude: ["createdAt", "updatedAt", "deletedAt"]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.TrackConditionModel,
               as: "TrackConditionData",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt"],
+                exclude: ["createdAt", "updatedAt", "deletedAt"]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.CurrencyModel,
               as: "CurrencyData",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt"],
+                exclude: ["createdAt", "updatedAt", "deletedAt"]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.RaceKindModel,
               as: "RaceKindData",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt"],
+                exclude: ["createdAt", "updatedAt", "deletedAt"]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.RaceTypeModel,
               as: "RaceTypeModelData",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt"],
+                exclude: ["createdAt", "updatedAt", "deletedAt"]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.SponsorModel,
@@ -1892,22 +1890,22 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                   "updatedAt",
                   "deletedAt",
                   "DescriptionEn",
-                  "DescriptionAr",
-                ],
+                  "DescriptionAr"
+                ]
               },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.CompetitonModel,
               as: "CompetitionRacesPointsModelData",
               include: { all: true },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.ResultModel,
               as: "RaceResultData",
               include: { all: true },
-              paranoid: false,
+              paranoid: false
             },
             {
               model: db.HorseAndRaceModel,
@@ -1919,8 +1917,8 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                   "Equipment",
                   "TrainerOnRace",
                   "JockeyOnRace",
-                  "OwnerOnRace",
-                ],
+                  "OwnerOnRace"
+                ]
               },
 
               include: [
@@ -1928,13 +1926,8 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                   model: db.EquipmentModel,
                   as: "EquipmentData1",
                   attributes: {
-                    exclude: [
-                      "createdAt",
-                      "updatedAt",
-                      "deletedAt",
-                      "BackupId",
-                    ],
-                  },
+                    exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+                  }
                 },
                 {
                   model: db.HorseModel,
@@ -1945,44 +1938,44 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                       model: db.HorseModel,
                       as: "DamData",
                       attributes: {
-                        exclude: ["createdAt", "updatedAt", "deletedAt"],
-                      },
+                        exclude: ["createdAt", "updatedAt", "deletedAt"]
+                      }
                     },
                     {
                       model: db.NationalityModel,
                       as: "NationalityData",
                       attributes: {
-                        exclude: ["createdAt", "updatedAt", "deletedAt"],
-                      },
+                        exclude: ["createdAt", "updatedAt", "deletedAt"]
+                      }
                     },
 
                     {
                       model: db.BreederModel,
                       as: "BreederData",
                       attributes: {
-                        exclude: ["createdAt", "updatedAt", "deletedAt"],
-                      },
+                        exclude: ["createdAt", "updatedAt", "deletedAt"]
+                      }
                     },
                     {
                       model: db.HorseModel,
                       as: "SireData",
                       attributes: {
-                        exclude: ["createdAt", "updatedAt", "deletedAt"],
-                      },
+                        exclude: ["createdAt", "updatedAt", "deletedAt"]
+                      }
                     },
                     {
                       model: db.HorseModel,
                       as: "GSireData",
                       attributes: {
-                        exclude: ["createdAt", "updatedAt", "deletedAt"],
-                      },
-                    },
-                  ],
+                        exclude: ["createdAt", "updatedAt", "deletedAt"]
+                      }
+                    }
+                  ]
                 },
                 {
                   model: db.TrainerModel,
                   as: "TrainerOnRaceData1",
-                  attributes: ["NameEn", "NameAr", "_id", "BackupId", "image"],
+                  attributes: ["NameEn", "NameAr", "_id", "BackupId", "image"]
                 },
                 {
                   model: db.JockeyModel,
@@ -1997,38 +1990,28 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                       "RemarksEn",
                       "Rating",
                       "NationalityID",
-                      "BackupId",
-                    ],
-                  },
+                      "BackupId"
+                    ]
+                  }
                 },
                 {
                   model: db.OwnerModel,
                   as: "OwnerOnRaceData1",
                   attributes: {
-                    exclude: [
-                      "createdAt",
-                      "updatedAt",
-                      "deletedAt",
-                      "BackupId",
-                    ],
-                  },
+                    exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+                  }
                 },
                 {
                   model: db.ColorModel,
                   as: "CapColorData1",
                   attributes: {
-                    exclude: [
-                      "createdAt",
-                      "updatedAt",
-                      "deletedAt",
-                      "BackupId",
-                    ],
-                  },
-                },
+                    exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+                  }
+                }
               ],
-              paranoid: false,
-            },
-          ],
+              paranoid: false
+            }
+          ]
         });
       }
     } catch (err) {
@@ -2052,18 +2035,18 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
             "deletedAt",
             "Competition",
             "RaceCard",
-            "BackupId",
+            "BackupId"
           ],
-          paranoid: false,
+          paranoid: false
         },
         include: [
           {
             model: db.HorseKindModel,
             as: "HorseKindinRaceData",
             attributes: {
-              exclude: ["createdAt", "updatedAt", "deletedAt"],
+              exclude: ["createdAt", "updatedAt", "deletedAt"]
             },
-            paranoid: false,
+            paranoid: false
           },
           {
             model: db.RaceCourseModel,
@@ -2077,58 +2060,58 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                 "AbbrevAr",
                 "createdAt",
                 "updatedAt",
-                "deletedAt",
-              ],
+                "deletedAt"
+              ]
             },
-            paranoid: false,
+            paranoid: false
           },
           {
             model: db.TrackLengthModel,
             as: "TrackLengthData",
             attributes: {
-              exclude: ["GroundType", "createdAt", "updatedAt", "deletedAt"],
+              exclude: ["GroundType", "createdAt", "updatedAt", "deletedAt"]
             },
-            paranoid: false,
+            paranoid: false
           },
           {
             model: db.RaceNameModel,
             as: "RaceNameModelData",
             attributes: {
-              exclude: ["createdAt", "updatedAt", "deletedAt"],
+              exclude: ["createdAt", "updatedAt", "deletedAt"]
             },
-            paranoid: false,
+            paranoid: false
           },
           {
             model: db.TrackConditionModel,
             as: "TrackConditionData",
             attributes: {
-              exclude: ["createdAt", "updatedAt", "deletedAt"],
+              exclude: ["createdAt", "updatedAt", "deletedAt"]
             },
-            paranoid: false,
+            paranoid: false
           },
           {
             model: db.CurrencyModel,
             as: "CurrencyData",
             attributes: {
-              exclude: ["createdAt", "updatedAt", "deletedAt"],
+              exclude: ["createdAt", "updatedAt", "deletedAt"]
             },
-            paranoid: false,
+            paranoid: false
           },
           {
             model: db.RaceKindModel,
             as: "RaceKindData",
             attributes: {
-              exclude: ["createdAt", "updatedAt", "deletedAt"],
+              exclude: ["createdAt", "updatedAt", "deletedAt"]
             },
-            paranoid: false,
+            paranoid: false
           },
           {
             model: db.RaceTypeModel,
             as: "RaceTypeModelData",
             attributes: {
-              exclude: ["createdAt", "updatedAt", "deletedAt"],
+              exclude: ["createdAt", "updatedAt", "deletedAt"]
             },
-            paranoid: false,
+            paranoid: false
           },
           {
             model: db.SponsorModel,
@@ -2139,22 +2122,22 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                 "updatedAt",
                 "deletedAt",
                 "DescriptionEn",
-                "DescriptionAr",
-              ],
+                "DescriptionAr"
+              ]
             },
-            paranoid: false,
+            paranoid: false
           },
           {
             model: db.CompetitonModel,
             as: "CompetitionRacesPointsModelData",
             include: { all: true },
-            paranoid: false,
+            paranoid: false
           },
           {
             model: db.ResultModel,
             as: "RaceResultData",
             include: { all: true },
-            paranoid: false,
+            paranoid: false
           },
           {
             model: db.HorseAndRaceModel,
@@ -2166,8 +2149,8 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                 "Equipment",
                 "TrainerOnRace",
                 "JockeyOnRace",
-                "OwnerOnRace",
-              ],
+                "OwnerOnRace"
+              ]
             },
 
             include: [
@@ -2175,8 +2158,8 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                 model: db.EquipmentModel,
                 as: "EquipmentData1",
                 attributes: {
-                  exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
-                },
+                  exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+                }
               },
               {
                 model: db.HorseModel,
@@ -2187,44 +2170,44 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                     model: db.HorseModel,
                     as: "DamData",
                     attributes: {
-                      exclude: ["createdAt", "updatedAt", "deletedAt"],
-                    },
+                      exclude: ["createdAt", "updatedAt", "deletedAt"]
+                    }
                   },
                   {
                     model: db.NationalityModel,
                     as: "NationalityData",
                     attributes: {
-                      exclude: ["createdAt", "updatedAt", "deletedAt"],
-                    },
+                      exclude: ["createdAt", "updatedAt", "deletedAt"]
+                    }
                   },
 
                   {
                     model: db.BreederModel,
                     as: "BreederData",
                     attributes: {
-                      exclude: ["createdAt", "updatedAt", "deletedAt"],
-                    },
+                      exclude: ["createdAt", "updatedAt", "deletedAt"]
+                    }
                   },
                   {
                     model: db.HorseModel,
                     as: "SireData",
                     attributes: {
-                      exclude: ["createdAt", "updatedAt", "deletedAt"],
-                    },
+                      exclude: ["createdAt", "updatedAt", "deletedAt"]
+                    }
                   },
                   {
                     model: db.HorseModel,
                     as: "GSireData",
                     attributes: {
-                      exclude: ["createdAt", "updatedAt", "deletedAt"],
-                    },
-                  },
-                ],
+                      exclude: ["createdAt", "updatedAt", "deletedAt"]
+                    }
+                  }
+                ]
               },
               {
                 model: db.TrainerModel,
                 as: "TrainerOnRaceData1",
-                attributes: ["NameEn", "NameAr", "_id", "BackupId", "image"],
+                attributes: ["NameEn", "NameAr", "_id", "BackupId", "image"]
               },
               {
                 model: db.JockeyModel,
@@ -2239,28 +2222,28 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                     "RemarksEn",
                     "Rating",
                     "NationalityID",
-                    "BackupId",
-                  ],
-                },
+                    "BackupId"
+                  ]
+                }
               },
               {
                 model: db.OwnerModel,
                 as: "OwnerOnRaceData1",
                 attributes: {
-                  exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
-                },
+                  exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+                }
               },
               {
                 model: db.ColorModel,
                 as: "CapColorData1",
                 attributes: {
-                  exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
-                },
-              },
+                  exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+                }
+              }
             ],
-            paranoid: false,
-          },
-        ],
+            paranoid: false
+          }
+        ]
       });
     }
   } else {
@@ -2285,18 +2268,18 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
           "deletedAt",
           "Competition",
           "RaceCard",
-          "BackupId",
+          "BackupId"
         ],
-        paranoid: false,
+        paranoid: false
       },
       include: [
         {
           model: db.HorseKindModel,
           as: "HorseKindinRaceData",
           attributes: {
-            exclude: ["createdAt", "updatedAt", "deletedAt"],
+            exclude: ["createdAt", "updatedAt", "deletedAt"]
           },
-          paranoid: false,
+          paranoid: false
         },
         {
           model: db.RaceCourseModel,
@@ -2310,58 +2293,58 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
               "AbbrevAr",
               "createdAt",
               "updatedAt",
-              "deletedAt",
-            ],
+              "deletedAt"
+            ]
           },
-          paranoid: false,
+          paranoid: false
         },
         {
           model: db.TrackLengthModel,
           as: "TrackLengthData",
           attributes: {
-            exclude: ["GroundType", "createdAt", "updatedAt", "deletedAt"],
+            exclude: ["GroundType", "createdAt", "updatedAt", "deletedAt"]
           },
-          paranoid: false,
+          paranoid: false
         },
         {
           model: db.RaceNameModel,
           as: "RaceNameModelData",
           attributes: {
-            exclude: ["createdAt", "updatedAt", "deletedAt"],
+            exclude: ["createdAt", "updatedAt", "deletedAt"]
           },
-          paranoid: false,
+          paranoid: false
         },
         {
           model: db.TrackConditionModel,
           as: "TrackConditionData",
           attributes: {
-            exclude: ["createdAt", "updatedAt", "deletedAt"],
+            exclude: ["createdAt", "updatedAt", "deletedAt"]
           },
-          paranoid: false,
+          paranoid: false
         },
         {
           model: db.CurrencyModel,
           as: "CurrencyData",
           attributes: {
-            exclude: ["createdAt", "updatedAt", "deletedAt"],
+            exclude: ["createdAt", "updatedAt", "deletedAt"]
           },
-          paranoid: false,
+          paranoid: false
         },
         {
           model: db.RaceKindModel,
           as: "RaceKindData",
           attributes: {
-            exclude: ["createdAt", "updatedAt", "deletedAt"],
+            exclude: ["createdAt", "updatedAt", "deletedAt"]
           },
-          paranoid: false,
+          paranoid: false
         },
         {
           model: db.RaceTypeModel,
           as: "RaceTypeModelData",
           attributes: {
-            exclude: ["createdAt", "updatedAt", "deletedAt"],
+            exclude: ["createdAt", "updatedAt", "deletedAt"]
           },
-          paranoid: false,
+          paranoid: false
         },
         {
           model: db.SponsorModel,
@@ -2372,22 +2355,22 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
               "updatedAt",
               "deletedAt",
               "DescriptionEn",
-              "DescriptionAr",
-            ],
+              "DescriptionAr"
+            ]
           },
-          paranoid: false,
+          paranoid: false
         },
         {
           model: db.CompetitonModel,
           as: "CompetitionRacesPointsModelData",
           include: { all: true },
-          paranoid: false,
+          paranoid: false
         },
         {
           model: db.ResultModel,
           as: "RaceResultData",
           include: { all: true },
-          paranoid: false,
+          paranoid: false
         },
         {
           model: db.HorseAndRaceModel,
@@ -2399,8 +2382,8 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
               "Equipment",
               "TrainerOnRace",
               "JockeyOnRace",
-              "OwnerOnRace",
-            ],
+              "OwnerOnRace"
+            ]
           },
 
           include: [
@@ -2408,8 +2391,8 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
               model: db.EquipmentModel,
               as: "EquipmentData1",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
-              },
+                exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+              }
             },
             {
               model: db.HorseModel,
@@ -2420,44 +2403,44 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                   model: db.HorseModel,
                   as: "DamData",
                   attributes: {
-                    exclude: ["createdAt", "updatedAt", "deletedAt"],
-                  },
+                    exclude: ["createdAt", "updatedAt", "deletedAt"]
+                  }
                 },
                 {
                   model: db.NationalityModel,
                   as: "NationalityData",
                   attributes: {
-                    exclude: ["createdAt", "updatedAt", "deletedAt"],
-                  },
+                    exclude: ["createdAt", "updatedAt", "deletedAt"]
+                  }
                 },
 
                 {
                   model: db.BreederModel,
                   as: "BreederData",
                   attributes: {
-                    exclude: ["createdAt", "updatedAt", "deletedAt"],
-                  },
+                    exclude: ["createdAt", "updatedAt", "deletedAt"]
+                  }
                 },
                 {
                   model: db.HorseModel,
                   as: "SireData",
                   attributes: {
-                    exclude: ["createdAt", "updatedAt", "deletedAt"],
-                  },
+                    exclude: ["createdAt", "updatedAt", "deletedAt"]
+                  }
                 },
                 {
                   model: db.HorseModel,
                   as: "GSireData",
                   attributes: {
-                    exclude: ["createdAt", "updatedAt", "deletedAt"],
-                  },
-                },
-              ],
+                    exclude: ["createdAt", "updatedAt", "deletedAt"]
+                  }
+                }
+              ]
             },
             {
               model: db.TrainerModel,
               as: "TrainerOnRaceData1",
-              attributes: ["NameEn", "NameAr", "_id", "BackupId", "image"],
+              attributes: ["NameEn", "NameAr", "_id", "BackupId", "image"]
             },
             {
               model: db.JockeyModel,
@@ -2472,29 +2455,29 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                   "RemarksEn",
                   "Rating",
                   "NationalityID",
-                  "BackupId",
-                ],
-              },
+                  "BackupId"
+                ]
+              }
             },
             {
               model: db.OwnerModel,
               as: "OwnerOnRaceData1",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
-              },
+                exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+              }
             },
             {
               model: db.ColorModel,
               as: "CapColorData1",
               attributes: {
-                exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
-              },
-            },
+                exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"]
+              }
+            }
           ],
-          paranoid: false,
-        },
+          paranoid: false
+        }
       ],
-      order: [["RacehorsesData", "HorseNo", "ASC"]],
+      order: [["RacehorsesData", "HorseNo", "ASC"]]
     });
   }
 
@@ -2503,7 +2486,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
   // } else {
   res.status(200).json({
     success: true,
-    data,
+    data
   });
   // }
 });
@@ -2534,7 +2517,7 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
     PrizeNumber,
     RaceWeight,
     Timing,
-    Endtiming,
+    Endtiming
   } = req.body;
   let = {
     FirstPrice,
@@ -2544,7 +2527,7 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
     FifthPrice,
     SixthPrice,
     Currency,
-    TrackCondition,
+    TrackCondition
   } = req.body;
 
   if (!totalPrize) {
@@ -2591,9 +2574,9 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
   if (!TrackConditionChecking) {
     TrackConditionChecking = await db.TrackConditionModel.findOne({
       where: {
-        NameEn: "GS",
+        NameEn: "GS"
       },
-      attributes: ["_id"],
+      attributes: ["_id"]
     });
   }
   console.log(TrackConditionChecking._id);
@@ -2601,9 +2584,9 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
   if (!CurrencyChecking) {
     CurrencyChecking = await db.CurrencyModel.findOne({
       where: {
-        NameEn: "AED",
+        NameEn: "AED"
       },
-      attributes: ["_id"],
+      attributes: ["_id"]
     });
   }
   console.log(CurrencyChecking._id, "ddad");
@@ -2647,13 +2630,13 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
       ? TrackCondition
       : TrackConditionChecking._id,
     RaceWeight: RaceWeight,
-    Currency: !Currency ? Currency : CurrencyChecking._id,
+    Currency: !Currency ? Currency : CurrencyChecking._id
   });
 
   await db.CronJobModel.create({
     CronStartTime: Timing,
     CronEndTime: Endtiming,
-    RaceId: data._id,
+    RaceId: data._id
   });
   schedule.scheduleJob(
     { start: Timing, end: Endtiming, rule: "*/1 * * * * *" },
@@ -2662,8 +2645,8 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
         { RaceStatus: "Due" },
         {
           where: {
-            _id: data._id,
-          },
+            _id: data._id
+          }
         }
       );
     }
@@ -2671,12 +2654,12 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.AddPointTable = Trackerror(async (req, res, next) => {
   let RaceId = await RaceModel.findOne({
-    where: { _id: req.params.id },
+    where: { _id: req.params.id }
   });
   if (!RaceId) {
     return next(new HandlerCallBack("Race Card not found", 404));
@@ -2686,19 +2669,19 @@ exports.AddPointTable = Trackerror(async (req, res, next) => {
     await Points.map(async (singlepoint) => {
       await RaceAndPointsSystemModel.create({
         Race: req.params.id,
-        Point: singlepoint,
+        Point: singlepoint
       });
     });
     await RaceModel.update(
       { role: "approveduser" },
       {
         where: {
-          _id: req.params.id,
-        },
+          _id: req.params.id
+        }
       }
     );
     res.status(200).json({
-      success: true,
+      success: true
     });
   }
 });
@@ -2711,8 +2694,8 @@ exports.IncludeHorses = Trackerror(async (req, res, next) => {
   for (let i = 0; i < HorseEntry.length; i++) {
     horsedata = await HorseModel.findOne({
       where: {
-        _id: HorseEntry[i].HorseModelId,
-      },
+        _id: HorseEntry[i].HorseModelId
+      }
     });
     await HorseAndRaceModel.findOrCreate({
       where: {
@@ -2728,8 +2711,8 @@ exports.IncludeHorses = Trackerror(async (req, res, next) => {
         Rating: HorseEntry[i].Rating,
         HorseRunningStatus: HorseEntry[i].HorseRunningStatus,
         CapColor: HorseEntry[i].CapColor,
-        JockeyRaceWeight: HorseEntry[i].JockeyRaceWeight || null,
-      },
+        JockeyRaceWeight: HorseEntry[i].JockeyRaceWeight || null
+      }
     });
   }
   // await HorseEntryData.map(async (singlehorse) => {
@@ -2772,7 +2755,7 @@ exports.IncludeHorses = Trackerror(async (req, res, next) => {
   //   });
   // });
   res.status(200).json({
-    success: true,
+    success: true
   });
 });
 
@@ -2796,12 +2779,12 @@ exports.IncludeVerdicts = Trackerror(async (req, res, next) => {
         HorseNo1: singleverdictdetail[1],
         HorseNo2: singleverdictdetail[2],
         HorseNo3: singleverdictdetail[3],
-        Remarks: singleverdictdetail[4],
+        Remarks: singleverdictdetail[4]
       });
     });
   });
   res.status(200).json({
-    success: true,
+    success: true
   });
 });
 exports.GetRaceWithStartTime = Trackerror(async (req, res, next) => {
@@ -2819,12 +2802,12 @@ WHERE
   results.map((singleresult) => arrayof_ids.push(singleresult._id));
   const data = await RaceModel.findAll({
     where: {
-      _id: arrayof_ids,
+      _id: arrayof_ids
     },
     include: [
       {
         model: db.MeetingTypeModel,
-        as: "MeetingTypeData",
+        as: "MeetingTypeData"
       },
       // {
       //   model: db.GroundTypeModel,
@@ -2832,43 +2815,43 @@ WHERE
       // },
       {
         model: db.RaceCourseModel,
-        as: "RaceCourseData",
+        as: "RaceCourseData"
       },
       {
         model: db.TrackLengthModel,
-        as: "TrackLengthData",
+        as: "TrackLengthData"
       },
       {
         model: db.RaceNameModel,
-        as: "RaceNameModelData",
+        as: "RaceNameModelData"
       },
       {
         model: db.RaceKindModel,
-        as: "RaceKindData",
+        as: "RaceKindData"
       },
       {
         model: db.RaceTypeModel,
-        as: "RaceTypeModelData",
+        as: "RaceTypeModelData"
       },
       {
         model: db.SponsorModel,
-        as: "SponsorData",
+        as: "SponsorData"
       },
 
       {
         model: db.HorseAndRaceModel,
-        include: { all: true },
+        include: { all: true }
       },
       {
         model: db.JockeyModel,
-        include: [{ model: db.NationalityModel, as: "JockeyNationalityData" }],
-      },
-    ],
+        include: [{ model: db.NationalityModel, as: "JockeyNationalityData" }]
+      }
+    ]
   });
   console.log(data.length);
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.EditRace = Trackerror(async (req, res, next) => {
@@ -2901,10 +2884,10 @@ exports.EditRace = Trackerror(async (req, res, next) => {
     TrackCondition,
     HorseKindinRace,
     Currency,
-    RaceWeight,
+    RaceWeight
   } = req.body;
   let data = await RaceModel.findOne({
-    where: { _id: req.params.id },
+    where: { _id: req.params.id }
   });
   if (data === null) {
     return next(new HandlerCallBack("data not found", 404));
@@ -2939,16 +2922,16 @@ exports.EditRace = Trackerror(async (req, res, next) => {
       TrackCondition: TrackCondition || data.TrackCondition,
       HorseKindinRace: HorseKindinRace || data.HorseKindinRace,
       Currency: Currency || data.Currency,
-      RaceWeight: RaceWeight || data.RaceWeight,
+      RaceWeight: RaceWeight || data.RaceWeight
     };
     data = await RaceModel.update(updateddata, {
       where: {
-        _id: req.params.id,
-      },
+        _id: req.params.id
+      }
     });
     res.status(200).json({
       success: true,
-      data,
+      data
     });
   } else {
     const file = req.files.image;
@@ -2986,23 +2969,23 @@ exports.EditRace = Trackerror(async (req, res, next) => {
       TrackCondition: TrackCondition || data.TrackCondition,
       HorseKindinRace: HorseKindinRace || data.HorseKindinRace,
       Currency: Currency || data.Currency,
-      RaceWeight: RaceWeight || data.RaceWeight,
+      RaceWeight: RaceWeight || data.RaceWeight
     };
     data = await RaceModel.update(updateddata, {
       where: {
-        _id: req.params.id,
-      },
+        _id: req.params.id
+      }
     });
     res.status(200).json({
       success: true,
-      data,
+      data
     });
   }
 });
 exports.DeleteRace = Trackerror(async (req, res, next) => {
   const data = await RaceModel.findOne({
     where: { _id: req.params.id },
-    include: { all: true },
+    include: { all: true }
   });
   if (!data) {
     return next(new HandlerCallBack("data not found", 404));
@@ -3011,17 +2994,17 @@ exports.DeleteRace = Trackerror(async (req, res, next) => {
   console.log(data);
   await RaceModel.destroy({
     where: { _id: req.params.id },
-    force: true,
+    force: true
   });
 
   res.status(200).json({
     success: true,
-    message: "data Delete Successfully",
+    message: "data Delete Successfully"
   });
 });
 exports.SoftDeleteRace = Trackerror(async (req, res, next) => {
   const data = await RaceModel.findOne({
-    where: { _id: req.params.id },
+    where: { _id: req.params.id }
   });
   if (!data) {
     return next(new HandlerCallBack("data not found", 404));
@@ -3029,12 +3012,12 @@ exports.SoftDeleteRace = Trackerror(async (req, res, next) => {
 
   console.log(data);
   await RaceModel.destroy({
-    where: { _id: req.params.id },
+    where: { _id: req.params.id }
   });
 
   res.status(200).json({
     success: true,
-    message: "data Delete Successfully",
+    message: "data Delete Successfully"
   });
 });
 exports.GetRaceonTimeAndRaceCourse = Trackerror(async (req, res, next) => {
@@ -3042,13 +3025,13 @@ exports.GetRaceonTimeAndRaceCourse = Trackerror(async (req, res, next) => {
     where: {
       [Op.and]: [
         { RaceCourse: req.params.RaceCourseid },
-        { StartTime: req.params.StartTime },
-      ],
-    },
+        { StartTime: req.params.StartTime }
+      ]
+    }
   });
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.RacePredictor = Trackerror(async (req, res, next) => {
@@ -3069,20 +3052,18 @@ exports.RacePredictor = Trackerror(async (req, res, next) => {
                 sequelize.literal(
                   "(SELECT COUNT(*) FROM SubscriberAndCompetitionModel where SubscriberAndCompetitionModel.HorseID=HorseModelIdData1._id)"
                 ),
-                "HorseScore",
-              ],
-            ],
-          },
-        ],
-      },
-    ],
+                "HorseScore"
+              ]
+            ]
+          }
+        ]
+      }
+    ]
   });
   const data = await SubscriberAndCompetitionModel.findAll({
     where: { RaceID: req.params.id },
     // include: { all: true },
-    attributes: [
-      [sequelize.fn("count", sequelize.col("RaceID")), "TotalVotes"],
-    ],
+    attributes: [[sequelize.fn("count", sequelize.col("RaceID")), "TotalVotes"]]
   });
   if (data === null) {
     return next(new HandlerCallBack("data not found", 404));
@@ -3090,27 +3071,27 @@ exports.RacePredictor = Trackerror(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data,
-    AllHorses,
+    AllHorses
   });
 });
 exports.GetEditRaceVerdict = Trackerror(async (req, res, next) => {
   const data = await RaceAndVerdictsHorseModel.findAll({
     where: { RaceToBePredict: req.params.id },
-    include: { all: true },
+    include: { all: true }
   });
   if (data === null) {
     return next(new HandlerCallBack("data not found", 404));
   }
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.EditRaceVerdict = Trackerror(async (req, res, next) => {
   const { VerdictEntry } = req.body;
   const data = await RaceAndVerdictsHorseModel.findAll({
     where: { RaceToBePredict: req.params.id },
-    include: { all: true },
+    include: { all: true }
   });
   console.log(req.body);
   console.log(VerdictEntry, "VerdictEntry");
@@ -3127,40 +3108,40 @@ exports.EditRaceVerdict = Trackerror(async (req, res, next) => {
           HorseNo1: singleverdictdetail[2] || data[i].HorseNo1,
           HorseNo2: singleverdictdetail[3] || data[i].HorseNo2,
           HorseNo3: singleverdictdetail[4] || data[i].HorseNo3,
-          Remarks: singleverdictdetail[5] || data[i].Remarks,
+          Remarks: singleverdictdetail[5] || data[i].Remarks
         },
         {
           where: {
-            _id: singleverdictdetail[6],
-          },
+            _id: singleverdictdetail[6]
+          }
         }
       );
     });
   });
   res.status(200).json({
-    success: true,
+    success: true
   });
 });
 exports.DeleteRaceVerdict = Trackerror(async (req, res, next) => {
   const data = await RaceAndVerdictsHorseModel.destroy({
     where: { _id: req.params.id },
-    force: true,
+    force: true
   });
   res.status(200).json({
     success: true,
     message: "Horse Has Been Delete Successfully",
-    data,
+    data
   });
 });
 exports.DeleteRaceHorse = Trackerror(async (req, res, next) => {
   const data = await HorseAndRaceModel.destroy({
     where: { _id: req.params.id },
-    force: true,
+    force: true
   });
   res.status(200).json({
     success: true,
     message: "Horse Has Been Delete Successfully",
-    data,
+    data
   });
 });
 exports.EditRaceVerdictv2 = Trackerror(async (req, res, next) => {
@@ -3172,10 +3153,10 @@ exports.EditRaceVerdictv2 = Trackerror(async (req, res, next) => {
     HorseNo1,
     HorseNo3,
     Remarks,
-    Rowid,
+    Rowid
   } = req.body;
   const data = await RaceAndVerdictsHorseModel.findOne({
-    where: { RaceToBePredict: req.params.id },
+    where: { RaceToBePredict: req.params.id }
   });
   // console.log(req.body);
   // console.log(VerdictEntry, "VerdictEntry");
@@ -3190,18 +3171,18 @@ exports.EditRaceVerdictv2 = Trackerror(async (req, res, next) => {
       HorseNo1: HorseNo1 || data[i].HorseNo1,
       HorseNo2: HorseNo2 || data[i].HorseNo2,
       HorseNo3: HorseNo3 || data[i].HorseNo3,
-      Remarks: Remarks || data[i].Remarks,
+      Remarks: Remarks || data[i].Remarks
     },
     {
       where: {
-        _id: Rowid,
-      },
+        _id: Rowid
+      }
     }
   );
   // });
   res.status(200).json({
     success: true,
-    message: "data has been updated",
+    message: "data has been updated"
   });
 });
 
@@ -3209,14 +3190,14 @@ exports.GetEditRaceHorses = Trackerror(async (req, res, next) => {
   const data = await HorseAndRaceModel.findAll({
     order: [["HorseNo", "ASC"]],
     where: { RaceModelId: req.params.id },
-    include: { all: true },
+    include: { all: true }
   });
   if (data === null) {
     return next(new HandlerCallBack("data not found", 404));
   }
   res.status(200).json({
     success: true,
-    data,
+    data
   });
 });
 exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
@@ -3233,13 +3214,13 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
     HorseRunningStatus,
     CapColor,
     JockeyRaceWeight,
-    Rowid,
+    Rowid
   } = req.body;
   let racehorsedata = await HorseAndRaceModel.findOne({
-    where: { HorseModelId: HorseModelId },
+    where: { HorseModelId: HorseModelId }
   });
   let horsedata = await HorseModel.findOne({
-    where: { _id: HorseModelId },
+    where: { _id: HorseModelId }
   });
   console.log(HorseRunningStatus);
   if (HorseRunningStatus == "false") {
@@ -3259,12 +3240,12 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
         HorseRunningStatus:
           HorseRunningStatus || racehorsedata.HorseRunningStatus,
         CapColor: CapColor || racehorsedata.CapColor,
-        JockeyRaceWeight: 0,
+        JockeyRaceWeight: 0
       },
       {
         where: {
-          _id: Rowid,
-        },
+          _id: Rowid
+        }
       }
     );
   } else {
@@ -3283,19 +3264,19 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
         HorseRunningStatus:
           HorseRunningStatus || racehorsedata.HorseRunningStatus,
         CapColor: CapColor || racehorsedata.CapColor,
-        JockeyRaceWeight: JockeyRaceWeight || racehorsedata.JockeyRaceWeight,
+        JockeyRaceWeight: JockeyRaceWeight || racehorsedata.JockeyRaceWeight
       },
       {
         where: {
-          _id: Rowid,
-        },
+          _id: Rowid
+        }
       }
     );
   }
 
   res.status(200).json({
     success: true,
-    message: "data has been updated",
+    message: "data has been updated"
   });
 });
 exports.EditRaceHorses = Trackerror(async (req, res, next) => {
@@ -3310,12 +3291,12 @@ exports.EditRaceHorses = Trackerror(async (req, res, next) => {
     singlehorse = singlehorse.split(",");
     console.log("00077792-262c-4831-b5f2-8209912447fa", "hello");
     racehorsedata = await HorseAndRaceModel.findOne({
-      where: { HorseModelId: "00077792-262c-4831-b5f2-8209912447fa" },
+      where: { HorseModelId: "00077792-262c-4831-b5f2-8209912447fa" }
     });
     horsedata = await HorseModel.findOne({
       where: {
-        _id: "00077792-262c-4831-b5f2-8209912447fa",
-      },
+        _id: "00077792-262c-4831-b5f2-8209912447fa"
+      }
     });
     console.log(racehorsedata, "racehorsedata");
     console.log(racehorsedata.Equipment, "racehorsedata1222");
@@ -3337,12 +3318,12 @@ exports.EditRaceHorses = Trackerror(async (req, res, next) => {
           HorseRunningStatus:
             singlehorse[7] || racehorsedata.HorseRunningStatus,
           CapColor: racehorsedata.CapColor,
-          JockeyRaceWeight: singlehorse[9] || racehorsedata.JockeyRaceWeight,
+          JockeyRaceWeight: singlehorse[9] || racehorsedata.JockeyRaceWeight
         },
         {
           where: {
-            _id: singlehorse[10],
-          },
+            _id: singlehorse[10]
+          }
         }
       );
     } catch (err) {
@@ -3352,7 +3333,7 @@ exports.EditRaceHorses = Trackerror(async (req, res, next) => {
     horsedata = null;
   });
   res.status(200).json({
-    success: true,
+    success: true
   });
 });
 // });
