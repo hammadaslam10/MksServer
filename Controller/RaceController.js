@@ -2638,17 +2638,28 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
     CronEndTime: Endtiming,
     RaceId: data._id
   });
-  schedule.scheduleJob(
+  const job = schedule.scheduleJob(
     { start: Timing, end: Endtiming, rule: "*/1 * * * * *" },
     async function () {
-      await RaceModel.update(
-        { RaceStatus: "Due" },
-        {
-          where: {
-            _id: data._id
+      const racedetail = await RaceModel.findOne({
+        where: {
+          _id: data._id
+        },
+        attributes: ["StartTime", "Day"]
+      });
+      let sheduletime = new Date(`${racedetail.Day} ${racedetail.StartTime}`);
+      if (Timing == sheduletime.toUTCString()) {
+        await RaceModel.update(
+          { RaceStatus: "Due" },
+          {
+            where: {
+              _id: data._id
+            }
           }
-        }
-      );
+        );
+      } else {
+        job.cancel();
+      }
     }
   );
 
@@ -2884,7 +2895,9 @@ exports.EditRace = Trackerror(async (req, res, next) => {
     TrackCondition,
     HorseKindinRace,
     Currency,
-    RaceWeight
+    RaceWeight,
+    Timing,
+    Endtiming
   } = req.body;
   let data = await RaceModel.findOne({
     where: { _id: req.params.id }
@@ -2929,6 +2942,39 @@ exports.EditRace = Trackerror(async (req, res, next) => {
         _id: req.params.id
       }
     });
+    const updatedtime = {
+      CronStartTime: Timing,
+      CronEndTime: Endtiming
+    };
+    await db.CronJobModel.create(updatedtime, {
+      where: {
+        _id: req.params.id
+      }
+    });
+    const job = schedule.scheduleJob(
+      { start: Timing, end: Endtiming, rule: "*/1 * * * * *" },
+      async function () {
+        const racedetail = await RaceModel.findOne({
+          where: {
+            _id: data._id
+          },
+          attributes: ["StartTime", "Day"]
+        });
+        let sheduletime = new Date(`${racedetail.Day} ${racedetail.StartTime}`);
+        if (Timing == sheduletime.toUTCString()) {
+          await RaceModel.update(
+            { RaceStatus: "Due" },
+            {
+              where: {
+                _id: data._id
+              }
+            }
+          );
+        } else {
+          job.cancel();
+        }
+      }
+    );
     res.status(200).json({
       success: true,
       data
