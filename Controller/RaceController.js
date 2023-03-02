@@ -797,7 +797,20 @@ exports.RaceWithTime = Trackerror(async (req, res, next) => {
       },
     ],
     where: {
-      HorseFilled: true,
+      [Op.and]: [
+        {
+          // Day: DateFormat
+          Day: {
+            [Op.between]: [
+              moment().format("YYYY-MM-DD 00:00"),
+              moment().format("YYYY-MM-DD 23:59"),
+            ],
+          },
+        },
+        {
+          HorseFilled: true,
+        },
+      ],
     },
   });
 
