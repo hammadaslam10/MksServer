@@ -44,14 +44,16 @@ const {
   DeleteRaceHorse,
   RaceCardOfToday,
   AllRaceCourseRaceToday,
+  RaceCardCalender,
 } = require("../Controller/RaceController");
 const { upload } = require("../Utils/ImageUpload");
+router.route("/RaceCardCalender").get(RaceCardCalender);
+
 router.route("/AllRaceCourseRaceToday").get(AllRaceCourseRaceToday);
 router.route("/RaceCardOfToday/:racecourseid").get(RaceCardOfToday);
 router.route("/EditRaceVerdictv2/:id").put(EditRaceVerdictv2);
 router.route("/DeleteRaceHorse/:id").delete(DeleteRaceHorse);
 router.route("/DeleteRaceVerdict/:id").delete(DeleteRaceVerdict);
-
 router.route("/AllDeclaredRaces").get(AllDeclaredRaces);
 router.route("/ResultCreationV2/:RaceId").post(ResultCreationV2);
 router.route("/horsehistory/:horseid").get(HorseHistory);

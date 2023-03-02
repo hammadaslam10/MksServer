@@ -9,7 +9,11 @@ const { generateFileName } = require("../Utils/FileNameGeneration");
 const { resizeImageBuffer } = require("../Utils/ImageResizing");
 const Features = require("../Utils/Features");
 const { Op } = require("sequelize");
-const { getPagination, getPagingData } = require("../Utils/Pagination");
+const {
+  getPagination,
+  getPagingData,
+  getPagingData1,
+} = require("../Utils/Pagination");
 function exchangefunction(arraytobechecked, valuetobechecked, val) {
   let a = arraytobechecked.find((item) => item.BackupId == valuetobechecked);
   return a._id;
@@ -299,7 +303,7 @@ exports.SearchJockey = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
   await JockeyModel.findAndCountAll({
-   order: [["createdAt", "DESC"]],
+    order: [["createdAt", "DESC"]],
     include: { all: true },
     where: {
       NameEn: {
@@ -346,7 +350,7 @@ exports.SearchJockey = Trackerror(async (req, res, next) => {
     offset,
   })
     .then((data) => {
-      const response = getPagingData(data, page, limit);
+      const response = getPagingData1(data, page, limit);
       res.status(200).json({
         data: response.data,
         currentPage: response.currentPage,

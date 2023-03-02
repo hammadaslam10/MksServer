@@ -95,6 +95,41 @@ exports.AllRaceCourseRaceToday = Trackerror(async (req, res, next) => {
     data,
   });
 });
+function getFirstDayOfMonth(year, month) {
+  return new Date(year, month, 1);
+}
+
+exports.RaceCardCalender = Trackerror(async (req, res, next) => {
+  const today = new Date();
+  const { year, month } = req.query;
+  let year1 = year || 0;
+  let month1 = month || 1;
+  const firstDay = getFirstDayOfMonth(
+    today.getFullYear() + Number(year1),
+    today.getMonth() + Number(month1) - 1
+  );
+
+  const lastDayOfMonth = new Date(
+    today.getFullYear() + Number(year1),
+    today.getMonth() + Number(month1),
+    0
+  );
+  console.log(today);
+  console.log(firstDay);
+  console.log(lastDayOfMonth);
+  const data = await RaceModel.findAll({
+    where: {
+      Day: {
+        [Op.between]: [firstDay, lastDayOfMonth],
+      },
+    },
+    attributes: ["Day", "StartTime"],
+  });
+  res.status(200).json({
+    success: true,
+    data,
+  });
+});
 exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
   const data = await RaceCourseModel.findAll({
     where: { _id: req.params.racecourseid },
@@ -113,6 +148,8 @@ exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
                   moment().format("YYYY-MM-DD 23:59"),
                 ],
               },
+
+              HorseFilled: true,
             },
           ],
         },

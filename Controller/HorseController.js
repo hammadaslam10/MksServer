@@ -669,6 +669,7 @@ exports.SearchHorse = Trackerror(async (req, res, next) => {
       "Foal",
       "HorseStatus",
       "HorseImage",
+      "shortCode",
     ],
     where: {
       KindHorse: {
