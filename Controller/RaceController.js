@@ -123,7 +123,7 @@ exports.RaceCardCalender = Trackerror(async (req, res, next) => {
         [Op.between]: [firstDay, lastDayOfMonth],
       },
     },
-    attributes: ["Day", "StartTime"],
+    attributes: ["Day", "StartTime", "RaceCourse"],
   });
   res.status(200).json({
     success: true,
