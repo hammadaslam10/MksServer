@@ -8,7 +8,7 @@ const { generateFileName } = require("../Utils/FileNameGeneration");
 const { resizeImageBuffer } = require("../Utils/ImageResizing");
 const { TrackLengths, Breeder } = require("../Utils/Path");
 const { Op } = require("sequelize");
-const { getPagination, getPagingData } = require("../Utils/Pagination");
+const { getPagination, getPagingData1 } = require("../Utils/Pagination");
 exports.GetDeletedTrackLength = Trackerror(async (req, res, next) => {
   const data = await TrackLengthModel.findAll({
     paranoid: false,
@@ -91,6 +91,7 @@ exports.CreateTrackLength = Trackerror(async (req, res, next) => {
 exports.TrackLengthGet = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
+  const totalcount = await TrackLengthModel.count();
   await TrackLengthModel.findAndCountAll({
     order: [["createdAt", "DESC"]],
     where: {
@@ -115,7 +116,7 @@ exports.TrackLengthGet = Trackerror(async (req, res, next) => {
     offset,
   })
     .then((data) => {
-      const response = getPagingData(data, page, limit);
+      const response = getPagingData1(data, page, limit, totalcount);
       res.status(200).json({
         data: response.data,
         currentPage: response.currentPage,
@@ -129,7 +130,7 @@ exports.TrackLengthGet = Trackerror(async (req, res, next) => {
       });
     });
 });
-exports.GetTrackLengthAdmin = Trackerror(async (req, res, next) => { });
+exports.GetTrackLengthAdmin = Trackerror(async (req, res, next) => {});
 exports.EditTrackLength = Trackerror(async (req, res, next) => {
   const { RaceCourse, TrackLength, RailPosition, GroundType } = req.body;
   let data = await TrackLengthModel.findOne({
