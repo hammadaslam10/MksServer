@@ -3,6 +3,7 @@ const Db = require("./config/Connection");
 const { Server } = require("socket.io");
 const { AdsGet } = require("./Controller/AdvertismentController");
 const db = require("./config/Connection");
+const schedule = require("node-schedule");
 const AdvertismentModel = db.AdvertismentModel;
 const Trackerror = require("./Middleware/TrackError");
 process.on("uncaughtException", (err) => {
@@ -25,15 +26,21 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 
 const server = app.listen(process.env.PORT || 8081, () => {
   console.log(`Server is working on port http:localhost:${process.env.PORT}`);
-  const A = new Date(
-    "Mon Feb 27 2023 20:14:48 GMT+0500 (Pakistan Standard Time)"
-  );
-  const b = new Date();
-  console.log(b.getTime(), b);
-  console.log(Date.now(), "now");
-  console.log(A.toISOString(), "a");
-  console.log(A.toUTCString(), "a");
-});
+  // const A = new Date(
+  //   "Mon Feb 27 2023 20:14:48 GMT+0500 (Pakistan Standard Time)"
+  // );
+  // const b = new Date();
+  // console.log(b.getTime(), b);
+  // console.log(Date.now(), "now");
+  // console.log(A.toISOString(), "a");
+  // console.log(A.toUTCString(), "a");
+  // const startTime = new Date(Date.now() + 5000);
+  // const endTime = new Date(startTime.getTime() + 5000);
+  // const job = schedule.scheduleJob("abc", startTime, function () {
+  //   console.log("Time for tea!");
+  // });
+  // console.log(schedule.scheduledJobs.abc.cancel());
+  });
 const io = new Server(server);
 io.on("connection", (socket) => {
   console.log("hello socket");

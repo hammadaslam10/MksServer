@@ -12,22 +12,23 @@ let options = {
   Protocol: "TCP",
 };
 
-const Db = new Sequelize(
-  process.env.RDSDB,
-  process.env.RDSUSER,
-  process.env.RDSPASSWORD,
-  {
-    ...options,
-  }
-);
 // const Db = new Sequelize(
-//   process.env.SQLDB,
-//   process.env.SQLHOST,
-//   process.env.SQLPASSWORD,
+//   process.env.RDSDB,
+//   process.env.RDSUSER,
+//   process.env.RDSPASSWORD,
 //   {
-//     dialect: "mysql",
+//     ...options,
 //   }
 // );
+const Db = new Sequelize(
+  process.env.SQLDB,
+  process.env.SQLHOST,
+  process.env.SQLPASSWORD,
+  {
+    dialect: "mysql",
+    logging: false,
+  }
+);
 
 Db.authenticate()
   .then(() => {
@@ -40,31 +41,37 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = Db;
 const schedule = require("node-schedule");
-const moment = require("moment");
 db.CronJobModel = require("../Models/CronJobModel")(Db, DataTypes);
 let loadcronjob = async () => {
   try {
-    const row = await db.CronJobModel.findAll({
-      where: { Status: true },
+    const counts = await db.CronJobModel.count({
+      where: {
+        Status: true,
+      },
     });
-    for (let i = 0; i < row.length; i++) {
-      schedule.scheduleJob(
-        {
-          start: row[i].dataValues.CronStartTime,
-          end: row[i].dataValues.CronEndTime,
-          rule: "*/1 * * * * *",
-        },
-        async function () {
-          await RaceModel.update(
-            { RaceStatus: "Due" },
-            {
-              where: {
-                _id: row[i].dataValues.RaceId,
-              },
-            }
-          );
-        }
-      );
+    console.log(counts);
+    const row = await db.CronJobModel.findAll({
+      where: {
+        Status: true,
+      },
+    });
+    console.log(row);
+    let time;
+    for (let i = 0; i < counts; i++) {
+      time = new Date(row[i].dataValues.CronStartTime);
+      console.log(time);
+      schedule.scheduleJob(row[i].dataValues.RaceId, time, async function () {
+        await db.RaceModel.update(
+          { RaceStatus: "Due" },
+          {
+            where: {
+              _id: row[i].dataValues.RaceId,
+            },
+          }
+        );
+      });
+      console.log("cron job loaded");
+      time = null;
     }
     console.log("cron job loaded");
   } catch (error) {
