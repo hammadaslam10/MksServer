@@ -302,6 +302,7 @@ exports.SingleJockey = Trackerror(async (req, res, next) => {
 exports.SearchJockey = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
+  let totalcount = await JockeyModel.count();
   await JockeyModel.findAndCountAll({
     order: [["createdAt", "DESC"]],
     include: { all: true },
@@ -350,7 +351,7 @@ exports.SearchJockey = Trackerror(async (req, res, next) => {
     offset,
   })
     .then((data) => {
-      const response = getPagingData1(data, page, limit);
+      const response = getPagingData1(data, page, limit, totalcount);
       res.status(200).json({
         data: response.data,
         currentPage: response.currentPage,
