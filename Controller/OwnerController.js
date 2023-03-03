@@ -327,6 +327,15 @@ exports.CreateOwner = Trackerror(async (req, res, next) => {
     });
   }
 });
+exports.GetSilkColorOfOwner = Trackerror(async (req, res, next) => {
+  const data = await OwnerSilkColorModel.findAll({
+    where: { OwnerID: req.params.id },
+  });
+  res.status(200).json({
+    success: true,
+    data,
+  });
+});
 exports.AddOwnerSilkColor = Trackerror(async (req, res, next) => {
   const data = await OwnerModel.findOne({
     where: { _id: req.params.id },
