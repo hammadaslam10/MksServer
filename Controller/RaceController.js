@@ -1044,7 +1044,7 @@ exports.AddRaceImage = Trackerror(async (req, res, next) => {
       )
     );
   }
-  let file = [req.files.image];
+  let file = req.files.image;
   await file.map(async (singleimage) => {
     console.log(singleimage, "dsadsa");
     let SingleImage = generateFileName();
