@@ -31,7 +31,7 @@ const TokenCreation = (user, statusCode, res) => {
     ),
     httpOnly: true,
   };
-  SignUpEmail(data.Email);
+  // SignUpEmail(data.Email);
   res.status(statusCode).cookie("token", token, options).json({
     success: true,
     user,
