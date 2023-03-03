@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       BestTurnOut: {
         type: DataTypes.UUID,
         allowNull: false,
+        // defaultValue: "b9f11f0a-773b-431f-96b6-b2fb06f71172",
       },
       BeatenBy: {
         type: DataTypes.UUID,
@@ -61,7 +62,6 @@ module.exports = (sequelize, DataTypes) => {
       VideoLink: {
         type: DataTypes.STRING,
         allowNull: false,
-
       },
     },
 
