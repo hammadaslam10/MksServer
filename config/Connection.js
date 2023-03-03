@@ -557,6 +557,14 @@ db.ResultModel.belongsTo(db.HorseModel, {
   as: "HorseIDData",
 });
 db.HorseModel.hasMany(db.ResultModel, {
+  foreignKey: "BestTurnOut",
+  as: "BestTurnOutData",
+});
+db.ResultModel.belongsTo(db.HorseModel, {
+  foreignKey: "BestTurnOut",
+  as: "BestTurnOutData",
+});
+db.HorseModel.hasMany(db.ResultModel, {
   foreignKey: "BeatenBy",
   as: "BeatenByData",
 });

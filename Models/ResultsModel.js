@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
+      BestTurnOut: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
       BeatenBy: {
         type: DataTypes.UUID,
       },
