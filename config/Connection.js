@@ -12,23 +12,23 @@ let options = {
   Protocol: "TCP",
 };
 
-const Db = new Sequelize(
-  process.env.RDSDB,
-  process.env.RDSUSER,
-  process.env.RDSPASSWORD,
-  {
-    ...options,
-  }
-);
 // const Db = new Sequelize(
-//   process.env.SQLDB,
-//   process.env.SQLHOST,
-//   process.env.SQLPASSWORD,
+//   process.env.RDSDB,
+//   process.env.RDSUSER,
+//   process.env.RDSPASSWORD,
 //   {
-//     dialect: "mysql",
-//     logging: false,
+//     ...options,
 //   }
 // );
+const Db = new Sequelize(
+  process.env.SQLDB,
+  process.env.SQLHOST,
+  process.env.SQLPASSWORD,
+  {
+    dialect: "mysql",
+    logging: false,
+  }
+);
 
 Db.authenticate()
   .then(() => {
@@ -194,7 +194,7 @@ db.RaceResultImagesModel = require("../Models/RaceResultImagesModel")(
 db.sequelize.sync({ force: false, alter: false }).then(async () => {
   console.log("yes re-sync done!");
 });
-db.ResultModel.sync({ alter: true });
+db.HorseAndRaceModel.sync({ alter: true });
 
 // -------------------------------------SubscriberAndCompetitionModel----------------------------
 db.CompetitonModel.hasMany(db.SubscriberAndCompetitionModel, {
@@ -636,11 +636,11 @@ db.HorseAndRaceModel.belongsTo(db.EquipmentModel, {
   foreignKey: "Equipment",
   as: "EquipmentData1",
 });
-db.ColorModel.hasMany(db.HorseAndRaceModel, {
+db.OwnerSilkColorModel.hasMany(db.HorseAndRaceModel, {
   foreignKey: "CapColor",
   as: "CapColorData1",
 });
-db.HorseAndRaceModel.belongsTo(db.ColorModel, {
+db.HorseAndRaceModel.belongsTo(db.OwnerSilkColorModel, {
   foreignKey: "CapColor",
   as: "CapColorData1",
 });
