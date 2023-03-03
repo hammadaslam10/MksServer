@@ -583,7 +583,7 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
             },
           },
           {
-            model: db.ColorModel,
+            model: db.OwnerSilkColorModel,
             as: "CapColorData1",
             attributes: {
               exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
@@ -1030,44 +1030,60 @@ exports.PublishRaces = Trackerror(async (req, res, next) => {
   });
 });
 exports.AddRaceImage = Trackerror(async (req, res, next) => {
-  if (!req.params.id) {
-    return next(new HandlerCallBack("No Race id Available in param", 404));
-  }
-  const data = await RaceModel.findOne({
+  const data = await OwnerModel.findOne({
     where: { _id: req.params.id },
   });
   if (!data) {
-    return next(
-      new HandlerCallBack(
-        "Race is not available or Result is not declared yet ",
-        404
-      )
-    );
+    return new HandlerCallBack("Owner is not available", 404);
   }
-  let file = req.files.image;
-  await file.map(async (singleimage) => {
-    console.log(singleimage, "dsadsa");
+  console.log(typeof req.files.image);
+
+  if (typeof req.files.image == "object") {
     let SingleImage = generateFileName();
-    console.log(singleimage);
     let SingleimagefileBuffer = await resizeImageBuffer(
-      singleimage.data,
+      req.files.image.data,
       214,
       212
     );
     await uploadFile(
       SingleimagefileBuffer,
       `${RaceImages}/${SingleImage}`,
-      singleimage.mimetype
+      req.files.image.mimetype
     );
-    await RaceResultImagesModel.findOrCreate({
+    await OwnerSilkColorModel.findOrCreate({
       where: {
         RaceId: data._id,
         image: `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${RaceImages}/${SingleImage}`,
       },
     });
-  });
+  } else {
+    let file = req.files.image;
+
+    await file.map(async (singleimage) => {
+      console.log(singleimage, "dsadsa");
+      let SingleImage = generateFileName();
+      console.log(singleimage);
+      let SingleimagefileBuffer = await resizeImageBuffer(
+        singleimage.data,
+        214,
+        212
+      );
+      await uploadFile(
+        SingleimagefileBuffer,
+        `${OwnerCap}/${SingleImage}`,
+        singleimage.mimetype
+      );
+      await RaceResultImagesModel.findOrCreate({
+        where: {
+          RaceId: data._id,
+          image: `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${RaceImages}/${SingleImage}`,
+        },
+      });
+    });
+  }
   res.status(201).json({
     success: true,
+    data,
     message: "all images are been submitted",
   });
 });
@@ -1817,7 +1833,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                   },
                 },
                 {
-                  model: db.ColorModel,
+                  model: db.OwnerSilkColorModel,
                   as: "CapColorData1",
                   attributes: {
                     exclude: [
@@ -2064,7 +2080,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                   },
                 },
                 {
-                  model: db.ColorModel,
+                  model: db.OwnerSilkColorModel,
                   as: "CapColorData1",
                   attributes: {
                     exclude: [
@@ -2301,7 +2317,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                 },
               },
               {
-                model: db.ColorModel,
+                model: db.OwnerSilkColorModel,
                 as: "CapColorData1",
                 attributes: {
                   exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
@@ -2534,7 +2550,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
               },
             },
             {
-              model: db.ColorModel,
+              model: db.OwnerSilkColorModel,
               as: "CapColorData1",
               attributes: {
                 exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
