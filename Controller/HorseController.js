@@ -859,6 +859,12 @@ exports.RaceHorse = Trackerror(async (req, res, next) => {
       {
         model: db.OwnerModel,
         as: "ActiveOwnerData",
+        include: [
+          {
+            model: db.OwnerSilkColorModel,
+            as: "OwnerIDData",
+          },
+        ],
       },
     ],
     attributes: ["NameEn", "NameAr", "_id", "ActiveOwner", "STARS"],
