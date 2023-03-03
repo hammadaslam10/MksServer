@@ -73,6 +73,36 @@ function CheckAge(a, b) {
   return value;
   // console.log(dateofbirth + "-" + month + "-" + day, "dateofbirth");
 }
+function EnglishLanguageVerification(Name) {
+  if (Name.trim() == "") {
+    return true;
+  }
+  if (
+    /^[a-zA-Z0-9$-@!%*?&#^_.+]+$/.test(Name) ||
+    /^[a-zA-Z0-9$-@!%*?&#^_. +]+$/.test(Name)
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+}
+// function ArabicLanguageVerification(Name) {
+//   if (this.Name.trim() == "") {
+//     throw new Error("Please Enter  Remarks in  Arabic ");
+//   }
+//   if (
+//     /^[a-zA-Z0-9$-@$!%*?&#^-_,،.+\u0621-\u064A\u0660-\u0669 ]+$/.test(
+//       this.Name
+//     ) ||
+//     /^[\u0621-\u064A\u0660-\u06690-9a-zA-Z0-9$-@$!%*?&#^-_.+]+$/.test(
+//       this.Name
+//     )
+//   ) {
+//   } else {
+//     throw new Error("Remarks Arabic Validation Failed");
+//   }
+// }
+
 exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
   let century = 20;
 
@@ -80,12 +110,62 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
     res.status(404).json({ message: "File not found" });
   } else if (req.files.file.mimetype === "application/json") {
     let errorstatements = [];
+    let recordswhicharenotgetentered = [];
     let de = JSON.parse(req.files.file.data.toString("utf8"));
     for (let i = 0; i < de.length; i++) {
       if (de[i].shortCode == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
           message: `RecordNo ${i + 1} is missing shortcode `,
+          recordetail: de[i],
+        });
+      }
+      if (EnglishLanguageVerification(de[i].Name)) {
+        errorstatements.push({
+          recordnumber: i + 1,
+          message: `RecordNo ${i + 1} is not validating horsename `,
+          recordetail: de[i],
+        });
+      }
+      if (EnglishLanguageVerification(de[i].Dam)) {
+        errorstatements.push({
+          recordnumber: i + 1,
+          message: `RecordNo ${i + 1} is not validating Dam `,
+          recordetail: de[i],
+        });
+      }
+      if (EnglishLanguageVerification(de[i].Sire)) {
+        errorstatements.push({
+          recordnumber: i + 1,
+          message: `RecordNo ${i + 1} is not validating horseSire `,
+          recordetail: de[i],
+        });
+      }
+      if (EnglishLanguageVerification(de[i].GSIRE)) {
+        errorstatements.push({
+          recordnumber: i + 1,
+          message: `RecordNo ${i + 1} is not validating horseGSIRE `,
+          recordetail: de[i],
+        });
+      }
+      if (EnglishLanguageVerification(de[i].ActiveOwner)) {
+        errorstatements.push({
+          recordnumber: i + 1,
+          message: `RecordNo ${i + 1} is not validating ActiveOwner `,
+          recordetail: de[i],
+        });
+      }
+      if (EnglishLanguageVerification(de[i].Breeder)) {
+        errorstatements.push({
+          recordnumber: i + 1,
+          message: `RecordNo ${i + 1} is not validating Breeder `,
+          recordetail: de[i],
+        });
+      }
+      if (EnglishLanguageVerification(de[i].ActiveTrainer)) {
+        errorstatements.push({
+          recordnumber: i + 1,
+          message: `RecordNo ${i + 1} is not validating ActiveTrainer `,
           recordetail: de[i],
         });
       }
@@ -96,6 +176,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           recordetail: de[i],
         });
       }
+      //   recordswhicharenotgetentered.push(de[i], Error);
       if (de[i].Foal == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
@@ -262,6 +343,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
         created: created,
       });
       for (let i = 0; i < Nationality.length; i++) {
+        // try {
         const [row, created] = await db.NationalityModel.findOrCreate({
           where: { NameEn: Nationality[i] },
           defaults: {
@@ -281,7 +363,10 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           NameEn: row.dataValues.NameEn,
           createdS: created,
         });
+        // } catch (Error) {
+        // }
       }
+      console.log("horsekind");
       for (let i = 0; i < HorseKind.length; i++) {
         const [row, created] = await db.HorseKindModel.findOrCreate({
           where: { NameEn: HorseKind[i] },
@@ -313,6 +398,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           },
           attributes: ["_id", "NameEn"],
         });
+        // recordswhicharenotgetentered.push(de[i], Error);
         console.log(ColorData[i]);
         ColorData.push({
           id: row.dataValues._id,
@@ -421,7 +507,6 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       let sextemp;
       let trainertemp;
       let ownertemp;
-      let recordswhicharenotgetentered = [];
       for (let i = 0; i < de.length; i++) {
         nationtemp = exchangefunctionv2(
           NationalityData,
@@ -491,9 +576,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
             NameEn: row.dataValues.NameEn,
             created: created,
           });
-        } catch (Error) {
-          recordswhicharenotgetentered.push(de[i], Error);
-        }
+        } catch (Error) {}
       }
       res.status(200).json({
         success: true,
@@ -511,7 +594,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       res.status(200).json({
         success: false,
         message: errorstatements,
-        recordswhicharenotgetentered
+        recordswhicharenotgetentered,
       });
       res.end();
     }
