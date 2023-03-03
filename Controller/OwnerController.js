@@ -381,7 +381,11 @@ exports.AddOwnerCap = Trackerror(async (req, res, next) => {
   if (!data) {
     return new HandlerCallBack("Owner is not available", 404);
   }
-  let file = [req.files.image];
+  let file = req.files.image;
+  // console.log(file);
+  // res.status(200).json({
+  //   file,
+  // });
   await file.map(async (singleimage) => {
     console.log(singleimage, "dsadsa");
     let SingleImage = generateFileName();
