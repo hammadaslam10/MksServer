@@ -105,7 +105,7 @@ exports.OwnerDropDown = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
   await OwnerModel.findAndCountAll({
-   order: [["createdAt", "DESC"]],
+    order: [["createdAt", "DESC"]],
     attributes: ["NameEn", "NameAr", "_id"],
     where: {
       NameEn: {
@@ -334,7 +334,11 @@ exports.AddOwnerSilkColor = Trackerror(async (req, res, next) => {
   if (!data) {
     return new HandlerCallBack("Owner is not available", 404);
   }
-  let file = [req.files.image];
+  let file = req.files.image;
+  // console.log(file);
+  // res.status(200).json({
+  //   file,
+  // });
   await file.map(async (singleimage) => {
     console.log(singleimage, "dsadsa");
     let SingleImage = generateFileName();
@@ -476,7 +480,7 @@ exports.SearchOwner = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
   await OwnerModel.findAndCountAll({
-   order: [["createdAt", "DESC"]],
+    order: [["createdAt", "DESC"]],
     where: {
       NameEn: {
         [Op.like]: `%${req.query.NameEn || ""}%`,
@@ -517,11 +521,10 @@ exports.SearchOwner = Trackerror(async (req, res, next) => {
     include: [
       {
         model: db.NationalityModel,
-        as: 'OwnerDataNationalityData',
-        attributes: ["NameEn"]
-      }
-    ]
-
+        as: "OwnerDataNationalityData",
+        attributes: ["NameEn"],
+      },
+    ],
   })
     .then((data) => {
       const response = getPagingData(data, page, limit);
@@ -538,7 +541,7 @@ exports.SearchOwner = Trackerror(async (req, res, next) => {
       });
     });
 });
-exports.UpdateOwnerHorse = Trackerror(async (req, res, next) => { });
+exports.UpdateOwnerHorse = Trackerror(async (req, res, next) => {});
 exports.ViewAllOwner = Trackerror(async (req, res, next) => {
   const data = await OwnerModel.findAll({ include: { all: true } });
   res.status(200).json({
