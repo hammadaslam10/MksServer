@@ -1038,7 +1038,7 @@ exports.AddRaceImage = Trackerror(async (req, res, next) => {
   }
   console.log(typeof req.files.image);
 
-  if (typeof req.files.image == "object") {
+  if (Array.isArray(req.files.image) === false) {
     let SingleImage = generateFileName();
     let SingleimagefileBuffer = await resizeImageBuffer(
       req.files.image.data,
