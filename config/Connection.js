@@ -194,9 +194,9 @@ db.RaceResultImagesModel = require("../Models/RaceResultImagesModel")(
 db.sequelize.sync({ force: false, alter: false }).then(async () => {
   console.log("yes re-sync done!");
 });
-// db.ResultModel.sync({ alter: true });
+db.ResultModel.sync({ alter: true });
 
-// -------------------------------------SubscriberAndCompetitionModel----------------------------
+// -------------------------------------SubscriberAndCompetitionfModel----------------------------
 db.CompetitonModel.hasMany(db.SubscriberAndCompetitionModel, {
   foreignKey: "CompetitionID",
   as: "CompetitionIDData",
