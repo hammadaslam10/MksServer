@@ -227,7 +227,12 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       );
       let ActiveOwner = Array.from(new Set(de.map((item) => item.ActiveOwner)));
       let HorseKind = Array.from(new Set(de.map((item) => item.HorseKind)));
-
+      console.log(Nationality);
+      console.log(Color);
+      console.log(Gender);
+      console.log(Breeder);
+      console.log(ActiveTrainer);
+      console.log(ActiveOwner);
       let NationalityData = [];
       let ColorData = [];
       let GenderData = [];
@@ -270,6 +275,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           },
           attributes: ["_id", "NameEn"],
         });
+        console.log(NationalityData[i]);
         NationalityData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
@@ -288,6 +294,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           },
           attributes: ["_id", "NameEn"],
         });
+        console.log(HorseKindData[i]);
         HorseKindData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
@@ -306,6 +313,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           },
           attributes: ["_id", "NameEn"],
         });
+        console.log(ColorData[i]);
         ColorData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
@@ -325,6 +333,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           },
           attributes: ["_id", "NameEn"],
         });
+        console.log(GenderData[i]);
         GenderData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
@@ -343,6 +352,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           },
           attributes: ["_id", "NameEn"],
         });
+        console.log(BreederData[i]);
         BreederData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
@@ -370,6 +380,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           },
           attributes: ["_id", "NameEn"],
         });
+        console.log(ActiveTrainerData[i]);
         ActiveTrainerData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
@@ -396,6 +407,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           },
           attributes: ["_id", "NameEn"],
         });
+        console.log(ActiveOwnerData[i]);
         ActiveOwnerData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
@@ -409,6 +421,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       let sextemp;
       let trainertemp;
       let ownertemp;
+      let recordswhicharenotgetentered = [];
       for (let i = 0; i < de.length; i++) {
         nationtemp = exchangefunctionv2(
           NationalityData,
@@ -434,48 +447,53 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           "owner"
         );
         console.log(horsekindtemp);
-        const [row, created] = await db.HorseModel.findOrCreate({
-          where: { NameEn: de[i].Name, shortCode: de[i].shortCode },
-          defaults: {
-            NameEn: de[i].Name,
-            NameAr: de[i].Name,
-            SireNameEn: de[i].Sire || "N/A",
-            SireNameAr: de[i].Sire || "N/A",
-            GSireNameEn: de[i].GSIRE || "N/A",
-            GSireNameAr: de[i].GSIRE || "N/A",
-            DamNameEn: de[i].Dam || "N/A",
-            DamNameAr: de[i].Dam || "N/A",
-            DOB: CheckAge(century, de[i].Age),
-            ActiveTrainer: trainertemp,
-            Breeder: breedertemp,
-            RemarksEn: de[i].RemarksEn || "N/A",
-            Sex: sextemp,
-            Color: colortemp,
-            Earning: de[i].Earning || 0,
-            STARS: de[i].STARS || 0,
-            ActiveOwner: ownertemp,
-            NationalityID: nationtemp,
-            Foal: de[i].Foal || 1,
-            PurchasePrice: de[i].PurchasePrice,
-            Rds: de[i].Rds,
-            ColorID: colortemp,
-            CreationId: nationtemp,
-            HorseStatus: de[i].HorseStatus,
-            // Dam: de[i].Dam || null,
-            // Sire: de[i].Sire || null,
-            // GSire: de[i].GSire || null,
-            Height: de[i].Height || 0,
-            KindHorse: horsekindtemp,
-            shortCode: de[i].shortCode,
-            RemarksAr: de[i].RemarksAr || "N/A",
-            BackupId: 4777777,
-          },
-        });
-        HorseData.push({
-          id: row.dataValues._id,
-          NameEn: row.dataValues.NameEn,
-          created: created,
-        });
+        try {
+          const [row, created] = await db.HorseModel.findOrCreate({
+            where: { NameEn: de[i].Name, shortCode: de[i].shortCode },
+            defaults: {
+              NameEn: de[i].Name,
+              NameAr: de[i].Name,
+              SireNameEn: de[i].Sire || "N/A",
+              SireNameAr: de[i].Sire || "N/A",
+              GSireNameEn: de[i].GSIRE || "N/A",
+              GSireNameAr: de[i].GSIRE || "N/A",
+              DamNameEn: de[i].Dam || "N/A",
+              DamNameAr: de[i].Dam || "N/A",
+              DOB: CheckAge(century, de[i].Age),
+              ActiveTrainer: trainertemp,
+              Breeder: breedertemp,
+              RemarksEn: de[i].RemarksEn || "N/A",
+              Sex: sextemp,
+              Color: colortemp,
+              Earning: de[i].Earning || 0,
+              STARS: de[i].STARS || 0,
+              ActiveOwner: ownertemp,
+              NationalityID: nationtemp,
+              Foal: de[i].Foal || 1,
+              PurchasePrice: de[i].PurchasePrice,
+              Rds: de[i].Rds,
+              ColorID: colortemp,
+              CreationId: nationtemp,
+              HorseStatus: de[i].HorseStatus,
+              // Dam: de[i].Dam || null,
+              // Sire: de[i].Sire || null,
+              // GSire: de[i].GSire || null,
+              Height: de[i].Height || 0,
+              KindHorse: horsekindtemp,
+              shortCode: de[i].shortCode,
+              RemarksAr: de[i].RemarksAr || "N/A",
+              BackupId: 4777777,
+            },
+          });
+
+          HorseData.push({
+            id: row.dataValues._id,
+            NameEn: row.dataValues.NameEn,
+            created: created,
+          });
+        } catch (Error) {
+          recordswhicharenotgetentered.push(de[i], Error);
+        }
       }
       res.status(200).json({
         success: true,
@@ -486,12 +504,14 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
         ColorData,
         BreederData,
         ActiveOwnerData,
+        recordswhicharenotgetentered,
       });
       res.end();
     } else {
       res.status(200).json({
         success: false,
         message: errorstatements,
+        recordswhicharenotgetentered
       });
       res.end();
     }

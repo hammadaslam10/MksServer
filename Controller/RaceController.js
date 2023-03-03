@@ -714,7 +714,6 @@ exports.RestoreSoftDeletedRace = Trackerror(async (req, res, next) => {
     restoredata,
   });
 });
-
 exports.GetHorsesofraces = Trackerror(async (req, res, next) => {
   let raceid = await RaceModel.findOne({
     where: {

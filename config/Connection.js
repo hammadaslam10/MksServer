@@ -116,6 +116,7 @@ db.JockeyModel = require("../Models/JockeyModel")(Db, DataTypes);
 db.TrainerModel = require("../Models/TrainerModel")(Db, DataTypes);
 db.TrackLengthModel = require("../Models/TrackLengthModel")(Db, DataTypes);
 db.EmailTemplateModel = require("../Models/EmailTemplateModel")(Db, DataTypes);
+
 db.RaceCardModel = require("../Models/RaceCardModel")(Db, DataTypes);
 db.RaceAndVerdictsJockeyModel = require("../Models/RaceAndVerdictsJockeyModel")(
   Db,
@@ -193,7 +194,7 @@ db.RaceResultImagesModel = require("../Models/RaceResultImagesModel")(
 db.sequelize.sync({ force: false, alter: false }).then(async () => {
   console.log("yes re-sync done!");
 });
-// db.TrackLengthModel.sync({ alter: true });
+// db.EmailTemplateModel.sync({ alter: true });
 
 // -------------------------------------SubscriberAndCompetitionModel----------------------------
 db.CompetitonModel.hasMany(db.SubscriberAndCompetitionModel, {

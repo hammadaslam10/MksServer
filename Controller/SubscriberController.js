@@ -2,7 +2,7 @@ const db = require("../config/Connection");
 const SubscriberModel = db.SubscriberModel;
 const HorseModel = db.HorseModel;
 const Trackerror = require("../Middleware/TrackError");
-const TokenCreation = require("../Utils/TokenCreation");
+const { TokenCreation, SignUpEmail } = require("../Utils/TokenCreation");
 const HandlerCallBack = require("../Utils/HandlerCallBack");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
@@ -188,7 +188,6 @@ exports.TrackHorses = Trackerror(async (req, res, next) => {
   }
 });
 exports.RegisterSubscriber = Trackerror(async (req, res, next) => {
-  const Features = require("../Utils/Features");
   const {
     FirstName,
     LastName,
@@ -208,22 +207,37 @@ exports.RegisterSubscriber = Trackerror(async (req, res, next) => {
     212
   );
   if (password) {
-    await uploadFile(fileBuffer, `${Subscriber}/${Image}`, file.mimetype);
-    const data = await SubscriberModel.create({
-      FirstName: FirstName,
-      LastName: LastName,
-      PassportNo: PassportNo,
-      PhoneNumber: PhoneNumber,
-      password: await bcrypt.hash(password, 10),
-      Email: Email,
-      PassportPicture: `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${Subscriber}/${Image}`,
-      Address: Address,
-      NationalityID: NationalityID,
-      DOB: DOB,
+    try {
+      // const data = await SubscriberModel.create({
+      //   FirstName: FirstName,
+      //   LastName: LastName,
+      //   PassportNo: PassportNo,
+      //   PhoneNumber: PhoneNumber,
+      //   password: await bcrypt.hash(password, 10),
+      //   Email: Email,
+      //   PassportPicture: `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${Subscriber}/${Image}`,
+      //   Address: Address,
+      //   NationalityID: NationalityID,
+      //   DOB: DOB,
+      // });
+      // await uploadFile(fileBuffer, `${Subscriber}/${Image}`, file.mimetype);
+      SignUpEmail(Email, 201, res);
+      res.status(200).json({
+        Email,
+      });
+    } catch (error) {
+      console.log("hello");
+      res.status(500).json({
+        success: false,
+        message: error,
+      });
+    }
+  } else {
+    res.status(200).json({
+      success: true,
+      message: "khali hai ",
     });
-    TokenCreation(data, 201, res);
   }
-  return next(new HandlerCallBack(`Error during Registration `));
 });
 exports.GetAllSubscriber = Trackerror(async (req, res, next) => {
   const data = await SubscriberModel.findAll();
