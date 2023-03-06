@@ -11,23 +11,23 @@ const { generateFileName } = require("../Utils/FileNameGeneration");
 const { resizeImageBuffer } = require("../Utils/ImageResizing");
 
 const { getPagination, getPagingData } = require("../Utils/Pagination");
-const e = require("express");
+
 exports.GetDeletedGroundType = Trackerror(async (req, res, next) => {
   const data = await GroundTypeModel.findAll({
     paranoid: false,
     where: {
-      [Op.not]: { deletedAt: null }
-    }
+      [Op.not]: { deletedAt: null },
+    },
   });
   res.status(200).json({
     success: true,
-    data
+    data,
   });
 });
 exports.RestoreSoftDeletedGroundType = Trackerror(async (req, res, next) => {
   const data = await GroundTypeModel.findOne({
     paranoid: false,
-    where: { _id: req.params.id }
+    where: { _id: req.params.id },
   });
   if (!data) {
     return next(new HandlerCallBack("data not found", 404));
@@ -35,15 +35,15 @@ exports.RestoreSoftDeletedGroundType = Trackerror(async (req, res, next) => {
 
   let checkcode = await GroundTypeModel.findOne({
     paranoid: false,
-    where: { shortCode: -1 * data.shortCode }
+    where: { shortCode: -1 * data.shortCode },
   });
   console.log(checkcode);
   if (checkcode) {
     let [result] = await GroundTypeModel.findAll({
       paranoid: false,
       attributes: [
-        [sequelize.fn("max", sequelize.col("shortCode")), "maxshortCode"]
-      ]
+        [sequelize.fn("max", sequelize.col("shortCode")), "maxshortCode"],
+      ],
     });
     console.log(-1 * (result.dataValues.maxshortCode + 1));
     let newcode = result.dataValues.maxshortCode + 1;
@@ -52,18 +52,18 @@ exports.RestoreSoftDeletedGroundType = Trackerror(async (req, res, next) => {
       { shortCode: newcode },
       {
         where: {
-          _id: req.params.id
+          _id: req.params.id,
         },
-        paranoid: false
+        paranoid: false,
       }
     );
     const restoredata = await GroundTypeModel.restore({
-      where: { _id: req.params.id }
+      where: { _id: req.params.id },
     });
 
     res.status(200).json({
       success: true,
-      restoredata
+      restoredata,
     });
   } else {
     console.log("done else");
@@ -75,9 +75,9 @@ exports.RestoreSoftDeletedGroundType = Trackerror(async (req, res, next) => {
         { shortCode: newcode },
         {
           where: {
-            _id: req.params.id
+            _id: req.params.id,
           },
-          paranoid: false
+          paranoid: false,
         }
       );
     } catch (error) {
@@ -85,17 +85,17 @@ exports.RestoreSoftDeletedGroundType = Trackerror(async (req, res, next) => {
       } else {
         res.status(500).json({
           success: false,
-          message: error
+          message: error,
         });
       }
     }
 
     const restoredata = await GroundTypeModel.restore({
-      where: { _id: req.params.id }
+      where: { _id: req.params.id },
     });
     res.status(200).json({
       success: true,
-      restoredata
+      restoredata,
     });
   }
 });
@@ -104,12 +104,12 @@ exports.GetGroundTypeMaxShortCode = Trackerror(async (req, res, next) => {
   const data = await GroundTypeModel.findAll({
     paranoid: false,
     attributes: [
-      [sequelize.fn("max", sequelize.col("shortCode")), "maxshortCode"]
-    ]
+      [sequelize.fn("max", sequelize.col("shortCode")), "maxshortCode"],
+    ],
   });
   res.status(200).json({
     success: true,
-    data
+    data,
   });
 });
 exports.CreateGroundType = Trackerror(async (req, res, next) => {
@@ -121,11 +121,11 @@ exports.CreateGroundType = Trackerror(async (req, res, next) => {
         NameEn: NameEn,
         NameAr: NameAr,
         AbbrevEn: AbbrevEn,
-        AbbrevAr: AbbrevAr
+        AbbrevAr: AbbrevAr,
       });
       res.status(201).json({
         success: true,
-        data
+        data,
       });
     } catch (error) {
       if (error.name === "SequelizeUniqueConstraintError") {
@@ -133,15 +133,15 @@ exports.CreateGroundType = Trackerror(async (req, res, next) => {
         res.json({
           status: "error",
           message: [
-            "This Short Code already exists, Please enter a different one."
-          ]
+            "This Short Code already exists, Please enter a different one.",
+          ],
         });
       } else {
         res.status(500).json({
           success: false,
           message: error.errors.map((singleerr) => {
             return singleerr.message;
-          })
+          }),
         });
       }
     }
@@ -158,11 +158,11 @@ exports.CreateGroundType = Trackerror(async (req, res, next) => {
         NameEn: NameEn,
         NameAr: NameAr,
         AbbrevEn: AbbrevEn,
-        AbbrevAr: AbbrevAr
+        AbbrevAr: AbbrevAr,
       });
       res.status(201).json({
         success: true,
-        data
+        data,
       });
     } catch (error) {
       if (error.name === "SequelizeUniqueConstraintError") {
@@ -170,15 +170,15 @@ exports.CreateGroundType = Trackerror(async (req, res, next) => {
         res.json({
           status: "error",
           message: [
-            "This Short Code already exists, Please enter a different one."
-          ]
+            "This Short Code already exists, Please enter a different one.",
+          ],
         });
       } else {
         res.status(500).json({
           success: false,
           message: error.errors.map((singleerr) => {
             return singleerr.message;
-          })
+          }),
         });
       }
     }
@@ -198,8 +198,8 @@ exports.GroundTypeMassUpload = Trackerror(async (req, res, next) => {
       });
       const Duplicates = await GroundTypeModel.findAll({
         where: {
-          shortCode: ShortCodeValidation
-        }
+          shortCode: ShortCodeValidation,
+        },
       });
       if (Duplicates.length >= 1) {
         res.status(215).json({
@@ -212,10 +212,10 @@ exports.GroundTypeMassUpload = Trackerror(async (req, res, next) => {
                 id: singledup.BackupId,
                 shortCode: singledup.shortCode,
                 NameEn: singledup.NameEn,
-                NameAr: singledup.NameAr
+                NameAr: singledup.NameAr,
               };
-            })
-          }
+            }),
+          },
         });
         res.end();
       } else {
@@ -226,7 +226,7 @@ exports.GroundTypeMassUpload = Trackerror(async (req, res, next) => {
             NameAr: data.NameAr,
             AbbrevEn: data.AbbrevEn || "N/A",
             AbbrevAr: data.AbbrevAr || "N/A",
-            BackupId: data.id
+            BackupId: data.id,
           });
         });
 
@@ -236,7 +236,7 @@ exports.GroundTypeMassUpload = Trackerror(async (req, res, next) => {
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: error
+        message: error,
       });
     }
   } else {
@@ -251,29 +251,29 @@ exports.GroundTypeGet = Trackerror(async (req, res, next) => {
     order: [[req.query.orderby || "createdAt", req.query.sequence || "DESC"]],
     where: {
       NameEn: {
-        [Op.like]: `%${req.query.NameEn || "%%"}%`
+        [Op.like]: `%${req.query.NameEn || "%%"}%`,
       },
       NameAr: {
-        [Op.like]: `%${req.query.NameAr || "%%"}%`
+        [Op.like]: `%${req.query.NameAr || "%%"}%`,
       },
       AbbrevEn: {
-        [Op.like]: `%${req.query.AbbrevEn || "%%"}%`
+        [Op.like]: `%${req.query.AbbrevEn || "%%"}%`,
       },
       AbbrevAr: {
-        [Op.like]: `%${req.query.AbbrevAr || "%%"}%`
+        [Op.like]: `%${req.query.AbbrevAr || "%%"}%`,
       },
       shortCode: {
-        [Op.like]: `${req.query.shortCode || "%%"}`
+        [Op.like]: `${req.query.shortCode || "%%"}`,
       },
       createdAt: {
         [Op.between]: [
           req.query.startdate || "2021-12-01 00:00:00",
-          req.query.endDate || "4030-12-01 00:00:00"
-        ]
-      }
+          req.query.endDate || "4030-12-01 00:00:00",
+        ],
+      },
     },
     limit,
-    offset
+    offset,
   })
     .then((data) => {
       const response = getPagingData(data, page, limit);
@@ -282,13 +282,13 @@ exports.GroundTypeGet = Trackerror(async (req, res, next) => {
         currentPage: response.currentPage,
         totalPages: response.totalPages,
         totalcount: response.totalcount,
-        counting: counting
+        counting: counting,
       });
     })
     .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Some error occurred while retrieving tutorials.",
       });
     });
 });
@@ -296,50 +296,93 @@ exports.GetGroundTypeAdmin = Trackerror(async (req, res, next) => {});
 exports.EditGroundType = Trackerror(async (req, res, next) => {
   const { NameEn, NameAr, shortCode, AbbrevEn, AbbrevAr } = req.body;
   let data = await GroundTypeModel.findOne({
-    where: { _id: req.params.id }
+    where: { _id: req.params.id },
   });
   if (data === null) {
     return next(new HandlerCallBack("data not found", 404));
   }
-  try {
-    const updateddata = {
-      shortCode: shortCode || data.shortCode,
-      NameEn: NameEn || data.NameEn,
-      NameAr: NameAr || data.NameAr,
-      AbbrevEn: AbbrevEn || data.AbbrevEn,
-      AbbrevAr: AbbrevAr || data.AbbrevAr
-    };
-    data = await GroundTypeModel.update(updateddata, {
-      where: {
-        _id: req.params.id
+  if (req.files === null) {
+    try {
+      const updateddata = {
+        shortCode: shortCode || data.shortCode,
+        NameEn: NameEn || data.NameEn,
+        NameAr: NameAr || data.NameAr,
+        AbbrevEn: AbbrevEn || data.AbbrevEn,
+        AbbrevAr: AbbrevAr || data.AbbrevAr,
+      };
+      data = await GroundTypeModel.update(updateddata, {
+        where: {
+          _id: req.params.id,
+        },
+      });
+      res.status(200).json({
+        success: true,
+        data,
+      });
+    } catch (error) {
+      if (error.name === "SequelizeUniqueConstraintError") {
+        res.status(403);
+        res.json({
+          status: "error",
+          message: [
+            "This Short Code already exists, Please enter a different one.",
+          ],
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: error.errors.map((singleerr) => {
+            return singleerr.message;
+          }),
+        });
       }
-    });
-    res.status(200).json({
-      success: true,
-      data
-    });
-  } catch (error) {
-    if (error.name === "SequelizeUniqueConstraintError") {
-      res.status(403);
-      res.json({
-        status: "error",
-        message: [
-          "This Short Code already exists, Please enter a different one."
-        ]
+    }
+  } else {
+    const file = req.files.image;
+    const Image = generateFileName();
+    const fileBuffer = await resizeImageBuffer(req.files.image.data, 214, 212);
+    await uploadFile(fileBuffer, `${GroundType}/${Image}`, file.mimetype);
+    try {
+      const updateddata = {
+        image: `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${GroundType}/${Image}`,
+        shortCode: shortCode || data.shortCode,
+        NameEn: NameEn || data.NameEn,
+        NameAr: NameAr || data.NameAr,
+        AbbrevEn: AbbrevEn || data.AbbrevEn,
+        AbbrevAr: AbbrevAr || data.AbbrevAr,
+      };
+      data = await GroundTypeModel.update(updateddata, {
+        where: {
+          _id: req.params.id,
+        },
       });
-    } else {
-      res.status(500).json({
-        success: false,
-        message: error.errors.map((singleerr) => {
-          return singleerr.message;
-        })
+      res.status(200).json({
+        success: true,
+        data,
       });
+    } catch (error) {
+      if (error.name === "SequelizeUniqueConstraintError") {
+        res.status(403);
+        res.json({
+          status: "error",
+          message: [
+            "This Short Code already exists, Please enter a different one.",
+          ],
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: error.errors.map((singleerr) => {
+            return singleerr.message;
+          }),
+        });
+      }
     }
   }
 });
 exports.DeleteGroundType = Trackerror(async (req, res, next) => {
   const data = await GroundTypeModel.findOne({
-    where: { _id: req.params.id }
+    where: { _id: req.params.id },
   });
   if (!data) {
     return next(new HandlerCallBack("data not found", 404));
@@ -347,24 +390,24 @@ exports.DeleteGroundType = Trackerror(async (req, res, next) => {
 
   await GroundTypeModel.destroy({
     where: { _id: req.params.id },
-    force: true
+    force: true,
   });
 
   res.status(200).json({
     success: true,
-    message: "data Delete Successfully"
+    message: "data Delete Successfully",
   });
 });
 exports.SoftDeleteGroundType = Trackerror(async (req, res, next) => {
   const data = await GroundTypeModel.findOne({
-    where: { _id: req.params.id }
+    where: { _id: req.params.id },
   });
   if (!data) {
     return next(new HandlerCallBack("data not found", 404));
   }
   let checkcode = await GroundTypeModel.findOne({
     paranoid: false,
-    where: { shortCode: -data.shortCode }
+    where: { shortCode: -data.shortCode },
   });
   console.log(checkcode);
   if (checkcode) {
@@ -372,25 +415,25 @@ exports.SoftDeleteGroundType = Trackerror(async (req, res, next) => {
     let [result] = await GroundTypeModel.findAll({
       paranoid: false,
       attributes: [
-        [sequelize.fn("max", sequelize.col("shortCode")), "maxshortCode"]
-      ]
+        [sequelize.fn("max", sequelize.col("shortCode")), "maxshortCode"],
+      ],
     });
     console.log(-result.dataValues.maxshortCode, "dsd");
     await GroundTypeModel.update(
       { shortCode: -result.dataValues.maxshortCode },
       {
         where: {
-          _id: req.params.id
-        }
+          _id: req.params.id,
+        },
       }
     );
     await GroundTypeModel.destroy({
-      where: { _id: req.params.id }
+      where: { _id: req.params.id },
     });
 
     res.status(200).json({
       success: true,
-      message: "Soft Delete Successfully"
+      message: "Soft Delete Successfully",
     });
   } else {
     console.log(data.shortCode);
@@ -398,17 +441,17 @@ exports.SoftDeleteGroundType = Trackerror(async (req, res, next) => {
       { shortCode: -data.shortCode },
       {
         where: {
-          _id: req.params.id
-        }
+          _id: req.params.id,
+        },
       }
     );
 
     await GroundTypeModel.destroy({
-      where: { _id: req.params.id }
+      where: { _id: req.params.id },
     });
     res.status(200).json({
       success: true,
-      message: "Soft Delete Successfully"
+      message: "Soft Delete Successfully",
     });
   }
 });
