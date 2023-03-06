@@ -1,5 +1,6 @@
 const db = require("../config/Connection");
 const PointTableSystemModel = db.PointTableSystemModel;
+const PointDefinitionModel = db.PointDefinitionModel;
 const Trackerror = require("../Middleware/TrackError");
 const HandlerCallBack = require("../Utils/HandlerCallBack");
 const { ArRegex } = require("../Utils/ArabicLanguageRegex");
@@ -109,15 +110,85 @@ exports.GetPointTableSystemMaxShortCode = Trackerror(async (req, res, next) => {
   });
 });
 exports.CreatePointTableSystem = Trackerror(async (req, res, next) => {
-  const { shortCode, Group_Name, Rank, Point, Bonus_Point } = req.body;
+  const { shortCode, Group_Name, Type, Length, PointTable } = req.body;
+  try {
+    const data = await PointTableSystemModel.create({
+      shortCode: shortCode,
+      Group_Name: Group_Name,
+      Type: Type,
+      Length: Length,
+    });
+    let entries;
+    console.log(PointTable);
+    if (Type == "Pick") {
+      console.log(Type);
+      console.log(PointTable[0].BonusPoint);
+      try {
+        entries = await PointDefinitionModel.findOrCreate({
+          where: {
+            PointGroupName: Group_Name,
+            Rank: 1,
+            BonusPoint: PointTable[0].BonusPoint,
+            Point: PointTable[0].Point,
+            Type: Type,
+          },
+        });
+      } catch (err) {
+        res.status(500).json({
+          success: false,
+          message: err,
+        });
+        res.end();
+      }
+    } else {
+      console.log("Cast");
+      if (PointTable.length == Length && PointTable.length > 1) {
+        for (let i = 0; i < PointTable.length; i++) {
+          try {
+            entries = await PointDefinitionModel.findOrCreate({
+              where: {
+                PointGroupName: Group_Name,
+                Rank: PointTable[i].Rank,
+                BonusPoint: PointTable[i].BonusPoint,
+                Point: PointTable[i].Point,
+                Type: Type,
+              },
+            });
+          } catch (err) {
+            res.status(500).json({
+              success: false,
+              message: err,
+            });
+            res.end();
+          }
+        }
+      } else {
+        res.status(400).json({
+          success: false,
+          message: ["Type Declared on Point Table is not defined "],
+        });
+        res.end();
+      }
+    }
 
+    res.status(200).json({
+      success: true,
+      data,
+      entries,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
   // try {
   //   const data = await PointTableSystemModel.create({
-  //     shortCode: shortCode,
-  //     Group_Name: Group_Name,
-  //     Rank: Rank,
-  //     Point: Point,
-  //     Bonus_Point: Bonus_Point,
+  // shortCode: shortCode,
+  // Group_Name: Group_Name,
+  // Rank: Rank,
+  // Point: Point,
+  // Bonus_Point: Bonus_Point,
   //   });
   //   console.log(data);
   //   res.status(201).json({

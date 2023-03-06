@@ -3,6 +3,7 @@ const CompetitonModel = db.CompetitonModel;
 const RaceModel = db.RaceModel;
 const HorseModel = db.HorseModel;
 const CompetitionRacesPointsModel = db.CompetitionRacesPointsModel;
+const CompetitionAndRacesModel = db.CompetitionAndRacesModel;
 const SubscriberAndCompetitonModel = db.SubscriberAndCompetitionModel;
 const SubscriberModel = db.SubscriberModel;
 const jwt = require("jsonwebtoken");
@@ -14,6 +15,7 @@ const { Race, Horse } = require("../Utils/Path");
 const { Conversion } = require("../Utils/Conversion");
 const { Op } = require("sequelize");
 const { getPagination, getPagingData } = require("../Utils/Pagination");
+const { async } = require("@firebase/util");
 exports.GetDeletedCompetiton = Trackerror(async (req, res, next) => {
   const data = await CompetitonModel.findAll({
     paranoid: false,
@@ -237,7 +239,40 @@ exports.CompetitonGet = Trackerror(async (req, res, next) => {
     data: data,
   });
 });
-
+exports.AddRacesInCompetitionV2 = Trackerror(async (req, res, next) => {
+  let CompetitionID = await CompetitonModel.findOne({
+    where: { _id: req.params.id },
+  });
+  if (!CompetitionID) {
+    return next(new HandlerCallBack("Race Card not found", 404));
+  } else {
+    const { RaceEntry } = req.body;
+    let entries;
+    if (CompetitionID.CategoryCount == RaceEntry.length) {
+      for (let i = 0; i < RaceEntry.length; i++) {
+        entries = await CompetitionAndRacesModel.findOrCreate({
+          where: {
+            CompetitionId: req.params.id,
+            RaceId: RaceEntry[i].RaceId,
+            PointTableOfRace: RaceEntry[i].PointTableOfRace,
+          },
+        });
+      }
+    } else {
+      res.status(401).json({
+        success: false,
+        message: [
+          `There Should be ${CompetitionID.CategoryCount}  where races Entered are ${RaceEntry.length}`,
+        ],
+      });
+      res.end();
+    }
+    res.status(200).json({
+      success: true,
+      entries,
+    });
+  }
+});
 exports.AddRacesInCompetition = Trackerror(async (req, res, next) => {
   let CompetitionID = await CompetitonModel.findOne({
     where: { _id: req.params.id },
@@ -261,7 +296,6 @@ exports.AddRacesInCompetition = Trackerror(async (req, res, next) => {
       });
     } else {
     }
-
     if (PickRaces.length > 0) {
       console.log(CompetitionID.CategoryCount);
       if (CompetitionID.CategoryCount === PickRaces.length) {
@@ -441,6 +475,7 @@ exports.SearchCompetition = Trackerror(async (req, res, next) => {
   const { limit, offset } = getPagination(page - 1, size);
   await CompetitonModel.findAndCountAll({
     order: [["createdAt", "DESC"]],
+    include: { all: true },
     where: {
       NameEn: {
         [Op.like]: `%${req.query.NameEn || ""}%`,

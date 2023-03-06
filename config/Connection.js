@@ -195,11 +195,11 @@ db.PointGroupNameModel = require("../Models/PointGroupNameModel")(
   Db,
   DataTypes
 );
-db.PointGroupNameModel = require("../Models/PointGroupNameModel")(
+db.PointDefinitionModel = require("../Models/PointDefinitionModel")(
   Db,
   DataTypes
 );
-db.PointGroupNameModel = require("../Models/PointGroupNameModel")(
+db.CompetitionAndRacesModel = require("../Models/CompetitionAndRacesModel")(
   Db,
   DataTypes
 );
@@ -207,8 +207,36 @@ db.PointGroupNameModel = require("../Models/PointGroupNameModel")(
 db.sequelize.sync({ force: false, alter: false }).then(async () => {
   console.log("yes re-sync done!");
 });
-// db.RaceModel.sync({ alter: true });
-// db.RaceAndHorseModel.sync({ alter: true });
+// db.CompetitonModel.sync({ alter: true });
+// db.PointDefinitionModel.sync({ alter: true });
+// db.CompetitionAndRacesModel.sync({ alter: true });
+// db.PointTableSystemModel.sync({ alter: true });
+//-------------------------------------CompetitionRaces-------------------------------------
+db.CompetitonModel.hasMany(db.CompetitionAndRacesModel, {
+  foreignKey: "CompetitionID",
+  as: "CompetitionDataOfRace",
+});
+db.CompetitionAndRacesModel.belongsTo(db.CompetitonModel, {
+  foreignKey: "CompetitionID",
+  as: "CompetitionDataOfRace",
+});
+db.CompetitionAndRacesModel.hasMany(db.RaceModel, {
+  foreignKey: "RaceId",
+  as: "RaceDataOfCompetition",
+});
+db.RaceModel.belongsTo(db.CompetitionAndRacesModel, {
+  foreignKey: "RaceId",
+  as: "RaceDataOfCompetition",
+});
+
+db.CompetitionAndRacesModel.hasMany(db.PointTableSystemModel, {
+  foreignKey: "PointTableOfRace",
+  as: "PointTableOfRaceofRace",
+});
+db.PointTableSystemModel.belongsTo(db.CompetitionAndRacesModel, {
+  foreignKey: "PointTableOfRace",
+  as: "PointTableOfRaceofRace",
+});
 
 // -------------------------------------SubscriberAndCompetitionfModel----------------------------
 db.CompetitonModel.hasMany(db.SubscriberAndCompetitionModel, {
@@ -285,14 +313,14 @@ db.CompetitonModel.belongsTo(db.SponsorModel, {
   foreignKey: "CompetitionSponsor",
   as: "CompetitionSponsorData",
 });
-db.CompetitonModel.belongsToMany(db.RaceModel, {
-  through: "CompetitionRacesPointsModel",
-  as: "CompetitionRacesPointsModelData",
-});
-db.RaceModel.belongsToMany(db.CompetitonModel, {
-  through: "CompetitionRacesPointsModel",
-  as: "CompetitionRacesPointsModelData",
-});
+// db.CompetitonModel.belongsToMany(db.RaceModel, {
+//   through: "CompetitionRacesPointsModel",
+//   as: "CompetitionRacesPointsModelData",
+// });
+// db.RaceModel.belongsToMany(db.CompetitonModel, {
+//   through: "CompetitionRacesPointsModel",
+//   as: "CompetitionRacesPointsModelData",
+// });
 
 // -------------------------------------HorseandJockey----------------------------
 db.JockeyModel.belongsToMany(db.HorseModel, {

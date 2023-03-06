@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  const PickPointTableModel = sequelize.define(
-    "PickPointTableModel",
+  const PointDefinitionModel = sequelize.define(
+    "PointDefinitionModel",
 
     {
       _id: {
@@ -19,13 +19,26 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         unique: true,
         allowNull: false,
-        validate: {
-          notNull: { msg: "Pick Point   will have Name" },
-          notEmpty: { msg: "Pick Point  will not be empty" },
-        },
       },
-      Rank: { type: DataTypes.BIGINT },
-      BonusPoint: { type: DataTypes.BIGINT },
+      Rank: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+      },
+      Point: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      BonusPoint: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      Type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        isIn: [["Pick", "Cast"]],
+      },
       BackupId: {
         type: DataTypes.BIGINT,
         defaultValue: null,
@@ -37,5 +50,5 @@ module.exports = (sequelize, DataTypes) => {
       initialAutoIncrement: 10,
     }
   );
-  return PickPointTableModel;
+  return PointDefinitionModel;
 };

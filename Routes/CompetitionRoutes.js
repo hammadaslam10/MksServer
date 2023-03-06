@@ -13,9 +13,11 @@ const {
   RestoreSoftDeletedCompetiton,
   Voting,
   SearchCompetition,
+  AddRacesInCompetitionV2,
 } = require("../Controller/CompetitonController");
 
 const { upload } = require("../Utils/ImageUpload");
+router.route("/AddRacesInCompetitionV2/:id").post(AddRacesInCompetitionV2);
 router.route("/searchcompetition").get(SearchCompetition);
 router.route("/competitiongetdeleted").get(GetDeletedCompetiton);
 router

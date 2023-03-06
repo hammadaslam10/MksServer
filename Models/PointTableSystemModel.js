@@ -10,6 +10,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true,
       },
+      Type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        isIn: [["Pick", "Cast"]],
+      },
       shortCode: {
         type: DataTypes.BIGINT,
         autoIncrement: true,
@@ -20,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: { msg: "ShortCode  will not be empty" },
         },
       },
+      Length: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+      },
       Group_Name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -27,26 +36,6 @@ module.exports = (sequelize, DataTypes) => {
           notNull: { msg: "Point Table System will have Group Name" },
           notEmpty: { msg: "Group Name Point will not be empty" },
         },
-      },
-      Rank: {
-        type: DataTypes.BIGINT,
-        allowNull: false,
-        validate: {
-          notNull: { msg: "Point Table System will have Rank" },
-          notEmpty: { msg: "Rank  will not be empty" },
-        },
-      },
-      Point: {
-        type: DataTypes.BIGINT,
-        allowNull: false,
-        validate: {
-          notNull: { msg: "Point Table System will have Point" },
-          notEmpty: { msg: "Point  will not be empty" },
-        },
-      },
-
-      Bonus_Point: {
-        type: DataTypes.BIGINT,
       },
     },
     {
