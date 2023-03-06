@@ -70,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       RaceWeight: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.FLOAT,
         allowNull: false,
         validate: {
           notNull: { msg: "Race will have RaceWeight" },

@@ -2687,7 +2687,7 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
     DescriptionAr: DescriptionAr,
     RaceCourse: RaceCourse,
     RaceStatus: RaceStatus,
-    StartTime: StartTime,
+    StartTime: Timing,
     RaceNumber: RaceNumber,
     // EndTime: EndTime,
     RaceType: RaceType,
@@ -2998,7 +2998,7 @@ exports.EditRace = Trackerror(async (req, res, next) => {
       RaceCourse: RaceCourse || data.RaceCourse,
       RaceType: RaceType || data.RaceType,
       RaceStatus: RaceStatus || data.RaceStatus,
-      StartTime: StartTime || data.StartTime,
+      StartTime: Timing || data.StartTime,
       EndTime: EndTime || data.EndTime,
       DescriptionAr: DescriptionAr || data.DescriptionAr,
       RaceNameAr: RaceNameAr || data.RaceNameAr,
@@ -3040,6 +3040,14 @@ exports.EditRace = Trackerror(async (req, res, next) => {
         {
           where: {
             _id: req.params.id,
+          },
+        }
+      );
+      await db.CronJobModel.update(
+        { Status: false },
+        {
+          where: {
+            RaceId: req.params.id,
           },
         }
       );

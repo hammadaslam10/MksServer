@@ -194,7 +194,8 @@ db.RaceResultImagesModel = require("../Models/RaceResultImagesModel")(
 db.sequelize.sync({ force: false, alter: false }).then(async () => {
   console.log("yes re-sync done!");
 });
-// db.ResultModel.sync({ alter: true });
+// db.RaceModel.sync({ alter: true });
+// db.RaceAndHorseModel.sync({ alter: true });
 
 // -------------------------------------SubscriberAndCompetitionfModel----------------------------
 db.CompetitonModel.hasMany(db.SubscriberAndCompetitionModel, {

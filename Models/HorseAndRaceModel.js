@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 1,
       },
       JockeyRaceWeight: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.FLOAT,
       },
       Rating: {
         type: DataTypes.BIGINT,
