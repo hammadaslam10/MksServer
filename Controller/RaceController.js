@@ -244,12 +244,19 @@ exports.AllDeclaredRaces = Trackerror(async (req, res, next) => {
           "CumulativeDistance",
           "Distance",
           "PrizeWin",
+          "BestTurnPrice",
         ],
         order: ["CumulativeDistance", "ASC"],
         include: [
           {
             model: db.HorseModel,
             as: "HorseIDData",
+
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.HorseModel,
+            as: "BestTurnOutData",
 
             attributes: ["_id", "NameEn", "NameAr"],
           },
