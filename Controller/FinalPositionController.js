@@ -238,6 +238,21 @@ exports.GetFinalPositionMaxShortCode = Trackerror(async (req, res, next) => {
     data,
   });
 });
+exports.MaxUniqueNumberFinalPosition = Trackerror(async (req, res, next) => {
+  const data = await FinalPositionModel.findOne({
+    attributes: [
+      [sequelize.fn("max", sequelize.col("shortCode")), "maxshortCode"],
+      [sequelize.fn("max", sequelize.col("Rank")), "maxRank"],
+    ],
+  });
+  // attributes: [
+  //   [sequelize.fn("max", sequelize.col("shortCode")), "maxshortCode"],
+  // ],
+  res.status(200).json({
+    success: true,
+    data,
+  });
+});
 exports.CreateFinalPosition = Trackerror(async (req, res, next) => {
   const { NameEn, NameAr, shortCode, Rank } = req.body;
 
@@ -254,22 +269,22 @@ exports.CreateFinalPosition = Trackerror(async (req, res, next) => {
       data,
     });
   } catch (error) {
-    if (error.name === "SequelizeUniqueConstraintError") {
-      res.status(403);
-      res.json({
-        status: "error",
-        message: [
-          "This Short Code already exists, Please enter a different one.",
-        ],
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        message: error.errors.map((singleerr) => {
-          return singleerr.message;
-        }),
-      });
-    }
+    // if (error.name === "SequelizeUniqueConstraintError") {
+    //   res.status(403);
+    //   res.json({
+    //     status: "error",
+    //     message: [
+    //       "This Short Code already exists, Please enter a different one.",
+    //     ],
+    //   });
+    // } else {
+    res.status(500).json({
+      success: false,
+      message: error.errors.map((singleerr) => {
+        return singleerr.message;
+      }),
+    });
+    // }
   }
 });
 exports.FinalPositionGet = Trackerror(async (req, res, next) => {
