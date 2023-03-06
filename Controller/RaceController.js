@@ -288,62 +288,133 @@ exports.AllDeclaredRaces = Trackerror(async (req, res, next) => {
   });
 });
 exports.GetDeletedRace = Trackerror(async (req, res, next) => {
-  const data = await RaceModel.findAll({
+  const { page, size } = req.query;
+  const { limit, offset } = getPagination(page - 1, size);
+  let counttotal = await RaceModel.count();
+  const data = await RaceModel.findAndCountAll({
     paranoid: false,
     where: {
       [Op.not]: { deletedAt: null },
     },
+    attributes: {
+      exclude: [
+        "MeetingType",
+        "RaceKind",
+        "RaceName",
+        "TrackLength",
+        "HorseKindinRace",
+        "Currency",
+        "RaceCourse",
+        "RaceType",
+        "TrackCondition",
+        "Sponsor",
+        "updatedAt",
+        "deletedAt",
+        "Competition",
+        "RaceCard",
+        "BackupId",
+      ],
+    },
     include: [
       {
-        model: db.MeetingTypeModel,
-        as: "MeetingTypeData",
+        model: db.HorseKindModel,
+        as: "HorseKindinRaceData",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "deletedAt"],
+        },
+        paranoid: false,
       },
-      // {
-      //   model: db.GroundTypeModel,
-      //   as: "GroundData"
-      // },
       {
         model: db.RaceCourseModel,
         as: "RaceCourseData",
+        attributes: {
+          exclude: [
+            "ColorCode",
+            "NationalityID",
+            "shortCode",
+            "AbbrevEn",
+            "AbbrevAr",
+            "createdAt",
+            "updatedAt",
+            "deletedAt",
+          ],
+        },
         paranoid: false,
       },
       {
         model: db.TrackLengthModel,
         as: "TrackLengthData",
-      },
-      {
-        model: db.RaceNameModel,
-        as: "RaceNameModelData",
-      },
-      {
-        model: db.RaceKindModel,
-        as: "RaceKindData",
-      },
-      {
-        model: db.RaceTypeModel,
-        as: "RaceTypeModelData",
-      },
-      {
-        model: db.SponsorModel,
-        as: "SponsorData",
-      },
-      {
-        model: db.HorseModel,
-        as: "RaceAndHorseModelData",
-        include: {
-          all: true,
+        attributes: {
+          exclude: ["GroundType", "createdAt", "updatedAt", "deletedAt"],
         },
         paranoid: false,
       },
       {
-        model: db.JockeyModel,
-        include: { all: true },
+        model: db.RaceNameModel,
+        as: "RaceNameModelData",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "deletedAt"],
+        },
         paranoid: false,
       },
       {
-        model: db.HorseAndRaceModel,
-        as: "RacehorsesData",
+        model: db.TrackConditionModel,
+        as: "TrackConditionData",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "deletedAt"],
+        },
+        paranoid: false,
+      },
+      {
+        model: db.CurrencyModel,
+        as: "CurrencyData",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "deletedAt"],
+        },
+        paranoid: false,
+      },
+      {
+        model: db.RaceKindModel,
+        as: "RaceKindData",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "deletedAt"],
+        },
+        paranoid: false,
+      },
+      {
+        model: db.MeetingTypeModel,
+        as: "MeetingTypeData",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "deletedAt"],
+        },
+      },
+      {
+        model: db.RaceTypeModel,
+        as: "RaceTypeModelData",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "deletedAt"],
+        },
+        paranoid: false,
+      },
+      {
+        model: db.SponsorModel,
+        as: "SponsorData",
+        attributes: {
+          exclude: [
+            "createdAt",
+            "updatedAt",
+            "deletedAt",
+            "DescriptionEn",
+            "DescriptionAr",
+          ],
+        },
+        paranoid: false,
+      },
+      {
+        model: db.CompetitonModel,
+        as: "CompetitionRacesPointsModelData",
         include: { all: true },
+        paranoid: false,
       },
       {
         model: db.ResultModel,
@@ -351,12 +422,221 @@ exports.GetDeletedRace = Trackerror(async (req, res, next) => {
         include: { all: true },
         paranoid: false,
       },
+      {
+        model: db.HorseAndRaceModel,
+        as: "RacehorsesData",
+        attributes: {
+          exclude: [
+            "RaceModelId",
+            "HorseModelId",
+            "Equipment",
+            "TrainerOnRace",
+            "JockeyOnRace",
+            "OwnerOnRace",
+          ],
+        },
+
+        include: [
+          {
+            model: db.EquipmentModel,
+            as: "EquipmentData1",
+            attributes: {
+              exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
+            },
+          },
+          {
+            model: db.HorseModel,
+            as: "HorseModelIdData1",
+            attributes: ["NameEn", "NameAr", "_id", "DOB", "HorseImage"],
+            include: [
+              {
+                model: db.HorseModel,
+                as: "DamData",
+                attributes: {
+                  exclude: ["createdAt", "updatedAt", "deletedAt"],
+                },
+              },
+              {
+                model: db.test,
+                as: "TrackHorses",
+                attributes: {
+                  exclude: ["createdAt", "updatedAt", "deletedAt"],
+                },
+              },
+              {
+                model: db.NationalityModel,
+                as: "NationalityData",
+                attributes: {
+                  exclude: ["createdAt", "updatedAt", "deletedAt"],
+                },
+              },
+              {
+                model: db.BreederModel,
+                as: "BreederData",
+                attributes: {
+                  exclude: ["createdAt", "updatedAt", "deletedAt"],
+                },
+              },
+              {
+                model: db.HorseModel,
+                as: "SireData",
+                attributes: {
+                  exclude: ["createdAt", "updatedAt", "deletedAt"],
+                },
+              },
+              {
+                model: db.HorseModel,
+                as: "GSireData",
+                attributes: {
+                  exclude: ["createdAt", "updatedAt", "deletedAt"],
+                },
+              },
+            ],
+          },
+          {
+            model: db.TrainerModel,
+            as: "TrainerOnRaceData1",
+            attributes: ["NameEn", "NameAr", "_id", "BackupId", "image"],
+          },
+          {
+            model: db.JockeyModel,
+            as: "JockeyOnRaceData1",
+            attributes: {
+              exclude: [
+                "createdAt",
+                "updatedAt",
+                "deletedAt",
+                "shortCode",
+                "JockeyLicenseDate",
+                "RemarksEn",
+                "Rating",
+                "NationalityID",
+                "BackupId",
+              ],
+            },
+          },
+          {
+            model: db.OwnerModel,
+            as: "OwnerOnRaceData1",
+            attributes: {
+              exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
+            },
+          },
+          {
+            model: db.OwnerSilkColorModel,
+            as: "CapColorData1",
+            attributes: {
+              exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
+            },
+          },
+        ],
+        paranoid: false,
+      },
     ],
-  });
-  res.status(200).json({
-    success: true,
-    data,
-  });
+    order: [["createdAt", "DESC"]],
+    where: {
+      MeetingType: {
+        [Op.like]: `%${req.query.MeetingType || ""}%`,
+      },
+      MeetingCode: {
+        [Op.like]: `%${req.query.MeetingCode || ""}%`,
+      },
+      RaceName: {
+        [Op.like]: `%${req.query.RaceName || ""}%`,
+      },
+      TrackLength: {
+        [Op.like]: `%${req.query.TrackLength || ""}%`,
+      },
+      // Ground: {
+      //   [Op.like]: `%${req.query.Ground || ""}%`
+      // },
+      DescriptionAr: {
+        [Op.like]: `%${req.query.DescriptionAr || ""}%`,
+      },
+      DescriptionEn: {
+        [Op.like]: `%${req.query.DescriptionEn || ""}%`,
+      },
+      // RaceStatus: {
+      //   [Op.like]: `%${req.query.RaceStatus || ""}%`,
+      // },
+      // ResultStatus: {
+      //   [Op.like]: `%${req.query.ResultStatus || ""}%`,
+      // },
+      RaceCourse: {
+        [Op.like]: `%${req.query.RaceCourse || ""}%`,
+      },
+      RaceType: {
+        [Op.like]: `%${req.query.RaceType || ""}%`,
+      },
+      // HorseFilled: {
+      //   [Op.like]: `%${req.query.HorseFilled || ""}%`,
+      // },
+      WeatherType: {
+        [Op.like]: `%${req.query.WeatherType || ""}%`,
+      },
+      WeatherDegree: {
+        [Op.like]: `%${req.query.WeatherDegree || ""}%`,
+      },
+      RaceType: {
+        [Op.like]: `%${req.query.RaceType || ""}%`,
+      },
+      // PointTableSystem: {
+      //   [Op.like]: `%${req.query.PointTableSystem || ""}%`,
+      // },
+      // RaceCard: {
+      //   [Op.like]: `%${req.query.RaceCard || null}%`,
+      // },
+      // Competition: {
+      //   [Op.like]: `%${req.query.Competition || null}%`,
+      // },
+      // Sponsor: {
+      //   [Op.like]: `%${req.query.Sponsor || ""}%`,
+      // },
+      // StartTime: {
+      //   [Op.between]: [
+      //     req.query.racestartdate1 || "2021-12-01 00:00:00",
+      //     req.query.racestartdate2 || "4030-12-01 00:00:00",
+      //   ],
+      // },
+      // EndTime: {
+      //   [Op.between]: [
+      //     req.query.raceenddate1 || "2021-12-01 00:00:00",
+      //     req.query.raceenddate2 || "4030-12-01 00:00:00",
+      //   ],
+      // },
+      Day: {
+        [Op.between]: [
+          req.query.racestartday || "2021-12-01 00:00:00",
+          req.query.raceendday || "4030-12-01 00:00:00",
+        ],
+      },
+
+      createdAt: {
+        [Op.between]: [
+          req.query.startdate || "2021-12-01 00:00:00",
+          req.query.endDate || "4030-12-01 00:00:00",
+        ],
+      },
+    },
+    limit,
+    offset,
+    paranoid: true,
+  })
+    .then((data) => {
+      // console.log(page, limit, data);
+      const response = getPagingData1(data, page, limit, counttotal);
+      res.status(200).json({
+        data: response.data,
+        currentPage: response.currentPage,
+        totalPages: response.totalPages,
+        totalcount: response.totalcount,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: err.message || "Some error occurred while retrieving Color.",
+      });
+    });
 });
 exports.SearchRace = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;

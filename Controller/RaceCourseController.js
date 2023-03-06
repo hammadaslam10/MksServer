@@ -9,7 +9,7 @@ const { uploadFile, deleteFile } = require("../Utils/s3");
 const { generateFileName } = require("../Utils/FileNameGeneration");
 const { resizeImageBuffer } = require("../Utils/ImageResizing");
 const { Op } = require("sequelize");
-const { getPagination, getPagingData } = require("../Utils/Pagination");
+const { getPagination, getPagingData1 } = require("../Utils/Pagination");
 exports.GetDeletedRaceCourse = Trackerror(async (req, res, next) => {
   const data = await RaceCourseModel.findAll({
     paranoid: false,
@@ -138,8 +138,9 @@ exports.SingleRaceCourse = Trackerror(async (req, res, next) => {
 exports.SearchRaceCourse = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
+  let counttotal = await RaceCourseModel.count();
   await RaceCourseModel.findAndCountAll({
-   order: [["createdAt", "DESC"]],
+    order: [["createdAt", "DESC"]],
     include: { all: true },
     where: {
       TrackNameEn: {
@@ -168,7 +169,7 @@ exports.SearchRaceCourse = Trackerror(async (req, res, next) => {
     offset,
   })
     .then((data) => {
-      const response = getPagingData(data, page, limit);
+      const response = getPagingData1(data, page, limit, counttotal);
       res.status(200).json({
         data: response.data,
         currentPage: response.currentPage,

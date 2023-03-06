@@ -130,7 +130,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: "Awaited",
       },
       StartTime: {
-        type: DataTypes.TIME,
+        type: DataTypes.DATE,
         allowNull: false,
         validate: {
           notNull: { msg: "Please Add StartTime Of Race" },
