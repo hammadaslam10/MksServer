@@ -714,7 +714,7 @@ exports.DeleteOwnerSilkColor = Trackerror(async (req, res, next) => {
   console.log(data);
   await deleteFile(`${OwnerSilk}/${data1.OwnerSilkColor.slice(-64)}`);
   await OwnerSilkColorModel.destroy({
-    where: { OwnerID: req.params.id },
+    where: { _id: req.params.silkid },
     force: true,
   });
 
