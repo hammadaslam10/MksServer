@@ -699,11 +699,20 @@ exports.DeleteOwnerSilkColor = Trackerror(async (req, res, next) => {
     where: { _id: req.params.id },
   });
   if (!data) {
-    return next(new HandlerCallBack("data not found", 404));
+    return next(new HandlerCallBack("owner not found", 404));
   }
-
+  const data1 = await OwnerSilkColorModel.findOne({
+    where: {
+      _id: req.params.silkid,
+    },
+  });
+  if (!data1) {
+    return next(
+      new HandlerCallBack(`${data.NameEn} SilkColor Not Found `, 404)
+    );
+  }
   console.log(data);
-  await deleteFile(`${OwnerSilk}/${data.image.slice(-64)}`);
+  await deleteFile(`${OwnerSilk}/${data1.OwnerSilkColor.slice(-64)}`);
   await OwnerSilkColorModel.destroy({
     where: { OwnerID: req.params.id },
     force: true,
@@ -711,6 +720,6 @@ exports.DeleteOwnerSilkColor = Trackerror(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    message: "data Delete Successfully",
+    message: "Silk Color Delete Successfully",
   });
 });
