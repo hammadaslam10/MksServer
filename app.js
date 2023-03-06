@@ -43,6 +43,7 @@ const FinalPositionRoutes = require("./Routes/FinalPositionRoutes");
 const ImageStorageRoutes = require("./Routes/ImagesStorageRoutes");
 const EmailTemplateRoutes = require("./Routes/EmailTemplateRoutes");
 const TrackConditionRoutes = require("./Routes/TrackConditionRoutes");
+const PointGroupNameRoutes = require("./Routes/PointGroupNameRoutes");
 const { initializeApp } = require("firebase/app");
 
 const firebaseConfig = {
@@ -107,6 +108,7 @@ app.use("/api/v1", TrackConditionRoutes);
 app.use("/api/v1", FinalPositionRoutes);
 app.use("/api/v1", ImageStorageRoutes);
 app.use("/api/v1", EmailTemplateRoutes);
+app.use("/api/v1", PointGroupNameRoutes);
 // cron.schedule("* * * * *", () => {
 //   console.log("cron job working");
 // });

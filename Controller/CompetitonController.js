@@ -440,7 +440,7 @@ exports.SearchCompetition = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
   await CompetitonModel.findAndCountAll({
-   order: [["createdAt", "DESC"]],
+    order: [["createdAt", "DESC"]],
     where: {
       NameEn: {
         [Op.like]: `%${req.query.NameEn || ""}%`,

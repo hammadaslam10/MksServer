@@ -12,23 +12,23 @@ let options = {
   Protocol: "TCP",
 };
 
-const Db = new Sequelize(
-  process.env.RDSDB,
-  process.env.RDSUSER,
-  process.env.RDSPASSWORD,
-  {
-    ...options,
-  }
-);
 // const Db = new Sequelize(
-//   process.env.SQLDB,
-//   process.env.SQLHOST,
-//   process.env.SQLPASSWORD,
+//   process.env.RDSDB,
+//   process.env.RDSUSER,
+//   process.env.RDSPASSWORD,
 //   {
-//     dialect: "mysql",
-//     logging: false,
+//     ...options,
 //   }
 // );
+const Db = new Sequelize(
+  process.env.SQLDB,
+  process.env.SQLHOST,
+  process.env.SQLPASSWORD,
+  {
+    dialect: "mysql",
+    logging: false,
+  }
+);
 
 Db.authenticate()
   .then(() => {
@@ -191,6 +191,19 @@ db.RaceResultImagesModel = require("../Models/RaceResultImagesModel")(
   Db,
   DataTypes
 );
+db.PointGroupNameModel = require("../Models/PointGroupNameModel")(
+  Db,
+  DataTypes
+);
+db.PointGroupNameModel = require("../Models/PointGroupNameModel")(
+  Db,
+  DataTypes
+);
+db.PointGroupNameModel = require("../Models/PointGroupNameModel")(
+  Db,
+  DataTypes
+);
+
 db.sequelize.sync({ force: false, alter: false }).then(async () => {
   console.log("yes re-sync done!");
 });

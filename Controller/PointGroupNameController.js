@@ -1,13 +1,13 @@
 const db = require("../config/Connection");
-const PointTableSystemModel = db.PointTableSystemModel;
+const PointGroupNameModel = db.PointGroupNameModel;
 const Trackerror = require("../Middleware/TrackError");
 const HandlerCallBack = require("../Utils/HandlerCallBack");
 const { ArRegex } = require("../Utils/ArabicLanguageRegex");
 const sequelize = require("sequelize");
 const { Op } = require("sequelize");
 const { getPagination, getPagingData } = require("../Utils/Pagination");
-exports.GetDeletedPointTableSystem = Trackerror(async (req, res, next) => {
-  const data = await PointTableSystemModel.findAll({
+exports.GetDeletedPointGroupName = Trackerror(async (req, res, next) => {
+  const data = await PointGroupNameModel.findAll({
     paranoid: false,
     where: {
       [Op.not]: { deletedAt: null },
@@ -18,9 +18,9 @@ exports.GetDeletedPointTableSystem = Trackerror(async (req, res, next) => {
     data,
   });
 });
-exports.RestoreSoftDeletedPointTableSystem = Trackerror(
+exports.RestoreSoftDeletedPointGroupName = Trackerror(
   async (req, res, next) => {
-    const data = await PointTableSystemModel.findOne({
+    const data = await PointGroupNameModel.findOne({
       paranoid: false,
       where: { _id: req.params.id },
     });
@@ -28,13 +28,13 @@ exports.RestoreSoftDeletedPointTableSystem = Trackerror(
       return next(new HandlerCallBack("data not found", 404));
     }
 
-    let checkcode = await PointTableSystemModel.findOne({
+    let checkcode = await PointGroupNameModel.findOne({
       paranoid: false,
       where: { shortCode: -1 * data.shortCode },
     });
     console.log(checkcode);
     if (checkcode) {
-      let [result] = await PointTableSystemModel.findAll({
+      let [result] = await PointGroupNameModel.findAll({
         paranoid: false,
         attributes: [
           [sequelize.fn("max", sequelize.col("shortCode")), "maxshortCode"],
@@ -43,7 +43,7 @@ exports.RestoreSoftDeletedPointTableSystem = Trackerror(
       console.log(-1 * (result.dataValues.maxshortCode + 1));
       let newcode = result.dataValues.maxshortCode + 1;
       console.log(newcode, "dsd");
-      await PointTableSystemModel.update(
+      await PointGroupNameModel.update(
         { shortCode: newcode },
         {
           where: {
@@ -52,7 +52,7 @@ exports.RestoreSoftDeletedPointTableSystem = Trackerror(
           paranoid: false,
         }
       );
-      const restoredata = await PointTableSystemModel.restore({
+      const restoredata = await PointGroupNameModel.restore({
         where: { _id: req.params.id },
       });
 
@@ -66,7 +66,7 @@ exports.RestoreSoftDeletedPointTableSystem = Trackerror(
       console.log(newcode);
       console.log(newcode);
       try {
-        await PointTableSystemModel.update(
+        await PointGroupNameModel.update(
           { shortCode: newcode },
           {
             where: {
@@ -85,7 +85,7 @@ exports.RestoreSoftDeletedPointTableSystem = Trackerror(
         }
       }
 
-      const restoredata = await PointTableSystemModel.restore({
+      const restoredata = await PointGroupNameModel.restore({
         where: { _id: req.params.id },
       });
       res.status(200).json({
@@ -96,9 +96,8 @@ exports.RestoreSoftDeletedPointTableSystem = Trackerror(
   }
 );
 
-exports.GetPointTableSystemMaxShortCode = Trackerror(async (req, res, next) => {
-  const data = await PointTableSystemModel.findAll({
-    paranoid: false,
+exports.GetPointGroupNameMaxShortCode = Trackerror(async (req, res, next) => {
+  const data = await PointGroupNameModel.findAll({
     attributes: [
       [sequelize.fn("max", sequelize.col("shortCode")), "maxshortCode"],
     ],
@@ -108,58 +107,49 @@ exports.GetPointTableSystemMaxShortCode = Trackerror(async (req, res, next) => {
     data,
   });
 });
-exports.CreatePointTableSystem = Trackerror(async (req, res, next) => {
-  const { shortCode, Group_Name, Rank, Point, Bonus_Point } = req.body;
+exports.CreatePointGroupName = Trackerror(async (req, res, next) => {
+  const { NameEn, NameAr, shortCode } = req.body;
 
-  // try {
-  //   const data = await PointTableSystemModel.create({
-  //     shortCode: shortCode,
-  //     Group_Name: Group_Name,
-  //     Rank: Rank,
-  //     Point: Point,
-  //     Bonus_Point: Bonus_Point,
-  //   });
-  //   console.log(data);
-  //   res.status(201).json({
-  //     success: true,
-  //     data,
-  //   });
-  // } catch (error) {
-  //   if (error.name === "SequelizeUniqueConstraintError") {
-  //     res.status(403);
-  //     res.json({
-  //       status: "error",
-  //       message: [
-  //         "This Short Code already exists, Please enter a different one.",
-  //       ],
-  //     });
-  //   } else {
-  //     res.status(500).json({
-  //       success: false,
-  //       message: error.errors.map((singleerr) => {
-  //         return singleerr.message;
-  //       }),
-  //     });
-  //   }
-  // }
+  try {
+    const data = await PointGroupNameModel.create({
+      shortCode: shortCode,
+      NameEn: NameEn,
+      NameAr: NameAr,
+    });
+    res.status(201).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    if (error.name === "SequelizeUniqueConstraintError") {
+      res.status(403);
+      res.json({
+        status: "error",
+        message: [
+          "This Short Code already exists, Please enter a different one.",
+        ],
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: error.errors.map((singleerr) => {
+          return singleerr.message;
+        }),
+      });
+    }
+  }
 });
-exports.PointTableSystemGet = Trackerror(async (req, res, next) => {
+exports.SearchPointGroupName = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
-  await PointTableSystemModel.findAndCountAll({
+  await PointGroupNameModel.findAndCountAll({
     order: [["createdAt", "DESC"]],
     where: {
-      Group_Name: {
-        [Op.like]: `%${req.query.Group_Name || ""}%`,
+      NameEn: {
+        [Op.like]: `%${req.query.NameEn || ""}%`,
       },
-      Rank: {
-        [Op.like]: `%${req.query.Rank || ""}%`,
-      },
-      Bonus_Point: {
-        [Op.like]: `%${req.query.Bonus_Point || ""}%`,
-      },
-      Point: {
-        [Op.like]: `%${req.query.DescriptionAr || ""}%`,
+      NameAr: {
+        [Op.like]: `%${req.query.NameAr || ""}%`,
       },
       shortCode: {
         [Op.like]: `%${req.query.shortCode || ""}%`,
@@ -189,38 +179,42 @@ exports.PointTableSystemGet = Trackerror(async (req, res, next) => {
       });
     });
 });
-exports.SinglePointTableSystem = Trackerror(async (req, res, next) => {
-  const data = await PointTableSystemModel.findOne({
+exports.PointGroupNameGet = Trackerror(async (req, res, next) => {
+  const data = await PointGroupNameModel.findAll({
+    include: { all: true },
+  });
+  res.status(200).json({
+    success: true,
+    data: data,
+  });
+});
+exports.SingleCompetitonCategoryGet = Trackerror(async (req, res, next) => {
+  const data = await PointGroupNameModel.findAll({
     where: { _id: req.params.id },
     include: { all: true },
   });
-  if (!data) {
-    return next(new HandlerCallBack("Race is Not Available", 404));
-  } else {
-    res.status(200).json({
-      success: true,
-      data,
-    });
-  }
+  res.status(200).json({
+    success: true,
+    data: data,
+  });
 });
-exports.GetPointTableSystemAdmin = Trackerror(async (req, res, next) => {});
-exports.EditPointTableSystem = Trackerror(async (req, res, next) => {
-  const { Group_Name, Rank, Point, Bonus_Point, shortCode } = req.body;
-  let data = await PointTableSystemModel.findOne({
+exports.GetPointGroupNameAdmin = Trackerror(async (req, res, next) => {});
+exports.EditPointGroupName = Trackerror(async (req, res, next) => {
+  const { NameEn, NameAr, shortCode } = req.body;
+  let data = await PointGroupNameModel.findOne({
     where: { _id: req.params.id },
   });
-  if (data === null) {
-    return next(new HandlerCallBack("data not found", 404));
-  }
-  const updateddata = {
-    shortCode: shortCode || data.shortCode,
-    Group_Name: Group_Name || data.Group_Name,
-    Rank: Rank || data.Rank,
-    Bonus_Point: Bonus_Point || data.Bonus_Point,
-    Point: Point || data.Point,
-  };
   try {
-    data = await PointTableSystemModel.update(updateddata, {
+    if (data === null) {
+      return next(new HandlerCallBack("data not found", 404));
+    }
+
+    const updateddata = {
+      shortCode: shortCode || data.shortCode,
+      NameEn: NameEn || data.NameEn,
+      NameAr: NameAr || data.NameAr,
+    };
+    data = await PointGroupNameModel.update(updateddata, {
       where: {
         _id: req.params.id,
       },
@@ -248,15 +242,15 @@ exports.EditPointTableSystem = Trackerror(async (req, res, next) => {
     }
   }
 });
-exports.DeletePointTableSystem = Trackerror(async (req, res, next) => {
-  const data = await PointTableSystemModel.findOne({
+exports.DeletePointGroupName = Trackerror(async (req, res, next) => {
+  const data = await PointGroupNameModel.findOne({
     where: { _id: req.params.id },
   });
   if (!data) {
     return next(new HandlerCallBack("data not found", 404));
   }
 
-  await PointTableSystemModel.destroy({
+  await PointGroupNameModel.destroy({
     where: { _id: req.params.id },
     force: true,
   });
@@ -266,28 +260,28 @@ exports.DeletePointTableSystem = Trackerror(async (req, res, next) => {
     message: "data Delete Successfully",
   });
 });
-exports.SoftDeletePointTableSystem = Trackerror(async (req, res, next) => {
-  const data = await PointTableSystemModel.findOne({
+exports.SoftDeletePointGroupName = Trackerror(async (req, res, next) => {
+  const data = await PointGroupNameModel.findOne({
     where: { _id: req.params.id },
   });
   if (!data) {
     return next(new HandlerCallBack("data not found", 404));
   }
-  let checkcode = await PointTableSystemModel.findOne({
+  let checkcode = await PointGroupNameModel.findOne({
     paranoid: false,
     where: { shortCode: -data.shortCode },
   });
   console.log(checkcode);
   if (checkcode) {
     console.log("hello");
-    let [result] = await PointTableSystemModel.findAll({
+    let [result] = await PointGroupNameModel.findAll({
       paranoid: false,
       attributes: [
         [sequelize.fn("max", sequelize.col("shortCode")), "maxshortCode"],
       ],
     });
     console.log(-result.dataValues.maxshortCode, "dsd");
-    await PointTableSystemModel.update(
+    await PointGroupNameModel.update(
       { shortCode: -result.dataValues.maxshortCode },
       {
         where: {
@@ -295,7 +289,7 @@ exports.SoftDeletePointTableSystem = Trackerror(async (req, res, next) => {
         },
       }
     );
-    await PointTableSystemModel.destroy({
+    await PointGroupNameModel.destroy({
       where: { _id: req.params.id },
     });
 
@@ -305,7 +299,7 @@ exports.SoftDeletePointTableSystem = Trackerror(async (req, res, next) => {
     });
   } else {
     console.log(data.shortCode);
-    await PointTableSystemModel.update(
+    await PointGroupNameModel.update(
       { shortCode: -data.shortCode },
       {
         where: {
@@ -314,7 +308,7 @@ exports.SoftDeletePointTableSystem = Trackerror(async (req, res, next) => {
       }
     );
 
-    await PointTableSystemModel.destroy({
+    await PointGroupNameModel.destroy({
       where: { _id: req.params.id },
     });
     res.status(200).json({
