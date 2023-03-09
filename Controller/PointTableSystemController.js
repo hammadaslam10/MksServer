@@ -111,7 +111,7 @@ exports.GetPointTableSystemMaxShortCode = Trackerror(async (req, res, next) => {
 });
 exports.CreatePointTableSystem = Trackerror(async (req, res, next) => {
   const { shortCode, Group_Name, Type, Length, PointTable } = req.body;
-  let ParseData = JSON.parse(PointTable);
+  // let ParseData = JSON.parse(PointTable);
   try {
     const data = await PointTableSystemModel.create({
       shortCode: shortCode,
@@ -120,17 +120,17 @@ exports.CreatePointTableSystem = Trackerror(async (req, res, next) => {
       Length: Length,
     });
     let entries;
-    console.log(ParseData);
+    console.log(PointTable);
     if (Type == "Pick") {
       console.log(Type);
-      console.log(ParseData[0].BonusPoint);
+      console.log(PointTable[0].BonusPoint);
       try {
         entries = await PointDefinitionModel.findOrCreate({
           where: {
             PointGroupName: Group_Name,
             Rank: 1,
-            BonusPoint: ParseData[0].BonusPoint,
-            Point: ParseData[0].Point,
+            BonusPoint: PointTable[0].BonusPoint,
+            Point: PointTable[0].Point,
             Type: Type,
           },
         });
@@ -141,17 +141,17 @@ exports.CreatePointTableSystem = Trackerror(async (req, res, next) => {
         });
         res.end();
       }
-    } else {
+    } else if (Type == "Cast") {
       console.log("Cast");
-      if (ParseData.length == Length && ParseData.length > 1) {
-        for (let i = 0; i < ParseData.length; i++) {
+      if (PointTable.length == Length && PointTable.length > 1) {
+        for (let i = 0; i < PointTable.length; i++) {
           try {
             entries = await PointDefinitionModel.findOrCreate({
               where: {
                 PointGroupName: Group_Name,
-                Rank: ParseData[i].Rank,
-                BonusPoint: ParseData[i].BonusPoint,
-                Point: ParseData[i].Point,
+                Rank: PointTable[i].Rank,
+                BonusPoint: PointTable[i].BonusPoint,
+                Point: PointTable[i].Point,
                 Type: Type,
               },
             });
@@ -276,7 +276,7 @@ exports.SinglePointTableSystem = Trackerror(async (req, res, next) => {
     });
   }
 });
-exports.GetPointTableSystemAdmin = Trackerror(async (req, res, next) => { });
+exports.GetPointTableSystemAdmin = Trackerror(async (req, res, next) => {});
 exports.EditPointTableSystem = Trackerror(async (req, res, next) => {
   const { Group_Name, Rank, Point, Bonus_Point, shortCode } = req.body;
   let data = await PointTableSystemModel.findOne({

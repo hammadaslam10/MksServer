@@ -28,6 +28,82 @@ const jwt = require("jsonwebtoken");
 const { getPagination, getPagingData1 } = require("../Utils/Pagination");
 const schedule = require("node-schedule");
 const moment = require("moment");
+exports.LiveRaceOnlyDropDown = Trackerror(async (req, res, next) => {
+  const { page, size } = req.query;
+  const { limit, offset } = getPagination(page - 1, size);
+  let counttotal = await RaceModel.count({
+    where: {
+      RaceStatus: "Live",
+    },
+  });
+  const data = await RaceModel.findAndCountAll({
+    attributes: {
+      exclude: [
+        "MeetingType",
+        "RaceKind",
+        "RaceName",
+        "TrackLength",
+        "HorseKindinRace",
+        "Currency",
+        "RaceCourse",
+        "RaceType",
+        "TrackCondition",
+        "Sponsor",
+        "updatedAt",
+        "deletedAt",
+        "Competition",
+        "RaceCard",
+        "BackupId",
+      ],
+    },
+    include: [
+      {
+        model: db.RaceNameModel,
+        as: "RaceNameModelData",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "deletedAt"],
+        },
+        where: {
+          NameEn: {
+            [Op.like]: `${req.query.RaceName || ""}%`,
+          },
+        },
+        paranoid: false,
+      },
+
+      {
+        model: db.RaceKindModel,
+        as: "RaceKindData",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "deletedAt"],
+        },
+        paranoid: false,
+      },
+    ],
+    order: [["createdAt", "DESC"]],
+    where: {
+      RaceStatus: "Live",
+    },
+    limit,
+    offset,
+    paranoid: true,
+  })
+    .then((data) => {
+      // console.log(page, limit, data);
+      const response = getPagingData1(data, page, limit, counttotal);
+      res.status(200).json({
+        data: response.data,
+        currentPage: response.currentPage,
+        totalPages: response.totalPages,
+        totalcount: response.totalcount,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: err.message || "Some error occurred while retrieving Color.",
+      });
+    });
+});
 exports.AllRaceCourseRaceToday = Trackerror(async (req, res, next) => {
   const racedata = await RaceModel.findAll({
     attributes: [
@@ -411,9 +487,15 @@ exports.GetDeletedRace = Trackerror(async (req, res, next) => {
         paranoid: false,
       },
       {
-        model: db.CompetitonModel,
-        as: "CompetitionRacesPointsModelData",
-        include: { all: true },
+        model: db.CompetitionAndRacesModel,
+        as: "RaceDataOfCompetition",
+        attributes: [
+          "_id",
+          "CompetitionCategory",
+          "CompetitionCode",
+          "NameEn",
+          "NameAr",
+        ],
         paranoid: false,
       },
       {
@@ -760,7 +842,13 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
       {
         model: db.CompetitionAndRacesModel,
         as: "RaceDataOfCompetition",
-        include: { all: true },
+        attributes: [
+          "_id",
+          "CompetitionCategory",
+          "CompetitionCode",
+          "NameEn",
+          "NameAr",
+        ],
         paranoid: false,
       },
       {
@@ -1998,9 +2086,15 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
               paranoid: false,
             },
             {
-              model: db.CompetitonModel,
-              as: "CompetitionRacesPointsModelData",
-              include: { all: true },
+              model: db.CompetitionAndRacesModel,
+              as: "RaceDataOfCompetition",
+              attributes: [
+                "_id",
+                "CompetitionCategory",
+                "CompetitionCode",
+                "NameEn",
+                "NameAr",
+              ],
               paranoid: false,
             },
             {
@@ -2251,9 +2345,15 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
               paranoid: false,
             },
             {
-              model: db.CompetitonModel,
-              as: "CompetitionRacesPointsModelData",
-              include: { all: true },
+              model: db.CompetitionAndRacesModel,
+              as: "RaceDataOfCompetition",
+              attributes: [
+                "_id",
+                "CompetitionCategory",
+                "CompetitionCode",
+                "NameEn",
+                "NameAr",
+              ],
               paranoid: false,
             },
             {
@@ -2498,9 +2598,15 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
             paranoid: false,
           },
           {
-            model: db.CompetitonModel,
-            as: "CompetitionRacesPointsModelData",
-            include: { all: true },
+            model: db.CompetitionAndRacesModel,
+            as: "RaceDataOfCompetition",
+            attributes: [
+              "_id",
+              "CompetitionCategory",
+              "CompetitionCode",
+              "NameEn",
+              "NameAr",
+            ],
             paranoid: false,
           },
           {
@@ -2731,9 +2837,15 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
           paranoid: false,
         },
         {
-          model: db.CompetitonModel,
-          as: "CompetitionRacesPointsModelData",
-          include: { all: true },
+          model: db.CompetitionAndRacesModel,
+          as: "RaceDataOfCompetition",
+          attributes: [
+            "_id",
+            "CompetitionCategory",
+            "CompetitionCode",
+            "NameEn",
+            "NameAr",
+          ],
           paranoid: false,
         },
         {
@@ -3263,7 +3375,7 @@ exports.EditRace = Trackerror(async (req, res, next) => {
     RaceWeight,
     Timing,
     Endtiming,
-    totalPrize
+    totalPrize,
   } = req.body;
   let = {
     FirstPrice,

@@ -233,7 +233,6 @@ exports.CompetitonGet = Trackerror(async (req, res, next) => {
         //   },
         // ],
       },
-
     ],
   });
   res.status(200).json({
@@ -249,7 +248,7 @@ exports.AddRacesInCompetitionV2 = Trackerror(async (req, res, next) => {
     return next(new HandlerCallBack("Race Card not found", 404));
   } else {
     const { RaceEntry } = req.body;
-    console.log(RaceEntry, 'RaceEntry');
+    console.log(RaceEntry, "RaceEntry");
     let entries;
     if (CompetitionID.CategoryCount == RaceEntry.length) {
       console.log("hello");
@@ -270,7 +269,6 @@ exports.AddRacesInCompetitionV2 = Trackerror(async (req, res, next) => {
         ],
       });
       // res.end();
-
     }
     res.status(200).json({
       success: true,
@@ -334,7 +332,7 @@ exports.SingleCompetitonGet = Trackerror(async (req, res, next) => {
     data: data,
   });
 });
-exports.GetCompetitonAdmin = Trackerror(async (req, res, next) => { });
+exports.GetCompetitonAdmin = Trackerror(async (req, res, next) => {});
 exports.EditCompetiton = Trackerror(async (req, res, next) => {
   const {
     NameEn,
@@ -480,7 +478,51 @@ exports.SearchCompetition = Trackerror(async (req, res, next) => {
   const { limit, offset } = getPagination(page - 1, size);
   await CompetitonModel.findAndCountAll({
     order: [["createdAt", "DESC"]],
-    include: { all: true },
+    attributes: [
+      "_id",
+      "CompetitionCategory",
+      "CompetitionCode",
+      "NameEn",
+      "NameAr",
+      "shortCode",
+      "CategoryCount",
+      "StartDate",
+      "EndDate",
+      "createdAt",
+    ],
+    include: [
+      {
+        model: db.SponsorModel,
+        as: "CompetitionSponsorData",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
+        },
+      },
+      {
+        model: db.CompetitionCategoryModel,
+        as: "CompetitionTypeData",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
+        },
+      },
+
+      {
+        model: db.CompetitionAndRacesModel,
+        as: "CompetitionDataOfRace",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
+        },
+        include: [
+          {
+            model: db.PointTableSystemModel,
+            as: "PointTableOfRaceofRace",
+            attributes: {
+              exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
+            },
+          },
+        ],
+      },
+    ],
     where: {
       NameEn: {
         [Op.like]: `%${req.query.NameEn || ""}%`,
@@ -488,15 +530,15 @@ exports.SearchCompetition = Trackerror(async (req, res, next) => {
       NameAr: {
         [Op.like]: `%${req.query.NameAr || ""}%`,
       },
-      CompetitionCategory: {
-        [Op.like]: `%${req.query.CompetitionCategory || ""}%`,
-      },
-      CompetitionType: {
-        [Op.like]: `%${req.query.CompetitionType || ""}%`,
-      },
-      CompetitionSponsor: {
-        [Op.like]: `%${req.query.CompetitionSponsor || ""}%`,
-      },
+      // CompetitionCategory: {
+      //   [Op.like]: `%${req.query.CompetitionCategory || ""}%`,
+      // },
+      // CompetitionType: {
+      //   [Op.like]: `%${req.query.CompetitionType || ""}%`,
+      // },
+      // CompetitionSponsor: {
+      //   [Op.like]: `%${req.query.CompetitionSponsor || ""}%`,
+      // },
       // CompetitionCode: {
       //   [Op.like]: `%${req.query.CompetitionCode || ""}%`,
       // },
@@ -542,7 +584,8 @@ exports.SearchCompetition = Trackerror(async (req, res, next) => {
     })
     .catch((err) => {
       res.status(500).json({
-        message: err.message || "Some error occurred while retrieving Color.",
+        message:
+          err.message || "Some error occurred while retrieving Competition.",
       });
     });
 });

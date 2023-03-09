@@ -62,6 +62,11 @@ function exchangefunctionv2(arraytobechecked, valuetobechecked, val) {
   // console.log(a, valuetobechecked, val);
   return a.id;
 }
+function exchangefunctionv3(arraytobechecked, valuetobechecked, val) {
+  let a = arraytobechecked.find((item) => item.Code == valuetobechecked);
+  // console.log(a, valuetobechecked, val);
+  return a.id;
+}
 
 function CheckAge(a, b) {
   let now = new Date();
@@ -247,10 +252,10 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           recordetail: de[i],
         });
       }
-      if (de[i].BreederCode == undefined) {
+      if (de[i].TrainerCode == undefined) {
         errorstatements.push({
           recordnumber: i + 1,
-          message: `RecordNo ${i + 1} is missing BreederCode number`,
+          message: `RecordNo ${i + 1} is missing TrainerCode `,
           recordetail: de[i],
         });
       }
@@ -303,17 +308,29 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       let Color = Array.from(new Set(de.map((item) => item.Color)));
       let Gender = Array.from(new Set(de.map((item) => item.Gender)));
       let Breeder = Array.from(new Set(de.map((item) => item.Breeder)));
-      let ActiveTrainer = Array.from(
-        new Set(de.map((item) => item.ActiveTrainer))
-      );
-      let ActiveOwner = Array.from(new Set(de.map((item) => item.ActiveOwner)));
-      let HorseKind = Array.from(new Set(de.map((item) => item.HorseKind)));
-      console.log(Nationality);
       console.log(Color);
-      console.log(Gender);
-      console.log(Breeder);
-      console.log(ActiveTrainer);
-      console.log(ActiveOwner);
+      let ActiveTrainer = Array.from(
+        new Set(de.map((item) => item.TrainerCode))
+      );
+      let ActiveOwner = Array.from(
+        new Set(de.map((item) => item.OwnerShortCode))
+      );
+      let AllTrainer = [];
+      let AllOwner = [];
+      de.map((item) => {
+        AllOwner.push({
+          ActiveOwner: item.ActiveOwner,
+          Code: item.OwnerShortCode,
+        });
+      });
+      de.map((item) => {
+        AllTrainer.push({
+          ActiveTrainer: item.ActiveTrainer,
+          Code: item.TrainerCode,
+        });
+      });
+      let HorseKind = Array.from(new Set(de.map((item) => item.HorseKind)));
+      console.log(HorseKind);
       let NationalityData = [];
       let ColorData = [];
       let GenderData = [];
@@ -323,6 +340,14 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       let HorseKindData = [];
       let HorseData = [];
 
+      const filteredOwner = [
+        ...new Set(AllOwner.map((a) => JSON.stringify(a))),
+      ].map((a) => JSON.parse(a));
+      console.log(filteredOwner);
+      const filteredTrainer = [
+        ...new Set(AllTrainer.map((a) => JSON.stringify(a))),
+      ].map((a) => JSON.parse(a));
+      console.log(filteredTrainer);
       const [defaultnatioanlityrow, created] =
         await db.NationalityModel.findOrCreate({
           where: { NameEn: "UAE" },
@@ -345,7 +370,7 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
       for (let i = 0; i < Nationality.length; i++) {
         // try {
         const [row, created] = await db.NationalityModel.findOrCreate({
-          where: { NameEn: Nationality[i] },
+          where: { AbbrevEn: Nationality[i] },
           defaults: {
             NameEn: Nationality[i],
             NameAr: Nationality[i],
@@ -355,21 +380,21 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
             AltNameAr: Nationality[i],
             BackupId: 4777777,
           },
-          attributes: ["_id", "NameEn"],
+          attributes: ["_id", "AbbrevEn"],
         });
         console.log(NationalityData[i]);
         NationalityData.push({
           id: row.dataValues._id,
-          NameEn: row.dataValues.NameEn,
+          NameEn: row.dataValues.AbbrevEn,
           createdS: created,
         });
         // } catch (Error) {
         // }
       }
-      console.log("horsekind");
+      // console.log("horsekind");
       for (let i = 0; i < HorseKind.length; i++) {
         const [row, created] = await db.HorseKindModel.findOrCreate({
-          where: { NameEn: HorseKind[i] },
+          where: { AbbrevEn: HorseKind[i] },
           defaults: {
             NameEn: HorseKind[i],
             NameAr: HorseKind[i],
@@ -377,18 +402,18 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
             AbbrevAr: HorseKind[i],
             BackupId: 4777777,
           },
-          attributes: ["_id", "NameEn"],
+          attributes: ["_id", "AbbrevEn"],
         });
-        console.log(HorseKindData[i]);
         HorseKindData.push({
           id: row.dataValues._id,
-          NameEn: row.dataValues.NameEn,
+          NameEn: row.dataValues.AbbrevEn,
           created: created,
         });
       }
+      // console.log(HorseKindData);
       for (let i = 0; i < Color.length; i++) {
         const [row, created] = await db.ColorModel.findOrCreate({
-          where: { NameEn: Color[i] },
+          where: { AbbrevEn: Color[i] },
           defaults: {
             NameEn: Color[i],
             NameAr: Color[i],
@@ -396,20 +421,20 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
             AbbrevAr: Color[i],
             BackupId: 4777777,
           },
-          attributes: ["_id", "NameEn"],
+          attributes: ["_id", "AbbrevEn"],
         });
         // recordswhicharenotgetentered.push(de[i], Error);
-        console.log(ColorData[i]);
+
         ColorData.push({
           id: row.dataValues._id,
-          NameEn: row.dataValues.NameEn,
+          NameEn: row.dataValues.AbbrevEn,
           created: created,
         });
       }
 
       for (let i = 0; i < Gender.length; i++) {
         const [row, created] = await db.SexModel.findOrCreate({
-          where: { NameEn: Gender[i] },
+          where: { AbbrevEn: Gender[i] },
           defaults: {
             NameEn: Gender[i],
             NameAr: Gender[i],
@@ -417,15 +442,16 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
             AbbrevAr: Gender[i],
             BackupId: 4777777,
           },
-          attributes: ["_id", "NameEn"],
+          attributes: ["_id", "AbbrevEn"],
         });
-        console.log(GenderData[i]);
+
         GenderData.push({
           id: row.dataValues._id,
-          NameEn: row.dataValues.NameEn,
+          NameEn: row.dataValues.AbbrevEn,
           created: created,
         });
       }
+
       for (let i = 0; i < Breeder.length; i++) {
         const [row, created] = await db.BreederModel.findOrCreate({
           where: { NameEn: Breeder[i] },
@@ -438,68 +464,73 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           },
           attributes: ["_id", "NameEn"],
         });
-        console.log(BreederData[i]);
+
         BreederData.push({
           id: row.dataValues._id,
           NameEn: row.dataValues.NameEn,
           created: created,
         });
       }
-      for (let i = 0; i < ActiveTrainer.length; i++) {
+
+      for (let i = 0; i < filteredTrainer.length; i++) {
         const [row, created] = await db.TrainerModel.findOrCreate({
-          where: { NameEn: ActiveTrainer[i] },
+          where: { shortCode: filteredTrainer[i].Code },
           defaults: {
-            NameEn: ActiveTrainer[i],
-            NameAr: ActiveTrainer[i],
-            TitleEn: ActiveTrainer[i],
-            TitleAr: ActiveTrainer[i],
-            ShortNameEn: ActiveTrainer[i],
-            ShortNameAr: ActiveTrainer[i],
-            DetailAr: ActiveTrainer[i],
-            DetailEn: ActiveTrainer[i],
-            RemarksEn: ActiveTrainer[i],
-            RemarksAr: ActiveTrainer[i],
+            NameEn: filteredTrainer[i].ActiveTrainer,
+            NameAr: filteredTrainer[i].ActiveTrainer,
+            TitleEn: filteredTrainer[i].ActiveTrainer,
+            TitleAr: filteredTrainer[i].ActiveTrainer,
+            shortCode: filteredTrainer[i].Code,
+            ShortNameEn: filteredTrainer[i].ActiveTrainer,
+            ShortNameAr: filteredTrainer[i].ActiveTrainer,
+            DetailAr: filteredTrainer[i].ActiveTrainer,
+            DetailEn: filteredTrainer[i].ActiveTrainer,
+            RemarksEn: filteredTrainer[i].ActiveTrainer,
+            RemarksAr: filteredTrainer[i].ActiveTrainer,
             NationalityID: defaultnatioanlityrow.dataValues._id,
             DOB: Date.now(),
             TrainerLicenseDate: Date.now(),
             BackupId: 4777777,
           },
-          attributes: ["_id", "NameEn"],
+          attributes: ["_id", "shortCode"],
         });
-        console.log(ActiveTrainerData[i]);
         ActiveTrainerData.push({
           id: row.dataValues._id,
-          NameEn: row.dataValues.NameEn,
+          Code: row.dataValues.shortCode,
           created: created,
         });
       }
-      for (let i = 0; i < ActiveOwner.length; i++) {
+
+      console.log(ActiveTrainerData);
+      for (let i = 0; i < filteredOwner.length; i++) {
         const [row, created] = await db.OwnerModel.findOrCreate({
-          where: { NameEn: ActiveOwner[i] },
+          where: { shortCode: filteredOwner[i].Code },
           defaults: {
-            NameEn: ActiveOwner[i],
-            NameAr: ActiveOwner[i],
-            TitleEn: ActiveOwner[i],
-            TitleAr: ActiveOwner[i],
-            // ShortNameEn: ActiveOwner[i],
-            // ShortNameAr: ActiveOwner[i],
-            ShortAr: ActiveOwner[i],
-            ShortEn: ActiveOwner[i],
-            RemarksEn: ActiveOwner[i],
-            RemarksAr: ActiveOwner[i],
+            NameEn: filteredOwner[i].ActiveOwner,
+            NameAr: filteredOwner[i].ActiveOwner,
+            TitleEn: filteredOwner[i].ActiveOwner,
+            TitleAr: filteredOwner[i].ActiveOwner,
+            shortCode: filteredOwner[i].Code,
+            // ShortNameEn: filteredOwner[i].ActiveOwner,
+            // ShortNameAr: filteredOwner[i].ActiveOwner,
+            ShortAr: filteredOwner[i].ActiveOwner,
+            ShortEn: filteredOwner[i].ActiveOwner,
+            RemarksEn: filteredOwner[i].ActiveOwner,
+            RemarksAr: filteredOwner[i].ActiveOwner,
             NationalityID: defaultnatioanlityrow.dataValues._id,
             RegistrationDate: Date.now(),
             BackupId: 4777777,
           },
-          attributes: ["_id", "NameEn"],
+          attributes: ["_id", "shortCode"],
         });
-        console.log(ActiveOwnerData[i]);
+
         ActiveOwnerData.push({
           id: row.dataValues._id,
-          NameEn: row.dataValues.NameEn,
+          Code: row.dataValues.shortCode,
           created: created,
         });
       }
+      console.log(ActiveOwnerData, "As");
       let nationtemp;
       let colortemp;
       let breedertemp;
@@ -521,20 +552,20 @@ exports.HorseMassUploadV2 = Trackerror(async (req, res, next) => {
           "horsekind"
         );
         sextemp = exchangefunctionv2(GenderData, de[i].Gender, "sex");
-        trainertemp = exchangefunctionv2(
+        trainertemp = exchangefunctionv3(
           ActiveTrainerData,
-          de[i].ActiveTrainer,
+          de[i].TrainerCode,
           "trainer"
         );
-        ownertemp = exchangefunctionv2(
+        ownertemp = exchangefunctionv3(
           ActiveOwnerData,
-          de[i].ActiveOwner,
+          de[i].OwnerShortCode,
           "owner"
         );
         console.log(horsekindtemp);
         try {
           const [row, created] = await db.HorseModel.findOrCreate({
-            where: { NameEn: de[i].Name, shortCode: de[i].shortCode },
+            where: { shortCode: de[i].shortCode },
             defaults: {
               NameEn: de[i].Name,
               NameAr: de[i].Name,

@@ -8,10 +8,10 @@ module.exports = (sequelize, DataTypes) => {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
-        primaryKey: true
+        primaryKey: true,
       },
       HorseImage: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
         // allowNull: false,
         // validate: {
         //   notNull: { msg: "Please Add Image Of Horse" },
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BIGINT,
         autoIncrement: true,
         unique: true,
-        allowNull: false
+        allowNull: false,
       },
       KindHorse: {
         type: DataTypes.UUID,
@@ -32,9 +32,9 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: { msg: "Please Add Kind Of Horse" },
           notEmpty: {
-            msg: "Without Kind Horse Will not get submitted"
-          }
-        }
+            msg: "Without Kind Horse Will not get submitted",
+          },
+        },
       },
       Breeder: {
         type: DataTypes.UUID,
@@ -42,9 +42,9 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: { msg: "Please Add Breeder Of Horse" },
           notEmpty: {
-            msg: "Without Breeder Horse Will not get submitted"
-          }
-        }
+            msg: "Without Breeder Horse Will not get submitted",
+          },
+        },
       },
       Sex: {
         type: DataTypes.UUID,
@@ -52,9 +52,9 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: { msg: "Please Add Sex Of Horse" },
           notEmpty: {
-            msg: "Without Sex Horse Will not get submitted"
-          }
-        }
+            msg: "Without Sex Horse Will not get submitted",
+          },
+        },
       },
       DOB: {
         type: DataTypes.DATE,
@@ -62,9 +62,9 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: { msg: "Please Add Date of birth Of Horse" },
           notEmpty: {
-            msg: "Without Date of birth Horse Will not get submitted"
-          }
-        }
+            msg: "Without Date of birth Horse Will not get submitted",
+          },
+        },
       },
       ActiveOwner: {
         type: DataTypes.UUID,
@@ -72,9 +72,9 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: { msg: "Please Add Owner Of Horse" },
           notEmpty: {
-            msg: "Without Owner Horse Will not get submitted"
-          }
-        }
+            msg: "Without Owner Horse Will not get submitted",
+          },
+        },
       },
       ActiveTrainer: {
         type: DataTypes.UUID,
@@ -82,9 +82,9 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: { msg: "Please Add Trainer Of Horse" },
           notEmpty: {
-            msg: "Without Trainer Horse Will not get submitted"
-          }
-        }
+            msg: "Without Trainer Horse Will not get submitted",
+          },
+        },
       },
       NationalityID: {
         type: DataTypes.UUID,
@@ -92,9 +92,9 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: { msg: "Please Add Nationality Of Horse" },
           notEmpty: {
-            msg: "Without Nationality Horse Will not get submitted"
-          }
-        }
+            msg: "Without Nationality Horse Will not get submitted",
+          },
+        },
       },
       CreationId: {
         type: DataTypes.UUID,
@@ -102,25 +102,25 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: { msg: "Please Add Creation Of Horse" },
           notEmpty: {
-            msg: "Without Creation Horse Will not get submitted"
-          }
-        }
+            msg: "Without Creation Horse Will not get submitted",
+          },
+        },
       },
 
       Dam: {
-        type: DataTypes.UUID
+        type: DataTypes.UUID,
       },
       Sire: {
-        type: DataTypes.UUID
+        type: DataTypes.UUID,
       },
       GSire: {
-        type: DataTypes.UUID
+        type: DataTypes.UUID,
       },
 
       Foal: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        defaultValue: 1
+        defaultValue: 1,
       },
       RemarksEn: {
         type: DataTypes.STRING,
@@ -136,7 +136,7 @@ module.exports = (sequelize, DataTypes) => {
           } else {
             throw new Error("remarks English Validation Failed");
           }
-        }
+        },
       },
       RemarksAr: {
         type: DataTypes.STRING,
@@ -156,7 +156,7 @@ module.exports = (sequelize, DataTypes) => {
           } else {
             throw new Error("Remarks Arabic Validation Failed");
           }
-        }
+        },
       },
       NameEn: {
         type: DataTypes.STRING,
@@ -173,8 +173,8 @@ module.exports = (sequelize, DataTypes) => {
             } else {
               throw new Error("Name English Validation Failed");
             }
-          }
-        }
+          },
+        },
       },
 
       NameAr: {
@@ -196,12 +196,12 @@ module.exports = (sequelize, DataTypes) => {
             } else {
               throw new Error("Name Arabic Validation Failed");
             }
-          }
-        }
+          },
+        },
       },
       DamEn: {
         type: DataTypes.STRING,
-        defaultValue: null
+        defaultValue: null,
         // allowNull: false,
         // validate: {
         //   EnglishLanguageVerification() {
@@ -221,49 +221,49 @@ module.exports = (sequelize, DataTypes) => {
 
       DamAr: {
         type: DataTypes.STRING,
-        defaultValue: null
+        defaultValue: null,
       },
       SireNameEn: {
         type: DataTypes.STRING,
-        defaultValue: null
+        defaultValue: null,
       },
 
       SireNameAr: {
         type: DataTypes.STRING,
-        defaultValue: null
+        defaultValue: null,
       },
       GSireNameEn: {
         type: DataTypes.STRING,
-        defaultValue: null
+        defaultValue: null,
       },
 
       GSireNameAr: {
         type: DataTypes.STRING,
-        defaultValue: null
+        defaultValue: null,
       },
       PurchasePrice: {
         type: DataTypes.DOUBLE,
-        allowNull: false
+        allowNull: false,
       },
       isGelded: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: 0
+        defaultValue: 0,
       },
       STARS: {
         type: DataTypes.FLOAT,
         allowNull: false,
-        defaultValue: 0
+        defaultValue: 0,
       },
       Rds: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: 0
+        defaultValue: 0,
       },
       HorseStatus: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: 0
+        defaultValue: 0,
       },
       ColorID: {
         type: DataTypes.UUID,
@@ -271,23 +271,23 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: { msg: "Please Add Image Of Horse" },
           notEmpty: {
-            msg: "Without Image Horse Will not get submitted"
-          }
-        }
+            msg: "Without Image Horse Will not get submitted",
+          },
+        },
       },
       Height: {
         type: DataTypes.BIGINT,
-        allowNull: false
+        allowNull: false,
       },
       BackupId: {
         type: DataTypes.BIGINT,
-        defaultValue: null
-      }
+        defaultValue: null,
+      },
     },
     {
       freezeTableName: true,
       paranoid: true,
-      initialAutoIncrement: 10
+      initialAutoIncrement: 10,
     }
   );
 
