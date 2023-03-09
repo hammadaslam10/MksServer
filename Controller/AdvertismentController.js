@@ -11,7 +11,7 @@ const { resizeImageBuffer } = require("../Utils/ImageResizing");
 const { ArRegex } = require("../Utils/ArabicLanguageRegex");
 const { EnglishRegex } = require("../Utils/EnglishLanguageRegex");
 const Features = require("../Utils/Features");
-const io = require("../socket");
+
 const validator = require("validator");
 const { Op } = require("sequelize");
 const { getPagination, getPagingData } = require("../Utils/Pagination");
@@ -78,7 +78,7 @@ exports.AdsGet = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
   await AdvertismentModel.findAndCountAll({
-   order: [["createdAt", "DESC"]],
+    order: [["createdAt", "DESC"]],
     where: {
       TitleEn: {
         [Op.like]: `%${req.query.TitleEn || ""}%`,
@@ -117,7 +117,7 @@ exports.AdsGet = Trackerror(async (req, res, next) => {
       });
     });
 });
-exports.GetAdsAdmin = Trackerror(async (req, res, next) => {});
+exports.GetAdsAdmin = Trackerror(async (req, res, next) => { });
 exports.EditAds = Trackerror(async (req, res, next) => {
   const { DescriptionEn, DescriptionAr, TitleEn, TitleAr, Url } = req.body;
   let data = await AdvertismentModel.findOne({
@@ -209,4 +209,4 @@ exports.SoftDeleteAds = Trackerror(async (req, res, next) => {
     message: "Soft Delete Successfully",
   });
 });
-exports.AdsGetlive = Trackerror(async (req, res, next) => {});
+exports.AdsGetlive = Trackerror(async (req, res, next) => { });

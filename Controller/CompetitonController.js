@@ -214,24 +214,26 @@ exports.CompetitonGet = Trackerror(async (req, res, next) => {
       //   as: "CompetitionCategoryData",
       // },
       {
-        model: db.RaceModel,
-        where: { HorseFilled: true },
-        as: "CompetitionRacesPointsModelData",
+        model: db.CompetitionAndRacesModel,
+        // where: { HorseFilled: true },
+        include: { all: true },
+        as: "CompetitionDataOfRace",
 
-        include: [
-          {
-            paranoid: false,
-            model: db.RaceNameModel,
-            as: "RaceNameModelData",
-          },
+        // include: [
+        //   {
+        //     paranoid: false,
+        //     model: db.RaceNameModel,
+        //     as: "RaceNameModelData",
+        //   },
 
-          {
-            paranoid: false,
-            model: db.HorseModel,
-            as: "RaceAndHorseModelData",
-          },
-        ],
+        //   {
+        //     paranoid: false,
+        //     model: db.HorseModel,
+        //     as: "RaceAndHorseModelData",
+        //   },
+        // ],
       },
+
     ],
   });
   res.status(200).json({
@@ -329,7 +331,7 @@ exports.SingleCompetitonGet = Trackerror(async (req, res, next) => {
     data: data,
   });
 });
-exports.GetCompetitonAdmin = Trackerror(async (req, res, next) => {});
+exports.GetCompetitonAdmin = Trackerror(async (req, res, next) => { });
 exports.EditCompetiton = Trackerror(async (req, res, next) => {
   const {
     NameEn,

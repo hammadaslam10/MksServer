@@ -78,7 +78,6 @@ let loadcronjob = async () => {
     console.error("cron job loaded failed:", error);
   }
 };
-loadcronjob();
 db.ImagesStorageModel = require("../Models/ImagesStorageModel")(Db, DataTypes);
 db.ColorModel = require("../Models/ColorModel")(Db, DataTypes);
 db.BreederModel = require("../Models/BreederModel")(Db, DataTypes);
@@ -207,33 +206,34 @@ db.CompetitionAndRacesModel = require("../Models/CompetitionAndRacesModel")(
 db.sequelize.sync({ force: false, alter: false }).then(async () => {
   console.log("yes re-sync done!");
 });
+// loadcronjob();
 // db.CompetitonModel.sync({ alter: true });
 // db.PointDefinitionModel.sync({ alter: true });
-// db.CompetitionAndRacesModel.sync({ alter: true });
+db.CompetitionAndRacesModel.sync({ alter: true });
 // db.PointTableSystemModel.sync({ alter: true });
 //-------------------------------------CompetitionRaces-------------------------------------
 db.CompetitonModel.hasMany(db.CompetitionAndRacesModel, {
-  foreignKey: "CompetitionID",
+  foreignKey: "Competition",
   as: "CompetitionDataOfRace",
 });
 db.CompetitionAndRacesModel.belongsTo(db.CompetitonModel, {
-  foreignKey: "CompetitionID",
+  foreignKey: "Competition",
   as: "CompetitionDataOfRace",
 });
-db.CompetitionAndRacesModel.hasMany(db.RaceModel, {
-  foreignKey: "RaceId",
+db.CompetitionAndRacesModel.belongsTo(db.RaceModel, {
+  foreignKey: "Race",
   as: "RaceDataOfCompetition",
 });
-db.RaceModel.belongsTo(db.CompetitionAndRacesModel, {
-  foreignKey: "RaceId",
+db.RaceModel.hasMany(db.CompetitionAndRacesModel, {
+  foreignKey: "Race",
   as: "RaceDataOfCompetition",
 });
 
-db.CompetitionAndRacesModel.hasMany(db.PointTableSystemModel, {
+db.CompetitionAndRacesModel.belongsTo(db.PointTableSystemModel, {
   foreignKey: "PointTableOfRace",
   as: "PointTableOfRaceofRace",
 });
-db.PointTableSystemModel.belongsTo(db.CompetitionAndRacesModel, {
+db.PointTableSystemModel.hasMany(db.CompetitionAndRacesModel, {
   foreignKey: "PointTableOfRace",
   as: "PointTableOfRaceofRace",
 });

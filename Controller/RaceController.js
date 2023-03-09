@@ -758,8 +758,8 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
         paranoid: false,
       },
       {
-        model: db.CompetitonModel,
-        as: "CompetitionRacesPointsModelData",
+        model: db.CompetitionAndRacesModel,
+        as: "RaceDataOfCompetition",
         include: { all: true },
         paranoid: false,
       },

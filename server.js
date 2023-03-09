@@ -1,6 +1,6 @@
 const app = require("./app");
 const Db = require("./config/Connection");
-const { Server } = require("socket.io");
+// const { Server } = require(".io");
 const { AdsGet } = require("./Controller/AdvertismentController");
 const db = require("./config/Connection");
 const schedule = require("node-schedule");
@@ -41,18 +41,18 @@ const server = app.listen(process.env.PORT || 8081, () => {
   // });
   // console.log(schedule.scheduledJobs.abc.cancel());
   });
-const io = new Server(server);
-io.on("connection", (socket) => {
-  console.log("hello socket");
-  socket.on(
-    "Ads",
-    Trackerror(async (req, res, next) => {
-      const data = await AdvertismentModel.findAll();
-      socket.emit("Ads", data);
-      console.log("done");
-    })
-  );
-});
+// const io = new Server(server);
+// io.on("connection", (socket) => {
+//   console.log("hello socket");
+//   socket.on(
+//     "Ads",
+//     Trackerror(async (req, res, next) => {
+//       const data = await AdvertismentModel.findAll();
+//       socket.emit("Ads", data);
+//       console.log("done");
+//     })
+//   );
+// });
 process.on("unhandledRejection", (err) => {
   console.log(`Error ${err.message}`);
   console.log(`Shutting down the server due to Promise Rejection`);

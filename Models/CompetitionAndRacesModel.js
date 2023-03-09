@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true,
       },
-      CompetitionId: {
+      Competition: {
         type: DataTypes.UUID,
         allowNull: false,
         validate: {
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      RaceId: {
+      Race: {
         type: DataTypes.UUID,
         allowNull: false,
         validate: {
