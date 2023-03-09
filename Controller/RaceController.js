@@ -2911,6 +2911,7 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
     let fifth = 3 / 100;
 
     let six = 2 / 100;
+    console.log(totalPrize);
     SecondPrice = second * totalPrize;
     ThirdPrice = third * totalPrize;
     FourthPrice = fouth * totalPrize;
@@ -3252,25 +3253,69 @@ exports.EditRace = Trackerror(async (req, res, next) => {
     WeatherDegree,
     WeatherIcon,
     TrackLength,
-    FirstPrice,
-    SecondPrice,
-    ThirdPrice,
-    FourthPrice,
-    FifthPrice,
-    SixthPrice,
     MeetingType,
     MeetingCode,
     Ground,
     Sponsor,
     EndTime,
     Day,
-    TrackCondition,
     HorseKindinRace,
-    Currency,
     RaceWeight,
     Timing,
     Endtiming,
+    totalPrize
   } = req.body;
+  let = {
+    FirstPrice,
+    SecondPrice,
+    ThirdPrice,
+    FourthPrice,
+    FifthPrice,
+    SixthPrice,
+    Currency,
+    TrackCondition,
+  } = req.body;
+  if (!totalPrize || totalPrize <= 0) {
+    return next(new HandlerCallBack("Please provide valid total prize", 404));
+  }
+  if (PrizeNumber == 6) {
+    let first = 60 / 100;
+    let second = 20 / 100;
+    let third = 10 / 100;
+    let fouth = 5 / 100;
+    let fifth = 3 / 100;
+
+    let six = 2 / 100;
+    console.log(totalPrize);
+    SecondPrice = second * totalPrize;
+    ThirdPrice = third * totalPrize;
+    FourthPrice = fouth * totalPrize;
+    FifthPrice = fifth * totalPrize;
+    FirstPrice = first * totalPrize;
+    SixthPrice = six * totalPrize;
+  } else {
+    let first = 60 / 100;
+    console.log(first * totalPrize, "first");
+    let second = 20 / 100;
+    console.log(second * totalPrize, "second");
+
+    let third = 11 / 100;
+    console.log(third * totalPrize, "third");
+
+    let fouth = 6 / 100;
+    console.log(fouth * totalPrize, "fouth");
+
+    let fifth = 3 / 100;
+    console.log(fifth * totalPrize, "fifth");
+
+    let six = 0 / 100;
+    SecondPrice = second * totalPrize;
+    ThirdPrice = third * totalPrize;
+    FourthPrice = fouth * totalPrize;
+    FifthPrice = fifth * totalPrize;
+    FirstPrice = first * totalPrize;
+    SixthPrice = six * totalPrize;
+  }
   let data = await RaceModel.findOne({
     where: { _id: req.params.id },
   });

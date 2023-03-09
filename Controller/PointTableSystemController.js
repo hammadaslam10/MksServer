@@ -111,6 +111,7 @@ exports.GetPointTableSystemMaxShortCode = Trackerror(async (req, res, next) => {
 });
 exports.CreatePointTableSystem = Trackerror(async (req, res, next) => {
   const { shortCode, Group_Name, Type, Length, PointTable } = req.body;
+  let ParseData = JSON.parse(PointTable);
   try {
     const data = await PointTableSystemModel.create({
       shortCode: shortCode,
@@ -119,17 +120,17 @@ exports.CreatePointTableSystem = Trackerror(async (req, res, next) => {
       Length: Length,
     });
     let entries;
-    console.log(PointTable);
+    console.log(ParseData);
     if (Type == "Pick") {
       console.log(Type);
-      console.log(PointTable[0].BonusPoint);
+      console.log(ParseData[0].BonusPoint);
       try {
         entries = await PointDefinitionModel.findOrCreate({
           where: {
             PointGroupName: Group_Name,
             Rank: 1,
-            BonusPoint: PointTable[0].BonusPoint,
-            Point: PointTable[0].Point,
+            BonusPoint: ParseData[0].BonusPoint,
+            Point: ParseData[0].Point,
             Type: Type,
           },
         });
@@ -142,15 +143,15 @@ exports.CreatePointTableSystem = Trackerror(async (req, res, next) => {
       }
     } else {
       console.log("Cast");
-      if (PointTable.length == Length && PointTable.length > 1) {
-        for (let i = 0; i < PointTable.length; i++) {
+      if (ParseData.length == Length && ParseData.length > 1) {
+        for (let i = 0; i < ParseData.length; i++) {
           try {
             entries = await PointDefinitionModel.findOrCreate({
               where: {
                 PointGroupName: Group_Name,
-                Rank: PointTable[i].Rank,
-                BonusPoint: PointTable[i].BonusPoint,
-                Point: PointTable[i].Point,
+                Rank: ParseData[i].Rank,
+                BonusPoint: ParseData[i].BonusPoint,
+                Point: ParseData[i].Point,
                 Type: Type,
               },
             });
@@ -219,29 +220,30 @@ exports.PointTableSystemGet = Trackerror(async (req, res, next) => {
   const { limit, offset } = getPagination(page - 1, size);
   await PointTableSystemModel.findAndCountAll({
     order: [["createdAt", "DESC"]],
-    where: {
-      Group_Name: {
-        [Op.like]: `%${req.query.Group_Name || ""}%`,
-      },
-      Rank: {
-        [Op.like]: `%${req.query.Rank || ""}%`,
-      },
-      Bonus_Point: {
-        [Op.like]: `%${req.query.Bonus_Point || ""}%`,
-      },
-      Point: {
-        [Op.like]: `%${req.query.DescriptionAr || ""}%`,
-      },
-      shortCode: {
-        [Op.like]: `%${req.query.shortCode || ""}%`,
-      },
-      createdAt: {
-        [Op.between]: [
-          req.query.startdate || "2021-12-01 00:00:00",
-          req.query.endDate || "4030-12-01 00:00:00",
-        ],
-      },
-    },
+    include: { all: true },
+    // where: {
+    // Group_Name: {
+    //   [Op.like]: `%${req.query.Group_Name || ""}%`,
+    // },
+    // Rank: {
+    //   [Op.like]: `%${req.query.Rank || ""}%`,
+    // },
+    // Bonus_Point: {
+    //   [Op.like]: `%${req.query.Bonus_Point || ""}%`,
+    // },
+    // Point: {
+    //   [Op.like]: `%${req.query.DescriptionAr || ""}%`,
+    // },
+    // shortCode: {
+    //   [Op.like]: `%${req.query.shortCode || ""}%`,
+    // },
+    // createdAt: {
+    //   [Op.between]: [
+    //     req.query.startdate || "2021-12-01 00:00:00",
+    //     req.query.endDate || "4030-12-01 00:00:00",
+    //   ],
+    // },
+    // },
     limit,
     offset,
   })
@@ -274,7 +276,7 @@ exports.SinglePointTableSystem = Trackerror(async (req, res, next) => {
     });
   }
 });
-exports.GetPointTableSystemAdmin = Trackerror(async (req, res, next) => {});
+exports.GetPointTableSystemAdmin = Trackerror(async (req, res, next) => { });
 exports.EditPointTableSystem = Trackerror(async (req, res, next) => {
   const { Group_Name, Rank, Point, Bonus_Point, shortCode } = req.body;
   let data = await PointTableSystemModel.findOne({

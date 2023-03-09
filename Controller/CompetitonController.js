@@ -249,13 +249,15 @@ exports.AddRacesInCompetitionV2 = Trackerror(async (req, res, next) => {
     return next(new HandlerCallBack("Race Card not found", 404));
   } else {
     const { RaceEntry } = req.body;
+    console.log(RaceEntry, 'RaceEntry');
     let entries;
     if (CompetitionID.CategoryCount == RaceEntry.length) {
+      console.log("hello");
       for (let i = 0; i < RaceEntry.length; i++) {
         entries = await CompetitionAndRacesModel.findOrCreate({
           where: {
-            CompetitionId: req.params.id,
-            RaceId: RaceEntry[i].RaceId,
+            Competition: req.params.id,
+            Race: RaceEntry[i].RaceId,
             PointTableOfRace: RaceEntry[i].PointTableOfRace,
           },
         });
@@ -267,7 +269,8 @@ exports.AddRacesInCompetitionV2 = Trackerror(async (req, res, next) => {
           `There Should be ${CompetitionID.CategoryCount}  where races Entered are ${RaceEntry.length}`,
         ],
       });
-      res.end();
+      // res.end();
+
     }
     res.status(200).json({
       success: true,
