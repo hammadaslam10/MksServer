@@ -489,13 +489,7 @@ exports.GetDeletedRace = Trackerror(async (req, res, next) => {
       {
         model: db.CompetitionAndRacesModel,
         as: "RaceDataOfCompetition",
-        attributes: [
-          "_id",
-
-          "CompetitionCode",
-          "NameEn",
-          "NameAr",
-        ],
+        attributes: ["_id", "CompetitionCode", "NameEn", "NameAr"],
         paranoid: false,
       },
       {
@@ -3370,6 +3364,7 @@ exports.EditRace = Trackerror(async (req, res, next) => {
     Timing,
     Endtiming,
     totalPrize,
+    PrizeNumber,
   } = req.body;
   let = {
     FirstPrice,
@@ -3384,6 +3379,7 @@ exports.EditRace = Trackerror(async (req, res, next) => {
   if (!totalPrize || totalPrize <= 0) {
     return next(new HandlerCallBack("Please provide valid total prize", 404));
   }
+
   if (PrizeNumber == 6) {
     let first = 60 / 100;
     let second = 20 / 100;
