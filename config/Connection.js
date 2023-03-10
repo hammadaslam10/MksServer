@@ -207,7 +207,7 @@ db.sequelize.sync({ force: false, alter: false }).then(async () => {
   console.log("yes re-sync done!");
 });
 loadcronjob();
-// db.CompetitonModel.sync({ alter: true });
+db.RaceKindModel.sync({ alter: true });
 // db.PointDefinitionModel.sync({ alter: true });
 // db.CompetitionAndRacesModel.sync({ alter: true });
 // db.PointTableSystemModel.sync({ alter: true });
