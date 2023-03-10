@@ -489,7 +489,6 @@ exports.GetDeletedRace = Trackerror(async (req, res, next) => {
       {
         model: db.CompetitionAndRacesModel,
         as: "RaceDataOfCompetition",
-  
         paranoid: false,
       },
       {
@@ -519,6 +518,7 @@ exports.GetDeletedRace = Trackerror(async (req, res, next) => {
             attributes: {
               exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
             },
+            paranoid: false,
           },
           {
             model: db.HorseModel,
@@ -532,6 +532,7 @@ exports.GetDeletedRace = Trackerror(async (req, res, next) => {
                   exclude: ["createdAt", "updatedAt", "deletedAt"],
                 },
               },
+
               {
                 model: db.test,
                 as: "TrackHorses",
@@ -2073,12 +2074,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
               },
               paranoid: false,
             },
-            {
-              model: db.CompetitionAndRacesModel,
-              as: "RaceDataOfCompetition",
 
-              paranoid: false,
-            },
             {
               model: db.ResultModel,
               as: "RaceResultData",
@@ -2326,12 +2322,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
               },
               paranoid: false,
             },
-            {
-              model: db.CompetitionAndRacesModel,
-              as: "RaceDataOfCompetition",
 
-              paranoid: false,
-            },
             {
               model: db.ResultModel,
               as: "RaceResultData",
@@ -2576,7 +2567,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
           {
             model: db.CompetitionAndRacesModel,
             as: "RaceDataOfCompetition",
-        
+
             paranoid: false,
           },
           {
@@ -2809,7 +2800,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
         {
           model: db.CompetitionAndRacesModel,
           as: "RaceDataOfCompetition",
-        
+
           paranoid: false,
         },
         {
