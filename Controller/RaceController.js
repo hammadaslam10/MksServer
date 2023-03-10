@@ -113,13 +113,20 @@ exports.AllRaceCourseRaceToday = Trackerror(async (req, res, next) => {
       ],
     ],
     where: {
-      // Day: DateFormat
-      Day: {
-        [Op.between]: [
-          moment().format("YYYY-MM-DD 00:00"),
-          moment().format("YYYY-MM-DD 23:59"),
-        ],
-      },
+      [Op.and]: [
+        // Day: DateFormat
+        {
+          HorseFilled: true,
+        },
+        {
+          Day: {
+            [Op.between]: [
+              moment().format("YYYY-MM-DD 00:00"),
+              moment().format("YYYY-MM-DD 23:59"),
+            ],
+          },
+        },
+      ],
     },
   });
 
