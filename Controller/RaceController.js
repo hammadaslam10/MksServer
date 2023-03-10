@@ -491,7 +491,7 @@ exports.GetDeletedRace = Trackerror(async (req, res, next) => {
         as: "RaceDataOfCompetition",
         attributes: [
           "_id",
-          "CompetitionCategory",
+
           "CompetitionCode",
           "NameEn",
           "NameAr",
@@ -842,13 +842,7 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
       {
         model: db.CompetitionAndRacesModel,
         as: "RaceDataOfCompetition",
-        attributes: [
-          "_id",
-          "CompetitionCategory",
-          "CompetitionCode",
-          "NameEn",
-          "NameAr",
-        ],
+
         paranoid: false,
       },
       {

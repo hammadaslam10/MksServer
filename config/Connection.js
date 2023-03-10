@@ -211,6 +211,7 @@ loadcronjob();
 // db.PointDefinitionModel.sync({ alter: true });
 // db.CompetitionAndRacesModel.sync({ alter: true });
 // db.PointTableSystemModel.sync({ alter: true });
+// db.PointGroupNameModel.sync({ alter: true });
 //-------------------------------------CompetitionRaces-------------------------------------
 db.CompetitonModel.hasMany(db.CompetitionAndRacesModel, {
   foreignKey: "Competition",
@@ -228,7 +229,22 @@ db.RaceModel.hasMany(db.CompetitionAndRacesModel, {
   foreignKey: "Race",
   as: "RaceDataOfCompetition",
 });
-
+db.PointTableSystemModel.belongsTo(db.PointGroupNameModel, {
+  foreignKey: "Group_Name",
+  as: "Group_NameDataOfCompetition",
+});
+db.PointGroupNameModel.hasMany(db.PointTableSystemModel, {
+  foreignKey: "Group_Name",
+  as: "Group_NameDataOfCompetition",
+});
+db.PointDefinitionModel.belongsTo(db.PointTableSystemModel, {
+  foreignKey: "PointSystemid",
+  as: "PointSystemidDataOfCompetition",
+});
+db.PointTableSystemModel.hasMany(db.PointDefinitionModel, {
+  foreignKey: "PointSystemid",
+  as: "PointSystemidDataOfCompetition",
+});
 db.CompetitionAndRacesModel.belongsTo(db.PointTableSystemModel, {
   foreignKey: "PointTableOfRace",
   as: "PointTableOfRaceofRace",
@@ -272,14 +288,14 @@ db.SubscriberAndCompetitionModel.belongsTo(db.HorseModel, {
   as: "CompetitionHorseIDData",
 });
 // -------------------------------------RaceAndPointsSystemModel----------------------------
-db.RaceModel.hasMany(db.RaceAndPointsSystemModel, {
-  foreignKey: "Race",
-  as: "RaceData",
-});
-db.RaceAndPointsSystemModel.belongsTo(db.RaceModel, {
-  foreignKey: "Race",
-  as: "RaceData",
-});
+// db.RaceModel.hasMany(db.RaceAndPointsSystemModel, {
+//   foreignKey: "Race",
+//   as: "RaceData",
+// });
+// db.RaceAndPointsSystemModel.belongsTo(db.RaceModel, {
+//   foreignKey: "Race",
+//   as: "RaceData",
+// });
 db.RaceModel.hasMany(db.RaceResultImagesModel, {
   foreignKey: "Race",
   as: "RaceimagesData",
@@ -288,14 +304,14 @@ db.RaceResultImagesModel.belongsTo(db.RaceModel, {
   foreignKey: "Race",
   as: "RaceimagesData",
 });
-db.RaceAndPointsSystemModel.belongsTo(db.PointTableSystemModel, {
-  foreignKey: "Point",
-  as: "PointsListingData",
-});
-db.PointTableSystemModel.hasMany(db.RaceAndPointsSystemModel, {
-  foreignKey: "Point",
-  as: "PointsListingData",
-});
+// db.RaceAndPointsSystemModel.belongsTo(db.PointTableSystemModel, {
+//   foreignKey: "Point",
+//   as: "PointsListingData",
+// });
+// db.PointTableSystemModel.hasMany(db.RaceAndPointsSystemModel, {
+//   foreignKey: "Point",
+//   as: "PointsListingData",
+// });
 // -------------------------------------Competition----------------------------
 db.CompetitionCategoryModel.hasMany(db.CompetitonModel, {
   foreignKey: "CompetitionType",

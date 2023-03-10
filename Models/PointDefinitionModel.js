@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
+      PointSystemid: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
       shortCode: {
         type: DataTypes.BIGINT,
         autoIncrement: true,

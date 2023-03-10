@@ -10,9 +10,11 @@ const {
   GetPointTableSystemMaxShortCode,
   GetDeletedPointTableSystem,
   RestoreSoftDeletedPointTableSystem,
+  SearchPointDefinition
 } = require("../Controller/PointTableSystemController");
 const { upload } = require("../Utils/ImageUpload");
 router.route("/PointTableSystemgetdeleted").get(GetDeletedPointTableSystem);
+router.route("/SearchPointDefinition").get(SearchPointDefinition);
 router
   .route("/restoresoftdeletePointTableSystem/:id")
   .post(RestoreSoftDeletedPointTableSystem);
