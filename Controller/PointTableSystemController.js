@@ -142,7 +142,7 @@ exports.CreatePointTableSystem = Trackerror(async (req, res, next) => {
         res.end();
       }
     } else if (Type == "Cast") {
-      console.log("Cast");
+      console.log(Type);
       if (PointTable.length == Length && PointTable.length > 1) {
         for (let i = 0; i < PointTable.length; i++) {
           try {
@@ -163,13 +163,13 @@ exports.CreatePointTableSystem = Trackerror(async (req, res, next) => {
             res.end();
           }
         }
-      } else {
-        res.status(400).json({
-          success: false,
-          message: ["Type Declared on Point Table is not defined "],
-        });
-        res.end();
       }
+    } else {
+      res.status(400).json({
+        success: false,
+        message: ["Type Declared on Point Table is not defined "],
+      });
+      res.end();
     }
 
     res.status(200).json({
