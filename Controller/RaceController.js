@@ -2576,13 +2576,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
           {
             model: db.CompetitionAndRacesModel,
             as: "RaceDataOfCompetition",
-            attributes: [
-              "_id",
-              "CompetitionCategory",
-              "CompetitionCode",
-              "NameEn",
-              "NameAr",
-            ],
+            attributes: ["_id", "CompetitionCode", "NameEn", "NameAr"],
             paranoid: false,
           },
           {
@@ -2815,13 +2809,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
         {
           model: db.CompetitionAndRacesModel,
           as: "RaceDataOfCompetition",
-          attributes: [
-            "_id",
-            "CompetitionCategory",
-            "CompetitionCode",
-            "NameEn",
-            "NameAr",
-          ],
+          attributes: ["_id", "CompetitionCode", "NameEn", "NameAr"],
           paranoid: false,
         },
         {
