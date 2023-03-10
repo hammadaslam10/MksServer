@@ -489,7 +489,7 @@ exports.GetDeletedRace = Trackerror(async (req, res, next) => {
       {
         model: db.CompetitionAndRacesModel,
         as: "RaceDataOfCompetition",
-        attributes: ["_id", "CompetitionCode", "NameEn", "NameAr"],
+        attributes: ["_id", "NameEn", "NameAr"],
         paranoid: false,
       },
       {
@@ -2576,7 +2576,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
           {
             model: db.CompetitionAndRacesModel,
             as: "RaceDataOfCompetition",
-            attributes: ["_id", "CompetitionCode", "NameEn", "NameAr"],
+            attributes: ["_id", "NameEn", "NameAr"],
             paranoid: false,
           },
           {
@@ -2809,7 +2809,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
         {
           model: db.CompetitionAndRacesModel,
           as: "RaceDataOfCompetition",
-          attributes: ["_id", "CompetitionCode", "NameEn", "NameAr"],
+          attributes: ["_id", "NameEn", "NameAr"],
           paranoid: false,
         },
         {
