@@ -520,6 +520,20 @@ exports.SearchCompetition = Trackerror(async (req, res, next) => {
               exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
             },
           },
+          {
+            model: db.RaceModel,
+            as: "RaceDataOfCompetition",
+            attributes: ["_id"],
+            include: [
+              {
+                model: db.RaceNameModel,
+                as: "RaceNameModelData",
+                attributes: {
+                  exclude: ["createdAt", "updatedAt", "deletedAt", "BackupId"],
+                },
+              },
+            ],
+          },
         ],
       },
     ],
