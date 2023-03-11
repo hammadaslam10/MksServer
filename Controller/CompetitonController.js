@@ -15,7 +15,7 @@ const { Race, Horse } = require("../Utils/Path");
 const { Conversion } = require("../Utils/Conversion");
 const { Op } = require("sequelize");
 const { getPagination, getPagingData } = require("../Utils/Pagination");
-const { async } = require("@firebase/util");
+
 exports.GetDeletedCompetiton = Trackerror(async (req, res, next) => {
   const data = await CompetitonModel.findAll({
     paranoid: false,
@@ -623,8 +623,7 @@ exports.Voting = Trackerror(async (req, res, next) => {
       new HandlerCallBack("Your are not Eligible to play competition", 401)
     );
   }
-  console.log(req.params.competitionid, "abc");
-  console.log(req.params.raceid, "dsd");
+
   const CompetitionID = await CompetitonModel.findOne({
     where: { _id: req.params.competitionid },
   });
@@ -638,11 +637,9 @@ exports.Voting = Trackerror(async (req, res, next) => {
     return next(new HandlerCallBack("Race time is Ended", 401));
   }
   if (CompetitionID.CompetitionCategory === "pick") {
-    console.log(Horse, "ghora");
     const HorseID = await HorseModel.findOne({
       where: { _id: Horse },
     });
-    console.log(HorseID, "dsd");
     if (!HorseID) {
       return next(new HandlerCallBack("Horse is not existed", 401));
     }

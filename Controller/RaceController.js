@@ -28,6 +28,7 @@ const jwt = require("jsonwebtoken");
 const { getPagination, getPagingData1 } = require("../Utils/Pagination");
 const schedule = require("node-schedule");
 const moment = require("moment");
+
 exports.LiveRaceOnlyDropDown = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
@@ -202,11 +203,17 @@ exports.RaceCardCalender = Trackerror(async (req, res, next) => {
   console.log(lastDayOfMonth);
   const data = await RaceModel.findAll({
     where: {
+      [Op.and]:[
+        {
+HorseFilled:true
+        },
+        {
       Day: {
         [Op.between]: [firstDay, lastDayOfMonth],
-      },
-    },
+      }},
+    ],
     attributes: ["Day", "StartTime", "RaceCourse"],
+  }
   });
   res.status(200).json({
     success: true,
@@ -3922,4 +3929,62 @@ exports.EditRaceHorses = Trackerror(async (req, res, next) => {
   res.status(200).json({
     success: true,
   });
+});
+exports.ChangeRaceStatus = Trackerror(async (req, res, next) => {
+  const { RaceStatus } = req.body;
+  console.log();
+  if (RaceStatus == "Live") {
+    const data = {
+      RaceStatus: "Live",
+      ResultStatus: "Awaited",
+    };
+    await RaceModel.update(
+      { data },
+      {
+        where: {
+          _id: req.params.id,
+        },
+      }
+    );
+    res.status(200).json({
+      success: true,
+      message: "Race status has been Live",
+    });
+  } else if (RaceStatus == "Due") {
+    const data = {
+      RaceStatus: "Due",
+      ResultStatus: "Awaited",
+    };
+    await RaceModel.update(
+      { data },
+      {
+        where: {
+          _id: req.params.id,
+        },
+      }
+    );
+    res.status(200).json({
+      success: true,
+      message: "Race status has been Due",
+    });
+  } else if (RaceStatus == "Cancelled") {
+    const data = {
+      RaceStatus: "Cancelled",
+      ResultStatus: "Cancelled",
+    };
+    await RaceModel.update(
+      { data },
+      {
+        where: {
+          _id: req.params.id,
+        },
+      }
+    );
+    res.status(200).json({
+      success: true,
+      message: "Race has been cancelled",
+    });
+  } else {
+    return next(new HandlerCallBack("Race Status is not valid", 300));
+  }
 });
