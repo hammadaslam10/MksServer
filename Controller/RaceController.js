@@ -238,6 +238,7 @@ exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
     where: { _id: req.params.racecourseid },
     include: [
       {
+        separate: true,
         model: db.RaceModel,
         as: "RaceCourseData",
         attributes: ["_id"],
@@ -254,6 +255,7 @@ exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
             },
             { HorseFilled: true },
           ],
+          order: [["StartTime", "ASC"]],
         },
         include: [
           {
