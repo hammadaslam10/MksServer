@@ -383,6 +383,7 @@ exports.AllDeclaredRaces = Trackerror(async (req, res, next) => {
           },
         ],
         order: [["FinalPositionDataHorse", "Rank", "ASC"]],
+        paranoid: false,
       },
       {
         model: db.RaceNameModel,
@@ -527,9 +528,44 @@ exports.GetDeletedRace = Trackerror(async (req, res, next) => {
         paranoid: false,
       },
       {
+        separate: true,
         model: db.ResultModel,
         as: "RaceResultData",
-        include: { all: true },
+        attributes: [
+          "Rating",
+          "_id",
+          "RaceTime",
+          "CumulativeDistance",
+          "Distance",
+          "PrizeWin",
+          "BestTurnPrice",
+        ],
+        order: ["CumulativeDistance", "ASC"],
+        include: [
+          {
+            model: db.HorseModel,
+            as: "HorseIDData",
+
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.HorseModel,
+            as: "BestTurnOutData",
+
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.HorseModel,
+            as: "BeatenByData",
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.FinalPositionModel,
+            as: "FinalPositionDataHorse",
+            attributes: ["_id", "NameEn", "Rank"],
+          },
+        ],
+        order: [["FinalPositionDataHorse", "Rank", "ASC"]],
         paranoid: false,
       },
       {
@@ -876,9 +912,44 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
         paranoid: false,
       },
       {
+        separate: true,
         model: db.ResultModel,
         as: "RaceResultData",
-        include: { all: true },
+        attributes: [
+          "Rating",
+          "_id",
+          "RaceTime",
+          "CumulativeDistance",
+          "Distance",
+          "PrizeWin",
+          "BestTurnPrice",
+        ],
+        order: ["CumulativeDistance", "ASC"],
+        include: [
+          {
+            model: db.HorseModel,
+            as: "HorseIDData",
+
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.HorseModel,
+            as: "BestTurnOutData",
+
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.HorseModel,
+            as: "BeatenByData",
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.FinalPositionModel,
+            as: "FinalPositionDataHorse",
+            attributes: ["_id", "NameEn", "Rank"],
+          },
+        ],
+        order: [["FinalPositionDataHorse", "Rank", "ASC"]],
         paranoid: false,
       },
       {
@@ -1192,9 +1263,44 @@ exports.GetRace = Trackerror(async (req, res, next) => {
         paranoid: false,
       },
       {
+        separate: true,
         model: db.ResultModel,
         as: "RaceResultData",
-        include: { all: true },
+        attributes: [
+          "Rating",
+          "_id",
+          "RaceTime",
+          "CumulativeDistance",
+          "Distance",
+          "PrizeWin",
+          "BestTurnPrice",
+        ],
+        order: ["CumulativeDistance", "ASC"],
+        include: [
+          {
+            model: db.HorseModel,
+            as: "HorseIDData",
+
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.HorseModel,
+            as: "BestTurnOutData",
+
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.HorseModel,
+            as: "BeatenByData",
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.FinalPositionModel,
+            as: "FinalPositionDataHorse",
+            attributes: ["_id", "NameEn", "Rank"],
+          },
+        ],
+        order: [["FinalPositionDataHorse", "Rank", "ASC"]],
         paranoid: false,
       },
       {
@@ -1852,14 +1958,45 @@ exports.AllResults = Trackerror(async (req, res, next) => {
   const data = await RaceModel.findAll({
     include: [
       {
-        // where: {
-        //   RaceID: result.RaceID,
-        // },
-
+        separate: true,
         model: db.ResultModel,
         as: "RaceResultData",
-        include: { all: true },
-        order: [["CumulativeDistance", "DESC"]],
+        attributes: [
+          "Rating",
+          "_id",
+          "RaceTime",
+          "CumulativeDistance",
+          "Distance",
+          "PrizeWin",
+          "BestTurnPrice",
+        ],
+        order: ["CumulativeDistance", "ASC"],
+        include: [
+          {
+            model: db.HorseModel,
+            as: "HorseIDData",
+
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.HorseModel,
+            as: "BestTurnOutData",
+
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.HorseModel,
+            as: "BeatenByData",
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.FinalPositionModel,
+            as: "FinalPositionDataHorse",
+            attributes: ["_id", "NameEn", "Rank"],
+          },
+        ],
+        order: [["FinalPositionDataHorse", "Rank", "ASC"]],
+        paranoid: false,
       },
       {
         model: db.RaceNameModel,
@@ -1891,14 +2028,45 @@ exports.ResultLatest = Trackerror(async (req, res, next) => {
   const data = await RaceModel.findOne({
     include: [
       {
-        order: [["CumulativeDistance", "DESC"]],
-        where: {
-          RaceID: result.RaceID,
-        },
-
+        separate: true,
         model: db.ResultModel,
         as: "RaceResultData",
-        include: { all: true },
+        attributes: [
+          "Rating",
+          "_id",
+          "RaceTime",
+          "CumulativeDistance",
+          "Distance",
+          "PrizeWin",
+          "BestTurnPrice",
+        ],
+        order: ["CumulativeDistance", "ASC"],
+        include: [
+          {
+            model: db.HorseModel,
+            as: "HorseIDData",
+
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.HorseModel,
+            as: "BestTurnOutData",
+
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.HorseModel,
+            as: "BeatenByData",
+            attributes: ["_id", "NameEn", "NameAr"],
+          },
+          {
+            model: db.FinalPositionModel,
+            as: "FinalPositionDataHorse",
+            attributes: ["_id", "NameEn", "Rank"],
+          },
+        ],
+        order: [["FinalPositionDataHorse", "Rank", "ASC"]],
+        paranoid: false,
       },
       {
         model: db.RaceNameModel,
@@ -1947,7 +2115,7 @@ exports.HorseHistory = Trackerror(async (req, res, next) => {
       },
       {
         model: db.RaceModel,
-        as: "RaceResultData",
+        as: "",
         include: [
           {
             model: db.RaceNameModel,
@@ -2111,9 +2279,44 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
             },
 
             {
+              separate: true,
               model: db.ResultModel,
               as: "RaceResultData",
-              include: { all: true },
+              attributes: [
+                "Rating",
+                "_id",
+                "RaceTime",
+                "CumulativeDistance",
+                "Distance",
+                "PrizeWin",
+                "BestTurnPrice",
+              ],
+              order: ["CumulativeDistance", "ASC"],
+              include: [
+                {
+                  model: db.HorseModel,
+                  as: "HorseIDData",
+
+                  attributes: ["_id", "NameEn", "NameAr"],
+                },
+                {
+                  model: db.HorseModel,
+                  as: "BestTurnOutData",
+
+                  attributes: ["_id", "NameEn", "NameAr"],
+                },
+                {
+                  model: db.HorseModel,
+                  as: "BeatenByData",
+                  attributes: ["_id", "NameEn", "NameAr"],
+                },
+                {
+                  model: db.FinalPositionModel,
+                  as: "FinalPositionDataHorse",
+                  attributes: ["_id", "NameEn", "Rank"],
+                },
+              ],
+              order: [["FinalPositionDataHorse", "Rank", "ASC"]],
               paranoid: false,
             },
             {
@@ -2357,11 +2560,45 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
               },
               paranoid: false,
             },
-
             {
+              separate: true,
               model: db.ResultModel,
               as: "RaceResultData",
-              include: { all: true },
+              attributes: [
+                "Rating",
+                "_id",
+                "RaceTime",
+                "CumulativeDistance",
+                "Distance",
+                "PrizeWin",
+                "BestTurnPrice",
+              ],
+              order: ["CumulativeDistance", "ASC"],
+              include: [
+                {
+                  model: db.HorseModel,
+                  as: "HorseIDData",
+
+                  attributes: ["_id", "NameEn", "NameAr"],
+                },
+                {
+                  model: db.HorseModel,
+                  as: "BestTurnOutData",
+
+                  attributes: ["_id", "NameEn", "NameAr"],
+                },
+                {
+                  model: db.HorseModel,
+                  as: "BeatenByData",
+                  attributes: ["_id", "NameEn", "NameAr"],
+                },
+                {
+                  model: db.FinalPositionModel,
+                  as: "FinalPositionDataHorse",
+                  attributes: ["_id", "NameEn", "Rank"],
+                },
+              ],
+              order: [["FinalPositionDataHorse", "Rank", "ASC"]],
               paranoid: false,
             },
             {
@@ -2606,9 +2843,44 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
             paranoid: false,
           },
           {
+            separate: true,
             model: db.ResultModel,
             as: "RaceResultData",
-            include: { all: true },
+            attributes: [
+              "Rating",
+              "_id",
+              "RaceTime",
+              "CumulativeDistance",
+              "Distance",
+              "PrizeWin",
+              "BestTurnPrice",
+            ],
+            order: ["CumulativeDistance", "ASC"],
+            include: [
+              {
+                model: db.HorseModel,
+                as: "HorseIDData",
+
+                attributes: ["_id", "NameEn", "NameAr"],
+              },
+              {
+                model: db.HorseModel,
+                as: "BestTurnOutData",
+
+                attributes: ["_id", "NameEn", "NameAr"],
+              },
+              {
+                model: db.HorseModel,
+                as: "BeatenByData",
+                attributes: ["_id", "NameEn", "NameAr"],
+              },
+              {
+                model: db.FinalPositionModel,
+                as: "FinalPositionDataHorse",
+                attributes: ["_id", "NameEn", "Rank"],
+              },
+            ],
+            order: [["FinalPositionDataHorse", "Rank", "ASC"]],
             paranoid: false,
           },
           {
@@ -2839,9 +3111,44 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
           paranoid: false,
         },
         {
+          separate: true,
           model: db.ResultModel,
           as: "RaceResultData",
-          include: { all: true },
+          attributes: [
+            "Rating",
+            "_id",
+            "RaceTime",
+            "CumulativeDistance",
+            "Distance",
+            "PrizeWin",
+            "BestTurnPrice",
+          ],
+          order: ["CumulativeDistance", "ASC"],
+          include: [
+            {
+              model: db.HorseModel,
+              as: "HorseIDData",
+
+              attributes: ["_id", "NameEn", "NameAr"],
+            },
+            {
+              model: db.HorseModel,
+              as: "BestTurnOutData",
+
+              attributes: ["_id", "NameEn", "NameAr"],
+            },
+            {
+              model: db.HorseModel,
+              as: "BeatenByData",
+              attributes: ["_id", "NameEn", "NameAr"],
+            },
+            {
+              model: db.FinalPositionModel,
+              as: "FinalPositionDataHorse",
+              attributes: ["_id", "NameEn", "Rank"],
+            },
+          ],
+          order: [["FinalPositionDataHorse", "Rank", "ASC"]],
           paranoid: false,
         },
         {
