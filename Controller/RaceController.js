@@ -113,6 +113,7 @@ exports.AllRaceCourseRaceToday = Trackerror(async (req, res, next) => {
         "AllRaceCourseToday",
       ],
     ],
+    // order: [["StartTime", "ASC"]],
     where: {
       [Op.and]: [
         // Day: DateFormat
@@ -145,18 +146,26 @@ exports.AllRaceCourseRaceToday = Trackerror(async (req, res, next) => {
       where: { _id: allracecourse },
       include: [
         {
+          separate: true,
           model: db.RaceModel,
           as: "RaceCourseData",
-          attributes: ["_id"],
+          attributes: ["_id", "StartTime"],
+          order: [["StartTime", "ASC"]],
           where: {
-            // Day: DateFormat
+            [Op.and]: [
+              // Day: DateFormat
+              {
+                HorseFilled: true,
+              },
+              {
             Day: {
               [Op.between]: [
                 moment().format("YYYY-MM-DD 00:00"),
                 moment().format("YYYY-MM-DD 23:59"),
               ],
             },
-          },
+          }]
+        },
           include: [
             {
               model: db.RaceNameModel,
