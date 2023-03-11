@@ -4260,7 +4260,7 @@ exports.EditRaceHorses = Trackerror(async (req, res, next) => {
 });
 exports.ChangeRaceStatus = Trackerror(async (req, res, next) => {
   const { RaceStatus } = req.body;
-  console.log();
+
   if (RaceStatus == "Live") {
     const data = {
       RaceStatus: "Live",
