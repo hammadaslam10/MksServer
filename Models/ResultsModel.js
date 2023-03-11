@@ -8,72 +8,76 @@ module.exports = (sequelize, DataTypes) => {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
-        primaryKey: true,
+        primaryKey: true
       },
       RaceID: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: false
       },
       Rating: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: false
       },
       RaceTime: {
         type: DataTypes.TIME,
-        allowNull: false,
+        allowNull: false
       },
       HorseID: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: false
       },
       BestTurnOut: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: false
         // defaultValue: "b9f11f0a-773b-431f-96b6-b2fb06f71172",
       },
       BestTurnPrice: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: false
         // defaultValue: "0",
       },
       BeatenBy: {
-        type: DataTypes.UUID,
+        type: DataTypes.UUID
       },
       FinalPosition: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: false
       },
 
       TrainerOnRace: {
-        type: DataTypes.UUID,
+        type: DataTypes.UUID
         // allowNull: false,
       },
       JockeyOnRace: {
-        type: DataTypes.UUID,
+        type: DataTypes.UUID
         // allowNull: false,
       },
       PrizeWin: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: false
       },
       Distance: {
-        type: DataTypes.BIGINT,
-        allowNull: false,
+        type: DataTypes.FLOAT,
+        allowNull: false
       },
       CumulativeDistance: {
-        type: DataTypes.BIGINT,
-        allowNull: false,
+        type: DataTypes.FLOAT,
+        allowNull: false
       },
       VideoLink: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
+      Remarks: {
+        type: DataTypes.STRING,
+        allowNull: false
+      }
     },
 
     {
       freezeTableName: true,
       paranoid: true,
-      initialAutoIncrement: 10,
+      initialAutoIncrement: 10
     }
   );
   return ResultsModel;

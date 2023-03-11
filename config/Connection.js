@@ -89,7 +89,6 @@ db.RaceModel = require("../Models/RaceModel")(Db, DataTypes);
 db.ResultModel = require("../Models/ResultsModel")(Db, DataTypes);
 db.SliderModel = require("../Models/SliderModel")(Db, DataTypes);
 db.SponsorModel = require("../Models/SponsorModel")(Db, DataTypes);
-// db.SponsorModel.sync({ alter: true });
 db.RaceAndHorseModel = require("../Models/RaceAndHorseModel")(Db, DataTypes);
 db.HorseAndRaceModel = require("../Models/HorseAndRaceModel")(Db, DataTypes);
 db.RaceAndJockeyModel = require("../Models/RaceAndJockeyModel")(Db, DataTypes);
@@ -206,6 +205,7 @@ db.CompetitionAndRacesModel = require("../Models/CompetitionAndRacesModel")(
 db.sequelize.sync({ force: false, alter: false }).then(async () => {
   console.log("yes re-sync done!");
 });
+// db.ResultModel.sync({ alter: true });
 loadcronjob();
 // db.RaceKindModel.sync({ alter: true });
 // db.PointDefinitionModel.sync({ alter: true });

@@ -1757,6 +1757,8 @@ exports.ResultCreationV2 = Trackerror(async (req, res, next) => {
         JockeyOnRace: ResultEntry[i].JockeyOnRace || null,
         BestTurnOut: ResultEntry[i].BestTurnOut,
         BestTurnPrice: ResultEntry[i].BestTurnPrice,
+        Remarks: ResultEntry[i].Remarks,
+       
       },
     });
   }
