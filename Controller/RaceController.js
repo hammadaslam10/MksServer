@@ -255,8 +255,8 @@ exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
             },
             { HorseFilled: true },
           ],
-          order: [["StartTime", "ASC"]],
         },
+        order: [["StartTime", "ASC"]],
         include: [
           {
             model: db.RaceNameModel,
