@@ -162,6 +162,7 @@ exports.AllRaceCourseRaceToday = Trackerror(async (req, res, next) => {
               model: db.RaceNameModel,
               as: "RaceNameModelData",
               attributes: ["NameEn", "NameAr", "_id"],
+              paranoid: false,
             },
           ],
         },
@@ -169,6 +170,7 @@ exports.AllRaceCourseRaceToday = Trackerror(async (req, res, next) => {
           model: db.NationalityModel,
           as: "NationalityDataRaceCourse",
           attributes: ["NameEn", "NameAr", "_id"],
+          paranoid: false,
         },
       ],
       attributes: ["TrackNameEn", "TrackNameAr", "_id"],
@@ -203,17 +205,18 @@ exports.RaceCardCalender = Trackerror(async (req, res, next) => {
   console.log(lastDayOfMonth);
   const data = await RaceModel.findAll({
     where: {
-      [Op.and]:[
+      [Op.and]: [
         {
-HorseFilled:true
+          HorseFilled: true,
         },
         {
-      Day: {
-        [Op.between]: [firstDay, lastDayOfMonth],
-      }},
-    ],
-    attributes: ["Day", "StartTime", "RaceCourse"],
-  }
+          Day: {
+            [Op.between]: [firstDay, lastDayOfMonth],
+          },
+        },
+      ],
+      attributes: ["Day", "StartTime", "RaceCourse"],
+    },
   });
   res.status(200).json({
     success: true,
@@ -238,9 +241,8 @@ exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
                   moment().format("YYYY-MM-DD 23:59"),
                 ],
               },
-
-              HorseFilled: true,
             },
+            { HorseFilled: true },
           ],
         },
         include: [
@@ -248,46 +250,55 @@ exports.RaceCardOfToday = Trackerror(async (req, res, next) => {
             model: db.RaceNameModel,
             as: "RaceNameModelData",
             attributes: ["NameEn", "NameAr", "_id"],
+            paranoid: false,
           },
           {
             model: db.RaceCourseModel,
             as: "RaceCourseData",
             attributes: ["TrackNameEn", "TrackNameAr", "_id"],
+            paranoid: false,
           },
           {
             model: db.TrackConditionModel,
             as: "TrackConditionData",
             attributes: ["NameEn", "NameAr", "_id"],
+            paranoid: false,
           },
           {
             model: db.HorseAndRaceModel,
             as: "RacehorsesData",
             attributes: ["HorseModelId"],
+            paranoid: false,
           },
           {
             model: db.TrackLengthModel,
             as: "TrackLengthData",
             attributes: ["TrackLength", "GroundType", "RailPosition", "_id"],
+            paranoid: false,
           },
           {
             model: db.RaceTypeModel,
             as: "RaceTypeModelData",
             attributes: ["NameEn", "NameAr", "_id"],
+            paranoid: false,
           },
           {
             model: db.RaceKindModel,
             as: "RaceKindData",
             attributes: ["NameEn", "NameAr", "_id"],
+            paranoid: false,
           },
           {
             model: db.HorseKindModel,
             as: "HorseKindinRaceData",
             attributes: ["NameEn", "NameAr", "_id"],
+            paranoid: false,
           },
           {
             model: db.MeetingTypeModel,
             as: "MeetingTypeData",
             attributes: ["NameEn", "NameAr", "_id"],
+            paranoid: false,
           },
         ],
         attributes: [
