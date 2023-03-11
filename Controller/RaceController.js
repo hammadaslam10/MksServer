@@ -158,14 +158,15 @@ exports.AllRaceCourseRaceToday = Trackerror(async (req, res, next) => {
                 HorseFilled: true,
               },
               {
-            Day: {
-              [Op.between]: [
-                moment().format("YYYY-MM-DD 00:00"),
-                moment().format("YYYY-MM-DD 23:59"),
-              ],
-            },
-          }]
-        },
+                Day: {
+                  [Op.between]: [
+                    moment().format("YYYY-MM-DD 00:00"),
+                    moment().format("YYYY-MM-DD 23:59"),
+                  ],
+                },
+              },
+            ],
+          },
           include: [
             {
               model: db.RaceNameModel,
@@ -1428,11 +1429,11 @@ exports.PublishRaces = Trackerror(async (req, res, next) => {
   });
 });
 exports.AddRaceImage = Trackerror(async (req, res, next) => {
-  const data = await OwnerModel.findOne({
+  const data = await RaceModel.findOne({
     where: { _id: req.params.id },
   });
   if (!data) {
-    return new HandlerCallBack("Owner is not available", 404);
+    return new HandlerCallBack("Race is not available", 404);
   }
   console.log(typeof req.files.image);
 
