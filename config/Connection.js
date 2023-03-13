@@ -205,7 +205,7 @@ db.CompetitionAndRacesModel = require("../Models/CompetitionAndRacesModel")(
 db.sequelize.sync({ force: false, alter: false }).then(async () => {
   console.log("yes re-sync done!");
 });
-// db.ResultModel.sync({ alter: true });
+db.ResultModel.sync({ alter: true });
 loadcronjob();
 // db.RaceKindModel.sync({ alter: true });
 // db.PointDefinitionModel.sync({ alter: true });
