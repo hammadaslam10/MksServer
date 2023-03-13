@@ -47,9 +47,11 @@ const {
   RaceCardCalender,
   LiveRaceOnlyDropDown,
   ChangeRaceStatus,
+  TodaysRacesAlltoAll,
 } = require("../Controller/RaceController");
 const { upload } = require("../Utils/ImageUpload");
 router.route("/ChangeRaceStatus/:id").put(ChangeRaceStatus);
+router.route("/TodaysRacesAlltoAll/:racecourseid").get(TodaysRacesAlltoAll);
 
 router.route("/RaceCardCalender").get(RaceCardCalender);
 router.route("/LiveRaceOnlyDropDown").get(LiveRaceOnlyDropDown);

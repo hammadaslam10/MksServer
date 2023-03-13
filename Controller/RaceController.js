@@ -28,7 +28,43 @@ const jwt = require("jsonwebtoken");
 const { getPagination, getPagingData1 } = require("../Utils/Pagination");
 const schedule = require("node-schedule");
 const moment = require("moment");
+exports.TodaysRacesAlltoAll = Trackerror(async (req, res, next) => {
+  const data = await RaceCourseModel.findAll({
+    where: { _id: req.params.racecourseid },
+    include: [
+      {
+        separate: true,
+        model: db.RaceModel,
+        as: "RaceCourseData",
+        attributes: ["_id"],
+        where: {
+          [Op.and]: [
+            {
+              // Day: DateFormat
+              Day: {
+                [Op.between]: [
+                  moment().format("YYYY-MM-DD 00:00"),
+                  moment().format("YYYY-MM-DD 23:59"),
+                ],
+              },
+            },
+            { HorseFilled: true },
+          ],
+        },
+        order: [["StartTime", "ASC"]],
 
+        attributes: ["_id", "Day", "RaceNumber", "RaceStatus", "StartTime"],
+      },
+    ],
+    attributes: ["_id"],
+  });
+  // console.log(moment().utc.format("YYYY-MM-DD 23:59"));
+
+  res.status(200).json({
+    success: true,
+    data,
+  });
+});
 exports.LiveRaceOnlyDropDown = Trackerror(async (req, res, next) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page - 1, size);
@@ -4159,23 +4195,32 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
     const racehorsedata = {
       GateNo: racehorse.GateNo == undefined ? 100 : racehorse.GateNo,
       HorseNo: racehorse.HorseNo == undefined ? null : racehorse.HorseNo,
-      HorseModelId: racehorse.HorseModelId == undefined ? null : racehorse.HorseModelId,
+      HorseModelId:
+        racehorse.HorseModelId == undefined ? null : racehorse.HorseModelId,
       Equipment: racehorse.Equipment == undefined ? null : racehorse.Equipment,
-      TrainerOnRace: racehorse.TrainerOnRace == undefined ? null : racehorse.TrainerOnRace,
-      OwnerOnRace: racehorse.OwnerOnRace == undefined ? null : racehorse.OwnerOnRace,
-      JockeyOnRace: racehorse.JockeyOnRace == undefined ? null : racehorse.JockeyOnRace,
-      JockeyWeight: racehorse.JockeyWeight == undefined ? 0 : racehorse.JockeyWeight,
+      TrainerOnRace:
+        racehorse.TrainerOnRace == undefined ? null : racehorse.TrainerOnRace,
+      OwnerOnRace:
+        racehorse.OwnerOnRace == undefined ? null : racehorse.OwnerOnRace,
+      JockeyOnRace:
+        racehorse.JockeyOnRace == undefined ? null : racehorse.JockeyOnRace,
+      JockeyWeight:
+        racehorse.JockeyWeight == undefined ? 0 : racehorse.JockeyWeight,
       Rating: racehorse.Rating == undefined ? 0 : racehorse.Rating,
-      HorseRunningStatus: racehorse.HorseRunningStatus == undefined ? null : racehorse.HorseRunningStatus,
+      HorseRunningStatus:
+        racehorse.HorseRunningStatus == undefined
+          ? null
+          : racehorse.HorseRunningStatus,
       CapColor: racehorse.CapColor == undefined ? null : racehorse.CapColor,
-      JockeyRaceWeight: racehorse.JockeyRaceWeight == undefined ? 0 : racehorse.JockeyRaceWeight,
+      JockeyRaceWeight:
+        racehorse.JockeyRaceWeight == undefined
+          ? 0
+          : racehorse.JockeyRaceWeight,
     };
 
     let horsedata = await HorseModel.findOne({
       where: { _id: HorseModelId },
     });
-
-
 
     console.log(racehorsedata);
 
@@ -4188,7 +4233,8 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
           GateNo: 100,
           HorseNo: HorseNo || racehorsedata.HorseNo,
           RaceModelId: req.params.id,
-          HorseModelId: HorseModelId == null ? racehorsedata.HorseModelId : HorseModelId,
+          HorseModelId:
+            HorseModelId == null ? racehorsedata.HorseModelId : HorseModelId,
           Equipment: Equipment == null ? racehorsedata.Equipment : Equipment,
           TrainerOnRace: horsedata.ActiveTrainer,
           OwnerOnRace: horsedata.ActiveOwner,
@@ -4236,15 +4282,10 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
       success: true,
       message: "data has been updated",
     });
-  }
-  else {
+  } else {
     let horsedata = await HorseModel.findOne({
       where: { _id: HorseModelId },
     });
-
-
-
-
 
     if (HorseRunningStatus == "false") {
       console.log("hello");
@@ -4262,8 +4303,7 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
           JockeyOnRace: null,
           JockeyWeight: JockeyWeight == null ? undefined : JockeyWeight,
           Rating: Rating == null ? undefined : Rating,
-          HorseRunningStatus:
-            HorseRunningStatus || undefined,
+          HorseRunningStatus: HorseRunningStatus || undefined,
           CapColor: CapColor,
           JockeyRaceWeight: 0,
         },
@@ -4286,8 +4326,7 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
           JockeyOnRace: JockeyOnRace || undefined,
           JockeyWeight: JockeyWeight || undefined,
           Rating: Rating || undefined,
-          HorseRunningStatus:
-            HorseRunningStatus || undefined,
+          HorseRunningStatus: HorseRunningStatus || undefined,
           CapColor: CapColor || undefined,
           JockeyRaceWeight: JockeyRaceWeight || undefined,
         },
@@ -4304,8 +4343,6 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
       message: "data has been updated",
     });
   }
-
-
 });
 exports.EditRaceHorses = Trackerror(async (req, res, next) => {
   const { HorseEntry } = req.body;
