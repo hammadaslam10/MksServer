@@ -4152,69 +4152,160 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
     JockeyRaceWeight,
     Rowid,
   } = req.body;
-  let racehorsedata = await HorseAndRaceModel.findOne({
+  let racehorse = await HorseAndRaceModel.findOne({
     where: { HorseModelId: HorseModelId },
   });
-  let horsedata = await HorseModel.findOne({
-    where: { _id: HorseModelId },
-  });
-  console.log(horsedata);
-  console.log(HorseRunningStatus);
-  if (HorseRunningStatus == "false") {
-    console.log("hello");
-    await HorseAndRaceModel.update(
-      {
-        GateNo: 100,
-        HorseNo: HorseNo || racehorsedata.HorseNo,
-        RaceModelId: req.params.id,
-        HorseModelId: HorseModelId || racehorsedata.HorseModelId,
-        Equipment: Equipment || racehorsedata.Equipment,
-        TrainerOnRace: horsedata.TrainerOnRace,
-        OwnerOnRace: horsedata.OwnerOnRace,
-        JockeyOnRace: null,
-        JockeyWeight: 0,
-        Rating: Rating || racehorsedata.Rating,
-        HorseRunningStatus:
-          HorseRunningStatus || racehorsedata.HorseRunningStatus,
-        CapColor: CapColor || racehorsedata.CapColor,
-        JockeyRaceWeight: 0,
-      },
-      {
-        where: {
-          _id: Rowid,
+  if (racehorse != null) {
+    const racehorsedata = {
+      GateNo: racehorse.GateNo == undefined ? 100 : racehorse.GateNo,
+      HorseNo: racehorse.HorseNo == undefined ? null : racehorse.HorseNo,
+      HorseModelId: racehorse.HorseModelId == undefined ? null : racehorse.HorseModelId,
+      Equipment: racehorse.Equipment == undefined ? null : racehorse.Equipment,
+      TrainerOnRace: racehorse.TrainerOnRace == undefined ? null : racehorse.TrainerOnRace,
+      OwnerOnRace: racehorse.OwnerOnRace == undefined ? null : racehorse.OwnerOnRace,
+      JockeyOnRace: racehorse.JockeyOnRace == undefined ? null : racehorse.JockeyOnRace,
+      JockeyWeight: racehorse.JockeyWeight == undefined ? 0 : racehorse.JockeyWeight,
+      Rating: racehorse.Rating == undefined ? 0 : racehorse.Rating,
+      HorseRunningStatus: racehorse.HorseRunningStatus == undefined ? null : racehorse.HorseRunningStatus,
+      CapColor: racehorse.CapColor == undefined ? null : racehorse.CapColor,
+      JockeyRaceWeight: racehorse.JockeyRaceWeight == undefined ? 0 : racehorse.JockeyRaceWeight,
+    };
+
+    let horsedata = await HorseModel.findOne({
+      where: { _id: HorseModelId },
+    });
+
+
+
+    console.log(racehorsedata);
+
+    if (HorseRunningStatus == "false") {
+      console.log("hello");
+      console.log(req.body);
+
+      await HorseAndRaceModel.update(
+        {
+          GateNo: 100,
+          HorseNo: HorseNo || racehorsedata.HorseNo,
+          RaceModelId: req.params.id,
+          HorseModelId: HorseModelId == null ? racehorsedata.HorseModelId : HorseModelId,
+          Equipment: Equipment == null ? racehorsedata.Equipment : Equipment,
+          TrainerOnRace: horsedata.ActiveTrainer,
+          OwnerOnRace: horsedata.ActiveOwner,
+          JockeyOnRace: null,
+          JockeyWeight: JockeyWeight == null ? 0 : JockeyWeight,
+          Rating: Rating == null ? racehorsedata.Rating : Rating,
+          HorseRunningStatus:
+            HorseRunningStatus || racehorsedata.HorseRunningStatus,
+          CapColor: CapColor,
+          JockeyRaceWeight: 0,
         },
-      }
-    );
-  } else {
-    await HorseAndRaceModel.update(
-      {
-        GateNo: GateNo || racehorsedata.GateNo,
-        HorseNo: HorseNo || racehorsedata.HorseNo,
-        RaceModelId: req.params.id,
-        HorseModelId: HorseModelId || racehorsedata.HorseModelId,
-        Equipment: Equipment || racehorsedata.Equipment,
-        TrainerOnRace: horsedata.TrainerOnRace,
-        OwnerOnRace: horsedata.OwnerOnRace,
-        JockeyOnRace: JockeyOnRace || racehorsedata.JockeyOnRace,
-        JockeyWeight: JockeyWeight || racehorsedata.JockeyWeight,
-        Rating: Rating || racehorsedata.Rating,
-        HorseRunningStatus:
-          HorseRunningStatus || racehorsedata.HorseRunningStatus,
-        CapColor: CapColor || racehorsedata.CapColor,
-        JockeyRaceWeight: JockeyRaceWeight || racehorsedata.JockeyRaceWeight,
-      },
-      {
-        where: {
-          _id: Rowid,
+        {
+          where: {
+            _id: Rowid,
+          },
+        }
+      );
+    } else {
+      await HorseAndRaceModel.update(
+        {
+          GateNo: GateNo || racehorsedata.GateNo,
+          HorseNo: HorseNo || racehorsedata.HorseNo,
+          RaceModelId: req.params.id,
+          HorseModelId: HorseModelId || racehorsedata.HorseModelId,
+          Equipment: Equipment || racehorsedata.Equipment,
+          TrainerOnRace: horsedata.ActiveTrainer,
+          OwnerOnRace: horsedata.ActiveOwner,
+          JockeyOnRace: JockeyOnRace || racehorsedata.JockeyOnRace,
+          JockeyWeight: JockeyWeight || racehorsedata.JockeyWeight,
+          Rating: Rating || racehorsedata.Rating,
+          HorseRunningStatus:
+            HorseRunningStatus || racehorsedata.HorseRunningStatus,
+          CapColor: CapColor || racehorsedata.CapColor,
+          JockeyRaceWeight: JockeyRaceWeight || racehorsedata.JockeyRaceWeight,
         },
-      }
-    );
+        {
+          where: {
+            _id: Rowid,
+          },
+        }
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "data has been updated",
+    });
+  }
+  else {
+    let horsedata = await HorseModel.findOne({
+      where: { _id: HorseModelId },
+    });
+
+
+
+
+
+    if (HorseRunningStatus == "false") {
+      console.log("hello");
+      console.log(req.body);
+
+      await HorseAndRaceModel.update(
+        {
+          GateNo: 100,
+          HorseNo: HorseNo || undefined,
+          RaceModelId: req.params.id,
+          HorseModelId: HorseModelId == null ? undefined : HorseModelId,
+          Equipment: Equipment == null ? undefined : Equipment,
+          TrainerOnRace: horsedata.ActiveTrainer,
+          OwnerOnRace: horsedata.ActiveOwner,
+          JockeyOnRace: null,
+          JockeyWeight: JockeyWeight == null ? undefined : JockeyWeight,
+          Rating: Rating == null ? undefined : Rating,
+          HorseRunningStatus:
+            HorseRunningStatus || undefined,
+          CapColor: CapColor,
+          JockeyRaceWeight: 0,
+        },
+        {
+          where: {
+            _id: Rowid,
+          },
+        }
+      );
+    } else {
+      await HorseAndRaceModel.update(
+        {
+          GateNo: GateNo || undefined,
+          HorseNo: HorseNo || undefined,
+          RaceModelId: req.params.id,
+          HorseModelId: HorseModelId || undefined,
+          Equipment: Equipment || undefined,
+          TrainerOnRace: horsedata.ActiveTrainer,
+          OwnerOnRace: horsedata.ActiveOwner,
+          JockeyOnRace: JockeyOnRace || undefined,
+          JockeyWeight: JockeyWeight || undefined,
+          Rating: Rating || undefined,
+          HorseRunningStatus:
+            HorseRunningStatus || undefined,
+          CapColor: CapColor || undefined,
+          JockeyRaceWeight: JockeyRaceWeight || undefined,
+        },
+        {
+          where: {
+            _id: Rowid,
+          },
+        }
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "data has been updated",
+    });
   }
 
-  res.status(200).json({
-    success: true,
-    message: "data has been updated",
-  });
+
 });
 exports.EditRaceHorses = Trackerror(async (req, res, next) => {
   const { HorseEntry } = req.body;

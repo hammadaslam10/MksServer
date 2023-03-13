@@ -12,23 +12,24 @@ let options = {
   Protocol: "TCP",
 };
 
-const Db = new Sequelize(
-  process.env.RDSDB,
-  process.env.RDSUSER,
-  process.env.RDSPASSWORD,
-  {
-    ...options,
-  }
-);
 // const Db = new Sequelize(
-//   process.env.SQLDB,
-//   process.env.SQLHOST,
-//   process.env.SQLPASSWORD,
+//   process.env.RDSDB,
+//   process.env.RDSUSER,
+//   process.env.RDSPASSWORD,
 //   {
-//     dialect: "mysql",
-//     logging: false,
+//     ...options,
 //   }
 // );
+
+const Db = new Sequelize(
+  process.env.SQLDB,
+  process.env.SQLHOST,
+  process.env.SQLPASSWORD,
+  {
+    dialect: "mysql",
+    logging: false,
+  }
+);
 
 Db.authenticate()
   .then(() => {
@@ -205,7 +206,7 @@ db.CompetitionAndRacesModel = require("../Models/CompetitionAndRacesModel")(
 db.sequelize.sync({ force: false, alter: false }).then(async () => {
   console.log("yes re-sync done!");
 });
-db.ResultModel.sync({ alter: true });
+// db.ResultModel.sync({ alter: true });
 loadcronjob();
 // db.RaceKindModel.sync({ alter: true });
 // db.PointDefinitionModel.sync({ alter: true });
