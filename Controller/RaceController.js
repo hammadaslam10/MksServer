@@ -358,6 +358,7 @@ exports.AllDeclaredRaces = Trackerror(async (req, res, next) => {
           "Distance",
           "PrizeWin",
           "BestTurnPrice",
+          "Remarks"
         ],
         order: ["CumulativeDistance", "ASC"],
         include: [
@@ -541,6 +542,8 @@ exports.GetDeletedRace = Trackerror(async (req, res, next) => {
           "Distance",
           "PrizeWin",
           "BestTurnPrice",
+          "Remarks"
+
         ],
         order: ["CumulativeDistance", "ASC"],
         include: [
@@ -925,6 +928,7 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
           "Distance",
           "PrizeWin",
           "BestTurnPrice",
+          "Remarks"
         ],
         order: ["CumulativeDistance", "ASC"],
         include: [
@@ -1276,6 +1280,7 @@ exports.GetRace = Trackerror(async (req, res, next) => {
           "Distance",
           "PrizeWin",
           "BestTurnPrice",
+          "Remarks"
         ],
         order: ["CumulativeDistance", "ASC"],
         include: [
@@ -1973,6 +1978,7 @@ exports.AllResults = Trackerror(async (req, res, next) => {
           "Distance",
           "PrizeWin",
           "BestTurnPrice",
+          "Remarks"
         ],
         order: ["CumulativeDistance", "ASC"],
         include: [
@@ -2043,6 +2049,7 @@ exports.ResultLatest = Trackerror(async (req, res, next) => {
           "Distance",
           "PrizeWin",
           "BestTurnPrice",
+          "Remarks"
         ],
         order: ["CumulativeDistance", "ASC"],
         include: [
@@ -2294,6 +2301,8 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                 "Distance",
                 "PrizeWin",
                 "BestTurnPrice",
+                "Remarks"
+
               ],
               order: ["CumulativeDistance", "ASC"],
               include: [
@@ -2576,6 +2585,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                 "Distance",
                 "PrizeWin",
                 "BestTurnPrice",
+                "Remarks"
               ],
               order: ["CumulativeDistance", "ASC"],
               include: [
@@ -2858,6 +2868,8 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
               "Distance",
               "PrizeWin",
               "BestTurnPrice",
+              "Remarks"
+
             ],
             order: ["CumulativeDistance", "ASC"],
             include: [
@@ -3126,6 +3138,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
             "Distance",
             "PrizeWin",
             "BestTurnPrice",
+            "Remarks"
           ],
           order: ["CumulativeDistance", "ASC"],
           include: [
