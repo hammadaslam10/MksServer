@@ -358,7 +358,7 @@ exports.AllDeclaredRaces = Trackerror(async (req, res, next) => {
           "Distance",
           "PrizeWin",
           "BestTurnPrice",
-          "Remarks"
+          "Remarks",
         ],
         order: ["CumulativeDistance", "ASC"],
         include: [
@@ -542,8 +542,7 @@ exports.GetDeletedRace = Trackerror(async (req, res, next) => {
           "Distance",
           "PrizeWin",
           "BestTurnPrice",
-          "Remarks"
-
+          "Remarks",
         ],
         order: ["CumulativeDistance", "ASC"],
         include: [
@@ -928,7 +927,7 @@ exports.SearchRace = Trackerror(async (req, res, next) => {
           "Distance",
           "PrizeWin",
           "BestTurnPrice",
-          "Remarks"
+          "Remarks",
         ],
         order: ["CumulativeDistance", "ASC"],
         include: [
@@ -1280,7 +1279,7 @@ exports.GetRace = Trackerror(async (req, res, next) => {
           "Distance",
           "PrizeWin",
           "BestTurnPrice",
-          "Remarks"
+          "Remarks",
         ],
         order: ["CumulativeDistance", "ASC"],
         include: [
@@ -1763,7 +1762,6 @@ exports.ResultCreationV2 = Trackerror(async (req, res, next) => {
         BestTurnOut: ResultEntry[i].BestTurnOut,
         BestTurnPrice: ResultEntry[i].BestTurnPrice,
         Remarks: ResultEntry[i].Remarks,
-       
       },
     });
   }
@@ -1978,7 +1976,7 @@ exports.AllResults = Trackerror(async (req, res, next) => {
           "Distance",
           "PrizeWin",
           "BestTurnPrice",
-          "Remarks"
+          "Remarks",
         ],
         order: ["CumulativeDistance", "ASC"],
         include: [
@@ -2049,7 +2047,7 @@ exports.ResultLatest = Trackerror(async (req, res, next) => {
           "Distance",
           "PrizeWin",
           "BestTurnPrice",
-          "Remarks"
+          "Remarks",
         ],
         order: ["CumulativeDistance", "ASC"],
         include: [
@@ -2301,8 +2299,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                 "Distance",
                 "PrizeWin",
                 "BestTurnPrice",
-                "Remarks"
-
+                "Remarks",
               ],
               order: ["CumulativeDistance", "ASC"],
               include: [
@@ -2585,7 +2582,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
                 "Distance",
                 "PrizeWin",
                 "BestTurnPrice",
-                "Remarks"
+                "Remarks",
               ],
               order: ["CumulativeDistance", "ASC"],
               include: [
@@ -2868,8 +2865,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
               "Distance",
               "PrizeWin",
               "BestTurnPrice",
-              "Remarks"
-
+              "Remarks",
             ],
             order: ["CumulativeDistance", "ASC"],
             include: [
@@ -3138,7 +3134,7 @@ exports.SingleRace = Trackerror(async (req, res, next) => {
             "Distance",
             "PrizeWin",
             "BestTurnPrice",
-            "Remarks"
+            "Remarks",
           ],
           order: ["CumulativeDistance", "ASC"],
           include: [
@@ -3422,6 +3418,7 @@ exports.CreateRace = Trackerror(async (req, res, next) => {
     TrackLength: TrackLength,
     Ground: Ground,
     Sponsor: Sponsor,
+    HorseFilled: true,
     Day: Day,
     TrackCondition: !TrackCondition
       ? TrackCondition
@@ -4161,7 +4158,7 @@ exports.EditRaceHorsesv2 = Trackerror(async (req, res, next) => {
   let horsedata = await HorseModel.findOne({
     where: { _id: HorseModelId },
   });
-  console.log(horsedata)
+  console.log(horsedata);
   console.log(HorseRunningStatus);
   if (HorseRunningStatus == "false") {
     console.log("hello");
