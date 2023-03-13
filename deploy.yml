@@ -1,0 +1,15 @@
+image: node:latest
+
+cache:
+  paths:
+    - node_modules/
+
+test_async:
+  script:
+    - npm install
+    - node server.js
+
+deploy:
+  stage: deploy
+  script: echo "Define your deployment script!"
+  environment: production
